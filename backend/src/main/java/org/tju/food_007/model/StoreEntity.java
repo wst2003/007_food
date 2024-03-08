@@ -88,4 +88,28 @@ public class StoreEntity {
     public int hashCode() {
         return Objects.hash(stoId, stoName, stoIntroduction, stoState, stoOpeningTime, stoClosingTime);
     }
+
+    @Basic
+    @Column(name = "sto_latitude")
+    private String stoLatitude;
+
+    public String getStoLatitude() {
+        return stoLatitude;
+    }
+
+    public void setStoLatitude(String stoLatitude) {
+        this.stoLatitude = stoLatitude;
+    }
+
+    @Basic
+    @Column(name = "sto_longtitude")
+    private String stoLongtitude;
+
+    public String getStoLongtitude() {
+        return stoLongtitude;
+    }
+
+    public void setStoLongtitude(String stoLongtitude) {
+        this.stoLongtitude = stoLongtitude;
+    }
 }
