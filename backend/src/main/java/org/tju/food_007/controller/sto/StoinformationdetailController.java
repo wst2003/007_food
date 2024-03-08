@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.tju.food_007.dto.sto.StoinformationdetailResponseDTO;
 import org.tju.food_007.service.sto.StoinformationdetailService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/sto")
 public class StoinformationdetailController {
@@ -17,11 +20,16 @@ public class StoinformationdetailController {
     private StoinformationdetailService stoinformationdetailService;
 
     @RequestMapping(value ="/informationdetail",method = RequestMethod.GET)
-    public ResponseEntity<StoinformationdetailResponseDTO> Stoinformationdetail
-            (@RequestParam Integer sto_ID){
+    public ResponseEntity<List<StoinformationdetailResponseDTO>> Stoinformationdetail
+            (@RequestParam Integer[] sto_ID){
         System.out.println("正在获取商家详细信息");
 
-        StoinformationdetailResponseDTO response =stoinformationdetailService.stoinformationdetail(sto_ID);
+        List<StoinformationdetailResponseDTO>response =new ArrayList<StoinformationdetailResponseDTO>();
+        for(Integer id : sto_ID){
+            StoinformationdetailResponseDTO res =stoinformationdetailService.stoinformationdetail(id);
+            response.add(res);
+        }
+
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
