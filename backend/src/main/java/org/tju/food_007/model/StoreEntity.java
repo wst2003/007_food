@@ -27,6 +27,12 @@ public class StoreEntity {
     @Basic
     @Column(name = "sto_closingTime")
     private Time stoClosingTime;
+    @Basic
+    @Column(name = "sto_latitude")
+    private String stoLatitude;
+    @Basic
+    @Column(name = "sto_longtitude")
+    private String stoLongtitude;
 
     public int getStoId() {
         return stoId;
@@ -89,10 +95,6 @@ public class StoreEntity {
         return Objects.hash(stoId, stoName, stoIntroduction, stoState, stoOpeningTime, stoClosingTime);
     }
 
-    @Basic
-    @Column(name = "sto_latitude")
-    private String stoLatitude;
-
     public String getStoLatitude() {
         return stoLatitude;
     }
@@ -100,10 +102,6 @@ public class StoreEntity {
     public void setStoLatitude(String stoLatitude) {
         this.stoLatitude = stoLatitude;
     }
-
-    @Basic
-    @Column(name = "sto_longtitude")
-    private String stoLongtitude;
 
     public String getStoLongtitude() {
         return stoLongtitude;

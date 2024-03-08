@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "storeImage", schema = "food_007", catalog = "")
-@IdClass(org.tju.food_007.model.StoreImageEntityPK.class)
+@IdClass(StoreImageEntityPK.class)
 public class StoreImageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

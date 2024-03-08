@@ -12,6 +12,10 @@ public class CommodityImageEntity {
     @Id
     @Column(name = "com_ID")
     private int comId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "com_image")
+    private String comImage;
 
     public int getComId() {
         return comId;
@@ -20,11 +24,6 @@ public class CommodityImageEntity {
     public void setComId(int comId) {
         this.comId = comId;
     }
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "com_image")
-    private String comImage;
 
     public String getComImage() {
         return comImage;
