@@ -31,7 +31,7 @@ public class CommoditySearchService {
         String sort_order;
         String sort_by = "";
 
-        if(request.getSort_order()==0){ sort_order="ASC";}//升序
+        if(request.getSort_order() == 0){ sort_order="ASC";}//升序
         else{sort_order="DESC";}
 
         if(request.getSort_by()==0){sort_by="COM_ORIPRICE";}

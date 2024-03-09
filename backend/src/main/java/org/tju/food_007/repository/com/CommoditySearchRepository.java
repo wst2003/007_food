@@ -27,10 +27,12 @@ public interface CommoditySearchRepository extends JpaRepository<CommodityEntity
             " LEFT JOIN user u ON u.USER_ID = s.STO_ID\n" +
             " WHERE c.COM_NAME LIKE %:content% \n" +
             " GROUP BY c.COM_ID \n" +
-            " ORDER BY CASE WHEN :sort_by = 'COM_ORIPRICE' THEN c.COM_ORIPRICE END, " +
-            "          CASE WHEN :sort_by = 'PRAISE_RATE' THEN c.PRAISE_RATE END, " +
-            "          CASE WHEN :sort_by = 'COM_UPLOADDATE' THEN c.COM_UPLOADDATE END, " +
-            "          CASE WHEN :sort_order = 'ASC' THEN 1 ELSE -1 END "
+            " ORDER BY CASE WHEN :sort_by = 'COM_ORIPRICE' AND :sort_order='ASC' THEN c.COM_ORIPRICE END ASC, " +
+            "          CASE WHEN :sort_by = 'PRAISE_RATE' AND :sort_order='ASC' THEN c.PRAISE_RATE END ASC, " +
+            "          CASE WHEN :sort_by = 'COM_UPLOADDATE' AND :sort_order='ASC' THEN c.COM_UPLOADDATE END ASC," +
+            "          CASE WHEN :sort_by = 'COM_ORIPRICE' AND :sort_order='DESC' THEN c.COM_ORIPRICE END DESC," +
+            "          CASE WHEN :sort_by = 'PRAISE_RATE' AND :sort_order='DESC' THEN c.PRAISE_RATE END DESC," +
+            "          CASE WHEN :sort_by = 'COM_UPLOADDATE' AND :sort_order='DESC' THEN c.COM_UPLOADDATE END DESC"
             ,nativeQuery = true)
     public List<Object[]> searchCommodity(@Param("content") String content,
                                           @Param("sort_by") String sort_by,
@@ -55,10 +57,12 @@ public interface CommoditySearchRepository extends JpaRepository<CommodityEntity
             " WHERE c.COM_NAME LIKE %:content% \n" +
             " GROUP BY c.COM_ID \n" +
             " HAVING Categories LIKE %:type% \n" +
-            " ORDER BY CASE WHEN :sort_by = 'COM_ORIPRICE' THEN c.COM_ORIPRICE END, " +
-            "          CASE WHEN :sort_by = 'PRAISE_RATE' THEN c.PRAISE_RATE END, " +
-            "          CASE WHEN :sort_by = 'COM_UPLOADDATE' THEN c.COM_UPLOADDATE END, " +
-            "          CASE WHEN :sort_order = 'ASC' THEN 1 ELSE -1 END "
+            " ORDER BY CASE WHEN :sort_by = 'COM_ORIPRICE' AND :sort_order='ASC' THEN c.COM_ORIPRICE END ASC, " +
+            "          CASE WHEN :sort_by = 'PRAISE_RATE' AND :sort_order='ASC' THEN c.PRAISE_RATE END ASC, " +
+            "          CASE WHEN :sort_by = 'COM_UPLOADDATE' AND :sort_order='ASC' THEN c.COM_UPLOADDATE END ASC," +
+            "          CASE WHEN :sort_by = 'COM_ORIPRICE' AND :sort_order='DESC' THEN c.COM_ORIPRICE END DESC," +
+            "          CASE WHEN :sort_by = 'PRAISE_RATE' AND :sort_order='DESC' THEN c.PRAISE_RATE END DESC," +
+            "          CASE WHEN :sort_by = 'COM_UPLOADDATE' AND :sort_order='DESC' THEN c.COM_UPLOADDATE END DESC"
             ,nativeQuery = true)
     public List<Object[]> searchCommoditybyType(@Param("content") String content,
                                           @Param("sort_by") String sort_by,
