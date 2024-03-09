@@ -24,6 +24,11 @@ public class StocategoriesService {
     private final StoCategoriesOnsaleMapper stoCategoriesOnsaleMapper =
             StoCategoriesOnsaleMapper.INSTANCE;
 
+    /**
+     * @author fjh
+     * @date 2024/3/8
+     * @Description 获取商家在售商品
+     */
     public StoCategoriesOnsaleResponseDTO getStoCategoriesOnsale(Integer sto_Id){
         CommodityEntity[] commodityEntities =
                 commodityInformationRepository.findAllByStoId(sto_Id).toArray(new CommodityEntity[0]);

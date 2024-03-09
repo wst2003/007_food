@@ -29,6 +29,11 @@ public class StoinformationdetailService {
     private final StoinformationdetailMapper stoinformationdetailMapper =
             StoinformationdetailMapper.INSTANCE;
 
+    /**
+     * @author fjh
+     * @date 2024/3/8
+     * @Description 获取商家商品详情
+     */
     public StoinformationdetailResponseDTO stoinformationdetail(Integer id){
         StoinformationdetailResponseDTO response = new StoinformationdetailResponseDTO();
 
