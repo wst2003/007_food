@@ -34,6 +34,8 @@ public interface StoinformationdetailMapper {
     @Mapping(source = "store.stoClosingTime", target = "sto_closingTime")
     @Mapping(source = "store.stoLatitude", target = "sto_latitude")
     @Mapping(source = "store.stoLongitude", target = "sto_longitude")
+    @Mapping(source = "store.stoRating" ,target =  "sto_rating")
+    @Mapping(source = "store.stoLogo",target = "sto_logo")
     @Mapping(expression = "java(mapStoCategories(storeCategories))", target = "store_categories")
     @Mapping(expression = "java(mapStoLicenses(storeLicenses))", target = "storeLicense")
     @Mapping(expression = "java(mapStoImages(storeImages))", target = "storeImage")

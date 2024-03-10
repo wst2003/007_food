@@ -8,6 +8,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "store", schema = "food_007", catalog = "")
 public class StoreEntity {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "sto_ID")
     private int stoId;
@@ -32,6 +33,12 @@ public class StoreEntity {
     @Basic
     @Column(name = "sto_longitude")
     private String stoLongitude;
+    @Basic
+    @Column(name = "sto_rating")
+    private Integer stoRating;
+    @Basic
+    @Column(name = "sto_logo")
+    private String stoLogo;
 
     public int getStoId() {
         return stoId;
@@ -81,19 +88,6 @@ public class StoreEntity {
         this.stoClosingTime = stoClosingTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StoreEntity that = (StoreEntity) o;
-        return stoId == that.stoId && stoState == that.stoState && Objects.equals(stoName, that.stoName) && Objects.equals(stoIntroduction, that.stoIntroduction) && Objects.equals(stoOpeningTime, that.stoOpeningTime) && Objects.equals(stoClosingTime, that.stoClosingTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(stoId, stoName, stoIntroduction, stoState, stoOpeningTime, stoClosingTime);
-    }
-
     public String getStoLatitude() {
         return stoLatitude;
     }
@@ -108,5 +102,34 @@ public class StoreEntity {
 
     public void setStoLongitude(String stoLongitude) {
         this.stoLongitude = stoLongitude;
+    }
+
+    public Integer getStoRating() {
+        return stoRating;
+    }
+
+    public void setStoRating(Integer stoRating) {
+        this.stoRating = stoRating;
+    }
+
+    public String getStoLogo() {
+        return stoLogo;
+    }
+
+    public void setStoLogo(String stoLogo) {
+        this.stoLogo = stoLogo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StoreEntity that = (StoreEntity) o;
+        return stoId == that.stoId && stoState == that.stoState && Objects.equals(stoName, that.stoName) && Objects.equals(stoIntroduction, that.stoIntroduction) && Objects.equals(stoOpeningTime, that.stoOpeningTime) && Objects.equals(stoClosingTime, that.stoClosingTime) && Objects.equals(stoLatitude, that.stoLatitude) && Objects.equals(stoLongitude, that.stoLongitude) && Objects.equals(stoRating, that.stoRating) && Objects.equals(stoLogo, that.stoLogo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stoId, stoName, stoIntroduction, stoState, stoOpeningTime, stoClosingTime, stoLatitude, stoLongitude, stoRating, stoLogo);
     }
 }
