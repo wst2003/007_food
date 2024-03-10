@@ -8,7 +8,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "store", schema = "food_007", catalog = "")
 public class StoreEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "sto_ID")
     private int stoId;
@@ -31,8 +30,8 @@ public class StoreEntity {
     @Column(name = "sto_latitude")
     private String stoLatitude;
     @Basic
-    @Column(name = "sto_longtitude")
-    private String stoLongtitude;
+    @Column(name = "sto_longitude")
+    private String stoLongitude;
 
     public int getStoId() {
         return stoId;
@@ -103,11 +102,11 @@ public class StoreEntity {
         this.stoLatitude = stoLatitude;
     }
 
-    public String getStoLongtitude() {
-        return stoLongtitude;
+    public String getStoLongitude() {
+        return stoLongitude;
     }
 
-    public void setStoLongtitude(String stoLongtitude) {
-        this.stoLongtitude = stoLongtitude;
+    public void setStoLongitude(String stoLongitude) {
+        this.stoLongitude = stoLongitude;
     }
 }

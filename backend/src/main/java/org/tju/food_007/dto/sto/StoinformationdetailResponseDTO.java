@@ -25,7 +25,7 @@ public class StoinformationdetailResponseDTO {
     private String sto_openingTime;
     private String sto_closingTime;
     private String sto_latitude;
-    private String sto_longtitude;
+    private String sto_longitude;
     private StoCategoriesInformationResponseDTO[] store_categories;
     private StoLicenseInformationResponseDTO[] storeLicense;
     private StoImageInfomationResponseDTO[] storeImage;

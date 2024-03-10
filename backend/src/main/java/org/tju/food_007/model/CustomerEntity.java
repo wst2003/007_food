@@ -7,7 +7,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "customer", schema = "food_007", catalog = "")
 public class CustomerEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "cus_ID")
     private int cusId;
