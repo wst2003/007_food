@@ -1,4 +1,4 @@
-package org.tju.food_007.repository;
+package org.tju.food_007.repository.pub.register;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.tju.food_007.model.UserEntity;

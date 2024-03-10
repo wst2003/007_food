@@ -11,10 +11,9 @@ import org.tju.food_007.dto.pub.register.mapper.CustomRegistrationRequestMapper;
 import org.tju.food_007.dto.pub.register.mapper.StoreRegistrationRequestMapper;
 import org.tju.food_007.model.StoreEntity;
 import org.tju.food_007.model.UserEntity;
-import org.tju.food_007.repository.CustomRegistrationRepository;
 import org.tju.food_007.repository.StoreRegistrationRepository;
-import org.tju.food_007.repository.UserRegistrationRepository;
-
+import org.tju.food_007.repository.pub.register.CustomRegistrationRepository;
+import org.tju.food_007.repository.pub.register.UserRegistrationRepository;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

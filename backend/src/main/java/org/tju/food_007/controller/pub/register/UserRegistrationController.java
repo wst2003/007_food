@@ -11,7 +11,7 @@ import org.tju.food_007.dto.pub.register.CustomRegistrationRequestDTO;
 import org.tju.food_007.dto.pub.register.CustomRegistrationResponseDTO;
 import org.tju.food_007.dto.pub.register.StoreRegistrationRequestDTO;
 import org.tju.food_007.dto.pub.register.StoreRegistrationResponseDTO;
-import org.tju.food_007.repository.CustomRegistrationRepository;
+import org.tju.food_007.repository.pub.register.CustomRegistrationRepository;
 import org.tju.food_007.service.CustomerRegistrationService;
 import org.tju.food_007.service.StoreRegistrationService;
 

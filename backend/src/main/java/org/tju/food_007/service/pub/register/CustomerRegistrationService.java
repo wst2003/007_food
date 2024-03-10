@@ -7,10 +7,12 @@ import org.tju.food_007.dto.pub.register.CustomRegistrationResponseDTO;
 import org.tju.food_007.dto.pub.register.mapper.CustomRegistrationRequestMapper;
 import org.tju.food_007.model.CustomerEntity;
 import org.tju.food_007.model.UserEntity;
-import org.tju.food_007.repository.CustomRegistrationRepository;
-import org.tju.food_007.repository.UserRegistrationRepository;
+import org.tju.food_007.repository.pub.register.CustomRegistrationRepository;
+import org.tju.food_007.repository.pub.register.UserRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tju.food_007.repository.pub.register.CustomRegistrationRepository;
+import org.tju.food_007.repository.pub.register.UserRegistrationRepository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
