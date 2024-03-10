@@ -11,9 +11,7 @@ import org.tju.food_007.repository.com.CommoditySearchRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -87,6 +85,32 @@ public class CommoditySearchService {
             }
             response.add(tempDTO);
         }
+
+        if(request.getSort_by()==0 && request.getSort_order()==0){
+            response.sort(new Comparator<SearchCommodityResponseDTO>() {
+                @Override
+                public int compare(SearchCommodityResponseDTO dto1, SearchCommodityResponseDTO dto2) {
+                    // 比较商品价格，如果价格相同则不改变顺序
+                    return Double.compare(dto1.getCom_price(), dto2.getCom_price());
+                }
+            });
+        }
+
+        if(request.getSort_by()==0 && request.getSort_order()==1){
+            response.sort(new Comparator<SearchCommodityResponseDTO>() {
+                @Override
+                public int compare(SearchCommodityResponseDTO dto1, SearchCommodityResponseDTO dto2) {
+                    // 比较商品价格，如果价格相同则不改变顺序
+                    return Double.compare(dto2.getCom_price(), dto1.getCom_price());
+                }
+            });
+        }
+
+
+
+
+
+
 
         int page_size = request.getPage_size();
         int page_num = request.getPage_num();
