@@ -14,4 +14,5 @@ public class SearchCommodityResponseDTO {
     private Double com_price;
     private Double com_dist= (double) 0;
     private String commodityImage;
+    private Integer sto_ID;
 }

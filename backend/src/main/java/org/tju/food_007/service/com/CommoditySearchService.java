@@ -53,6 +53,7 @@ public class CommoditySearchService {
             if(tempObj[1]!=null)tempDTO.setCom_name(tempObj[1].toString());
             if(tempObj[6]!=null)tempDTO.setCom_left((Integer)tempObj[6]);
             if(tempObj[7]!=null)tempDTO.setPraise_rate(Double.parseDouble(tempObj[7].toString()));
+            if(tempObj[8]!=null)tempDTO.setSto_ID((Integer)tempObj[8]);
             if(tempObj[15]!=null)tempDTO.setCom_position(tempObj[15].toString());
             if(tempObj[14]!=null){
                 List<String> images = Arrays.stream(tempObj[14].toString().split(",")).toList();
@@ -106,8 +107,15 @@ public class CommoditySearchService {
             });
         }
 
-
-
+        if(request.getSto_ID() != null){
+            Iterator<SearchCommodityResponseDTO> iterator = response.iterator();
+            while (iterator.hasNext()) {
+                SearchCommodityResponseDTO dto = iterator.next();
+                if (!Objects.equals(dto.getSto_ID(), request.getSto_ID())) {
+                    iterator.remove(); // 从结果中删除 sto_id 不匹配的项
+                }
+            }
+        }
 
 
 

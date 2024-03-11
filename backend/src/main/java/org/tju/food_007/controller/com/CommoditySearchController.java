@@ -27,16 +27,16 @@ public class CommoditySearchController {
                                                             @RequestParam(required = false) Integer sort_by,
                                                             @RequestParam(required = false) Integer sort_order,
                                                             @RequestParam(required = false) Integer page_size,
-                                                            @RequestParam(required = false) Integer page_num) {
+                                                            @RequestParam(required = false) Integer page_num,
+                                                            @RequestParam(required = false) Integer sto_ID) {
         SearchCommodityRequestDTO requestDTO = new SearchCommodityRequestDTO();
         requestDTO.setContent(content);
-
         requestDTO.setCom_type(com_type);
-
         requestDTO.setSort_by(sort_by);
         requestDTO.setSort_order(sort_order);
         requestDTO.setPage_size(page_size);
         requestDTO.setPage_num(page_num);
+        requestDTO.setSto_ID(sto_ID);
 
         List<SearchCommodityResponseDTO> responseDTO = commoditySearchService.searchCommodity(requestDTO);
 

@@ -7,6 +7,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "customer", schema = "food_007", catalog = "")
 public class CustomerEntity {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "cus_ID")
     private int cusId;
@@ -19,6 +20,9 @@ public class CustomerEntity {
     @Basic
     @Column(name = "cus_state")
     private int cusState;
+    @Basic
+    @Column(name = "user_logo")
+    private String userLogo;
 
     public int getCusId() {
         return cusId;
@@ -63,5 +67,13 @@ public class CustomerEntity {
     @Override
     public int hashCode() {
         return Objects.hash(cusId, cusNickname, cusPayPassword, cusState);
+    }
+
+    public String getUserLogo() {
+        return userLogo;
+    }
+
+    public void setUserLogo(String userLogo) {
+        this.userLogo = userLogo;
     }
 }
