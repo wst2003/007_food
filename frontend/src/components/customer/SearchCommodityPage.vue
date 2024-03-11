@@ -39,7 +39,7 @@
           <nut-cell style="background: #e5f1e3;height:165px" @click="showDetail(commodity.id1,commodity.position1,commodity.distance1,commodity.price1,commodity.name1)">
             <div>
               <div>
-                <nut-image style="margin-bottom: 5px;" :round="true" :radius="8" src="https://img10.360buyimg.com/ling/jfs/t1/181258/24/10385/53029/60d04978Ef21f2d42/92baeb21f907cd24.jpg" width="100%" height="100px" :fit="contain" />
+                <nut-image style="margin-bottom: 5px;" :round="true" :radius="8" :src="commodity.commodityImage1" width="100%" height="100px" :fit="contain" />
                 <nut-ellipsis style="font-family: Source Han Sans SC;
                   font-size: 14px;
                   font-weight: 400;
@@ -96,7 +96,7 @@
           <nut-cell style="background: #e5f1e3;height:165px" @click="showDetail(commodity.id2,commodity.position2,commodity.distance2,commodity.price2,commodity.name2)">
             <div>
               <div>
-                <nut-image style="margin-bottom: 5px;" :round="true" :radius="8" src="https://img10.360buyimg.com/ling/jfs/t1/181258/24/10385/53029/60d04978Ef21f2d42/92baeb21f907cd24.jpg" width="100%" height="100px" :fit="contain" />
+                <nut-image style="margin-bottom: 5px;" :round="true" :radius="8" :src="commodity.commodityImage2" width="100%" height="100px" :fit="contain" />
                 <nut-ellipsis style="font-family: Source Han Sans SC;
                   font-size: 14px;
                   font-weight: 400;
@@ -230,13 +230,15 @@ const convert=(response)=>{
       rating1:"4.9",
       price1:"5.2",
       left1:"2",
+      commodityImage1:"",
       id2:"-1",
       name2:"-1",
       position2:"-1",
       distance2:"-1",
       rating2:"-1",
       price2:"-1",
-      left2:"-1"
+      left2:"-1",
+      commodityImage2:""
     }
 
     tempData.id1=String(response[i].com_ID);
@@ -246,6 +248,7 @@ const convert=(response)=>{
     tempData.position1=response[i].com_position;
     tempData.price1=String(response[i].com_price);
     tempData.rating1=String(response[i].praise_rate);
+    tempData.commodityImage1="https://007-food.obs.cn-east-3.myhuaweicloud.com/"+response[i].commodityImage;
     
     i+=1;
     if(i!=response.length){
@@ -256,6 +259,7 @@ const convert=(response)=>{
       tempData.position2=response[i].com_position;
       tempData.price2=String(response[i].com_price);
       tempData.rating2=String(response[i].praise_rate);
+      tempData.commodityImage2="https://007-food.obs.cn-east-3.myhuaweicloud.com/"+response[i].commodityImage;
     }
     commodityData.value.push(tempData);
   }
