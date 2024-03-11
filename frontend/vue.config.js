@@ -2,7 +2,7 @@ const { defineConfig } = require('@vue/cli-service')
 const Components = require('unplugin-vue-components/webpack')
 const NutUIResolver = require('@nutui/auto-import-resolver')
 
-const BaseUrl = "http://120.55.115.204:5000"
+const BaseUrl = "http://localhost:5000"
 const imageURL = "https://food-bank.obs.cn-east-3.myhuaweicloud.com/"
 
 module.exports = defineConfig({

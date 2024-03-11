@@ -24,7 +24,7 @@ public class UserLoginService {
             if(targetUser.getUserPassword().equals(requestDTO.getUser_password()))
             {
                 responseDTO.setUser_type(targetUser.getUserType());
-                responseDTO.setMsg("登录成功");
+                responseDTO.setMsg("success");
             }
             else
             {

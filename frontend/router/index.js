@@ -1,14 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import SearchCommodityPage from '@/components/customer/SearchCommodityPage.vue';
-import CommodityDetailPage from "@/components/commodity/CommodityDetailPage.vue"
 import HomePage from "@/components/HomePage.vue"
+import CommodityDetailPage from "@/components/commodity/CommodityDetailPage.vue";
+import LoginPage from '@/components/public/LoginPage.vue';
+import SelectIdentityPage from '@/components/public/SelectIdentityPage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: '/home'
+            redirect: "/SelectIdentity",
         },
         {
             path: '/home',
@@ -29,6 +31,19 @@ const router = createRouter({
             //         component: CommodityDetailPage
             //     }
             // ]
+            meta: {
+                keepAlive: true
+            }
+        },
+        {
+            path: '/SelectIdentity',
+            name: 'SelectIdentity',
+            component: SelectIdentityPage
+        },
+        {
+            path:'/login',
+            name:'login',
+            component:LoginPage
         },
         {
             path: '/searchCommodity',
