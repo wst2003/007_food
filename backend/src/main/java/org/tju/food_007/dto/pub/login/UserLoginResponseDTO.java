@@ -12,4 +12,5 @@ import lombok.Setter;
 public class UserLoginResponseDTO {
      private String msg;
      private  Integer user_type;
+     private  Integer user_id;
 }

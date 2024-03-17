@@ -25,12 +25,14 @@ public class UserLoginService {
             {
                 responseDTO.setUser_type(targetUser.getUserType());
                 responseDTO.setMsg("登录成功");
+                responseDTO.setUser_id(targetUser.getUserId());
             }
             else
             {
                 {
                     responseDTO.setUser_type(-1);
                     responseDTO.setMsg("密码错误");
+                    responseDTO.setUser_id(-1);
                 }
 
             }
@@ -39,6 +41,8 @@ public class UserLoginService {
             {
                 responseDTO.setUser_type(-1);
                 responseDTO.setMsg("账号不存在");
+                responseDTO.setUser_id(-1);
+                
             }
         }
         return responseDTO;

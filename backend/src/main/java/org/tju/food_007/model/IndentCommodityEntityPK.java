@@ -11,11 +11,9 @@ import java.util.Objects;
 public class IndentCommodityEntityPK implements Serializable {
     @Column(name = "ind_ID")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int indId;
     @Column(name = "com_ID")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int comId;
 
     public int getIndId() {

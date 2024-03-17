@@ -9,11 +9,9 @@ import java.util.Objects;
 @Table(name = "indent_commodity", schema = "food_007", catalog = "")
 @IdClass(IndentCommodityEntityPK.class)
 public class IndentCommodityEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "ind_ID")
     private int indId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "com_ID")
     private int comId;
