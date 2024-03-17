@@ -13,4 +13,5 @@ public class SearchCommodityRequestDTO {
     private Integer sort_order;
     private Integer page_size;
     private Integer page_num;
+    private Integer sto_ID=0;
 }
