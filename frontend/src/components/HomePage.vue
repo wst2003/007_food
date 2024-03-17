@@ -63,6 +63,11 @@
         path:'/searchCommodity'
       })
     }
+    if(index === 0){
+    router.push({
+      path:'/storeDetail'
+    })
+  }
   };
   
   

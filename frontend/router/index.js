@@ -5,6 +5,7 @@ import HomePage from "@/components/HomePage.vue"
 import CommodityDetailPage from "@/components/commodity/CommodityDetailPage.vue";
 import LoginPage from '@/components/public/LoginPage.vue';
 import SelectIdentityPage from '@/components/public/SelectIdentityPage.vue';
+import StoreDetailPage from '@/components/customer/StoreDetailPage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -57,6 +58,11 @@ const router = createRouter({
             path: '/commodityDetail',
             name: 'commodityDetail',
             component: CommodityDetailPage
+        },
+        {
+            path: '/storeDetail',
+            name: 'storeDetail',
+            component: StoreDetailPage
         }
 
     ]
