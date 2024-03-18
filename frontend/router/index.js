@@ -7,12 +7,15 @@ import LoginPage from '@/components/public/LoginPage.vue';
 import SelectIdentityPage from '@/components/public/SelectIdentityPage.vue';
 import StoreDetailPage from '@/components/customer/StoreDetailPage.vue';
 import MyIndentPage from '@/components/customer/MyIndentPage.vue';
+import CustomerRegisterPage from '@/components/public/CustomerRegisterPage.vue';
+import StoreRegisterPage from '@/components/public/StoreRegisterPage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: "/myIndent",
+            redirect: "/login",
+
         },
         {
             path: '/home',
@@ -61,6 +64,7 @@ const router = createRouter({
             component: CommodityDetailPage
         },
         {
+
             path: '/storeDetail',
             name: 'storeDetail',
             component: StoreDetailPage
@@ -69,8 +73,17 @@ const router = createRouter({
             path: '/myIndent',
             name: 'myIndent',
             component: MyIndentPage
+        },
+        {
+            path:'/cusregister',
+            name:'cusregister',
+            component:CustomerRegisterPage
+        },
+        {
+            path:'/storegister',
+            name:'storegister',
+            component:StoreRegisterPage
         }
-
     ]
 });
 

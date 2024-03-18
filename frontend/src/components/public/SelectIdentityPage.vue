@@ -4,18 +4,22 @@
         Hello !
       </div>
       <div class="select-bar">
-        请选择你的身份
+        请选择你的身份进行注册~
       </div>
-      <nut-button plain class="button-bar-1" @click="click">我是卖家</nut-button>
-      <nut-button plain class="button-bar-2" @click="click">我是买家</nut-button>
+      <nut-button plain class="button-bar-1" @click="click_cus">我是卖家</nut-button>
+      <nut-button plain class="button-bar-2" @click="click_sto">我是买家</nut-button>
     </div>
   </template>
   <script setup lang="js">
 import router from '../../../router/index.js';
 
-    const click=()=>{
-      router.push({name:'login'});
+    const click_cus=()=>{
+      router.push({name:'cusregister'});
     } 
+
+    const click_sto=()=>{
+      router.push({name:'storegister'});
+    }
   // import { ref } from 'vue';
   // const show = ref(false);
   // const click = () => {
