@@ -9,7 +9,7 @@
         <nut-row>
           <!-- <nut-col :span="24"> -->
           <!-- <div> -->
-            <div v-for="(commodity,index) in indent.commodity" :key="index">
+            <div v-for="(commodity,index) in indent.commodity" :key="index" >
               <span style="font-family: Source Han Sans SC;
                 font-size: 14px;
                 font-weight: 400;
@@ -38,6 +38,7 @@
             <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
           </nut-col>
           <nut-col :span="8">
+            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail"> 查看详情 </nut-tag>
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent"> 评价 </nut-tag>
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
           </nut-col>
@@ -177,9 +178,18 @@ const changeType=(state)=>{
 }
 
 const gradeIndent=()=>{
+  router.push({
+    path:'/comment'
+  })
 
 }
 const newIndent=()=>{
 
+}
+
+const goDetail=()=>{
+  router.push({
+    path:'/indentdetail'
+  })
 }
 </script>

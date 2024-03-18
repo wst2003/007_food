@@ -9,12 +9,14 @@ import StoreDetailPage from '@/components/customer/StoreDetailPage.vue';
 import MyIndentPage from '@/components/customer/MyIndentPage.vue';
 import CustomerRegisterPage from '@/components/public/CustomerRegisterPage.vue';
 import StoreRegisterPage from '@/components/public/StoreRegisterPage.vue';
+import CommentPage from '@/components/customer/CommentPage.vue';
+import IndentDetailPage from '@/components/customer/IndentDetailPage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: "/login",
+            redirect: "/searchCommodity",
 
         },
         {
@@ -83,6 +85,16 @@ const router = createRouter({
             path:'/storegister',
             name:'storegister',
             component:StoreRegisterPage
+        },
+        {
+            path:'/comment',
+            name:'comment',
+            component:CommentPage
+        },
+        {
+            path:'/indentdetail',
+            name:'indentdetail',
+            component:IndentDetailPage
         }
     ]
 });
