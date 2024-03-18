@@ -24,7 +24,7 @@
                 确认
             </nut-button>
             <nut-space :gutter="20" style="position:relative;margin-top:39vh;left:0%;">
-                <nut-button class="bottom-button">新用户注册</nut-button>
+                <nut-button class="bottom-button" @click="register">新用户注册</nut-button>
                 <nut-button class="bottom-button">短信验证码登录</nut-button>
                 <nut-button class="bottom-button">忘记密码</nut-button>
             </nut-space>
@@ -112,6 +112,12 @@
         showBottom.value=true;
         mess.value=message
     };
+
+    const register=()=>{
+        router.push({
+            path: '/SelectIdentity',
+        });
+    }
 </script>
 <style scoped>
     .total-layout{
