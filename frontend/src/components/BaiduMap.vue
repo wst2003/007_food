@@ -14,8 +14,11 @@
 </template>
 <script setup>
  /* eslint-disable */ 
-import { onMounted ,ref} from 'vue';
+import { onMounted ,reactive,ref} from 'vue';
 import BaiduMap from 'BaiduMap'
+import globalData from '../global.js'
+import axios from 'axios';
+import qs from 'qs'
 /*
     地区切换模块
 */
@@ -52,21 +55,23 @@ function rezoom(replacestr){
     地图模块
 */
 var map=null;//地图对象
-var currentPoint=null; // 当前定位信息
-var pointOffset=[
-    [0.01,0],
-    [0.005,0],
-    [-0.005,0],
-    [0,0.005],
-    [0,-0.005],
-    [+0.007,-0.003],
-    [-0.002,0],
-    [-0.002,0.002],
-    [0.001,0.002]
-]
+var currentPoint=null; // 当前定位信息,BMapPoint
+
 var mkList=[]
 var calcList=[]
 var markedPoint=[]
+
+function sto_info(sto_obj){
+    this.sto_name=sto_obj.sto_name
+    this.sto_address=sto_obj.user_address
+    this.sto_latitude=sto_obj.sto_latitude
+    this.sto_longitude=sto_obj.sto_longitude
+    this.sto_rating=sto_obj.sto_rating
+    this.sto_logo=sto_obj.sto_logo
+    this.introduction=sto_obj.sto_introduction
+}
+
+const sto_arr=reactive([])
 
 onMounted(()=>{
     var geolocation = new qq.maps.Geolocation("7WQBZ-GJ2K5-V2PID-IBVSK-6FHK7-4IFXU", "mapqq");
@@ -76,13 +81,14 @@ onMounted(()=>{
             // alert(position.lat+' '+position.lng)
             console.log(position)
             var {lng,lat}=qqMapTransBMap(position.lng,position.lat);
-            
+            // alert(lat+' '+lng)
+            // var {lng,lat}={lng: -74,lat:40.7}
             // alert(lat+' '+lng)
             afterLocation(lat,lng)
 
         },
         function(){
-            alert('定位失败')
+            alert('定位失败,请检查网络连接')
         },
         {
             timeout:5000
@@ -106,29 +112,11 @@ function qqMapTransBMap(lng, lat) {
           lat: lats 
       } 
 }
-// 将GPS坐标转换到百度地图坐标
-function GPSToBMap(points){
-       
-    translateCallback = function (data){
-         //坐标转换完之后的回调函数
-      if(data.status === 0) {
-        console.log(data.points)
-        return data.points
 
-      }
-      else{
-        console.log("G2B坐标转换失败")
-        return []
-      }
-    }
-    var convertor = new BMap.Convertor();
-    convertor.translate(points, 1, 5, translateCallback)
-
-}
-
-function afterLocation(lat,lng){
+function initalizatin(lat,lng){
     //初始化
     map = new BaiduMap.Map("baidumap");
+    globalData.mapObj.map=map
     let point = new BaiduMap.Point(lng, lat); // 百度BD09坐标
     map.centerAndZoom(point, 15); // 地图实例化
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
@@ -140,26 +128,35 @@ function afterLocation(lat,lng){
     map.panTo(point);
     currentPoint  = point; // 百度BD09坐标
 
-    // 各个点依次获取距离信息
-    var promises = [];
+    // 将坐标与地址设置到全局变量
+    globalData.userPosition.setCoordination(lat,lng)
+    var geoc = new BMapGL.Geocoder();
+    geoc.getLocation(point, function(rs){
+        var addComp = rs.addressComponents;
+        globalData.userPosition.address= addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber;
+        //arr.shift()
+        areastr.value=addComp.province + " | " + addComp.city + " | " + addComp.district
+    })
+}
 
-    pointOffset.forEach(function(element, index, arr) {
-        var point=new BaiduMap.Point(currentPoint.lng+element[0], currentPoint.lat+element[1]); 
-        var mk = new BaiduMap.Marker(point);
+function computeDistance(){
+    var promises = [];
+    sto_arr.forEach(function(element) {
+        var sto_point=new BaiduMap.Point(element.sto_longitude,element.sto_latitude); 
+        var mk = new BaiduMap.Marker(sto_point);
         mkList.push(mk);
         map.addOverlay(mk);
-                
-        //var ridingInfo=ridingRoute(currentPoint,point,false);
+
         var promise = new Promise((resolve, reject) => {
-            walkingRoute(currentPoint,point,false, (distance, duration) => {
+            globalData.mapObj.walkingRoute(currentPoint,sto_point,false, (distance, duration) => {
                 //console.log('Distance:', distance, 'Duration:', duration);
                 calcList.push([distance,duration])
                 if (!distance.includes("公里")){ markedPoint.push(point);}
                 var opts = {
                     width : 200,     // 信息窗口宽度
                     height: 100,     // 信息窗口高度
-                    title : "测试店" , // 信息窗口标题
-                    message:"测试店面"
+                    title : element.sto_name , // 信息窗口标题
+                    message:element.introduction
                 }
                 var infoWindow = new BaiduMap.InfoWindow('步行距离'+distance+'，步行时间'+duration, opts);  // 创建信息窗口对象 
                     mk.addEventListener("click", function(){          
@@ -171,18 +168,46 @@ function afterLocation(lat,lng){
             });
         });
         promises.push(promise);
-        });
-        Promise.all(promises)
-        .then(() => {
-            // 在这里执行绘制多边形的逻辑，使用markedPoint数组中的点
-            // 可以调用一个函数来处理这部分逻辑
-            markedPoint.push(currentPoint)
-            // console.log(markedPoint)
-            drawPolygon(markedPoint);
+    });
+    Promise.all(promises)
+    .then(() => {
+        // 在这里执行绘制多边形的逻辑，使用markedPoint数组中的点
+        // 可以调用一个函数来处理这部分逻辑
+        markedPoint.push(currentPoint)
+        // console.log(markedPoint)
+        drawPolygon(markedPoint);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+} 
+
+function afterLocation(lat,lng){
+    initalizatin(lat,lng)
+    var sto_ids=[]
+    axios.get('/api/pub/map',{
+    params:{
+        cur_latitude:lat,
+        cur_longitude:lng
+    }}).then(res=>{
+        console.log(res.data)
+        sto_ids=res.data.sto_id
+        return axios.get('http://127.0.0.1:4523/m1/4090306-0-default/api/sto/informationdetail',{
+            params:{
+                sto_ID:sto_ids
+            },
+            paramsSerializer: params => {
+                return qs.stringify(params, { indices: false })
+            }
         })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    }).then(res=>{
+        res.data.forEach(ele=>{
+            sto_arr.push(new sto_info(ele))
+        })
+    }).then(()=>{
+        computeDistance()
+    })
+
 }
 
 

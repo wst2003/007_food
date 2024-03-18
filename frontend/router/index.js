@@ -11,6 +11,7 @@ import CustomerRegisterPage from '@/components/public/CustomerRegisterPage.vue';
 import StoreRegisterPage from '@/components/public/StoreRegisterPage.vue';
 import CommentPage from '@/components/customer/CommentPage.vue';
 import IndentDetailPage from '@/components/customer/IndentDetailPage.vue';
+import IndentConfirmPage from '@/components/indent/IndentConfirmPage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -95,6 +96,11 @@ const router = createRouter({
             path:'/indentdetail',
             name:'indentdetail',
             component:IndentDetailPage
+        },
+        {
+            path:'/indentConfirm',
+            name: 'indentConfirm',
+            component:IndentConfirmPage
         }
     ]
 });

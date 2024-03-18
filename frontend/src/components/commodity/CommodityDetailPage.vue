@@ -9,7 +9,7 @@
     <nut-swiper ref="swiperRef">
       <nut-swiper-item v-for="(item, index) in list" :key="index" style="height: 150px">
         <img :src="item" alt="" style="height: 100%; width: 100%" draggable="false" />
-      </nut-swiper-item>
+      </nut-swiper-item >
     </nut-swiper>
     <div class="swiper-btns">
       <div class="swiper-btn" @click="handlePrev">
@@ -23,33 +23,39 @@
 
 
   <nut-cell>
-    <nut-row>
-      <nut-col>
-        <nut-tag type="primary" style="
-          background-color: #93B090;
-          font-family: Source Han Sans SC;
-          font-size: 8px;
-          font-weight: 500;
-          line-height: 11px;
-          letter-spacing: 0.849056601524353px;
-          text-align: left;
-          width: 20.42px;
-          height: 15.28px;
-          top: 319px;
-          left: 18px;
-          border-radius: 8.49px;
-
-        "> 
-        {{ "当前" }} </nut-tag>
-        <nut-price :price="route.query.price" size="normal" style="color: black;"/>
-      </nut-col>
-      <div>
-        <Shop />
-        {{ "  "+route.query.position }}
-      </div>
-      <Clock />
-      {{timePeriod}}
-    </nut-row>
+    <div style="display:flex;flex-direction: column;width: 100%;">
+      <nut-row>
+        <nut-col :span="12">
+          <nut-tag type="primary" style="
+            background-color: #93B090;
+            font-family: Source Han Sans SC;
+            font-size: 8px;
+            font-weight: 500;
+            line-height: 11px;
+            letter-spacing: 0.849056601524353px;
+            text-align: left;
+            width: 20.42px;
+            height: 15.28px;
+            top: 319px;
+            left: 18px;
+            border-radius: 8.49px;
+          "> 
+          {{ "当前" }} </nut-tag>
+          <nut-price :price="route.query.price" size="normal" style="color: black;"/>
+        </nut-col>
+        <nut-col :span="12">
+          <nut-input-number v-model="buying_quantity" min="0" :max="route.query.left" />
+        </nut-col>
+      </nut-row>
+      <nut-row>
+          <Shop />
+          {{ "  "+route.query.position }}
+      </nut-row>
+      <nut-row>
+        <Clock />
+        {{timePeriod}}
+      </nut-row>
+    </div>
   </nut-cell>
 
   <div style="font-family: Source Han Sans SC;
@@ -72,13 +78,38 @@
     {{ "商品的价格会随着保质期剩余的天数越少越便宜。保质期剩余天数少于1天的商品将会自动下架" }}
   </div>
   <div id="main" style="width:auto;height: 300px;"></div>
+
+  <!--Fixed block for shopping cart-->
+  <div style="width: 90%; height: 44px; position:fixed;bottom: 20px; margin: auto;left:0;right:0">
+    <div style="width: 100%; height: 44px; left: 0; top: 0; position: absolute; box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.25); border-radius: 50px" />
+    <div style="width: 70%; height: 44px; left: 0; top: 0; position: absolute; background: #FDFDFD; border-top-left-radius:50px;border-bottom-left-radius:50px;display: flex;align-items: end;" >
+      <div style="width: 70%; height: 29.59px; left: 5%; bottom:5px; position: absolute;display: flex;align-items: center;">
+        <div style="height: 16px;  color: #666666; font-size: 10; font-family: 'Source Han Sans SC'; font-weight: 400; word-wrap: break-word">合计：</div>
+        <span style="color: black; font-size: 18.49; font-family: 'Source Han Sans SC'; font-weight: 500;  ">￥</span>
+        <span style="color: black; font-size: 2rem; font-family: 'Source Han Sans SC'; font-weight: 500;vertical-align:top  ">{{ globalData.shoppingCart.getTotalPrice()}}</span>
+      </div>
+      <div style="width: 30%; height: 16px; right: 5px; bottom: 10px; position: absolute; color: #666666; font-size: 10; font-family: 'Source Han Sans SC'; font-weight: 400;  word-wrap: break-word">共{{globalData.shoppingCart.getTotalQuantity()}}件商品</div>
+    </div>
+    <div style="width:30%;height:44px;right:0;top:0;position:absolute;background: black; display: flex;align-items: center;justify-content: center;border-top-right-radius: 50px; border-bottom-right-radius: 50px; "
+      @click="EnterIndentConfirmPage()"> 
+      <div style="text-align: center; color: white; font-size: 16; font-family: 'Source Han Sans SC'; font-weight: 700; word-wrap: break-word">去结算</div>
+    </div>
+  </div>
+
 </template>
 <script setup>
-import { ref,onMounted } from 'vue';
+import { ref,onMounted,watch } from 'vue';
 import { Shop,Clock } from '@nutui/icons-vue';
 import { useRoute,useRouter } from 'vue-router';
 import * as echarts from 'echarts';
+import globalData from"../../global.js"
 import axios from 'axios';
+
+const buying_quantity=ref(0);// quantity in shopping cart
+// Whenever quantity is modified, synchronize with shopping cart
+watch(buying_quantity,()=>{
+  globalData.shoppingCart.modify(route.query.id,buying_quantity.value,buying_quantity.value *route.query.price)
+})
 
 var option = {
   tooltip: {
@@ -167,6 +198,15 @@ const handleNext = () => {
 
 const goBackPage=()=>{
   router.go(-1);
+}
+
+const EnterIndentConfirmPage=()=>{
+  if(globalData.shoppingCart.items.length>0){
+    router.push({
+      path:'/indentConfirm'
+    })
+  }
+
 }
 </script>
 
