@@ -26,7 +26,7 @@ public interface CommodityDetailRepository extends JpaRepository<CommodityEntity
             " LEFT JOIN commodity_categories cc ON c.COM_ID = cc.COM_ID\n" +
             " LEFT JOIN commodityImage ci ON c.COM_ID = ci.COM_ID\n" +
             " LEFT JOIN commodityPriceCurve pc ON c.COM_ID = pc.COM_ID\n" +
-            " WHERE c.COM_ID = :com_id\n" +
+            " WHERE c.COM_ID = :com_id AND c.COM_TYPE=0\n" +
             " GROUP BY c.COM_ID, pc.COM_PC_TIME, pc.COM_PC_PRICE\n" +
             " ORDER BY pc.COM_PC_TIME ASC",nativeQuery = true)
     public List<Object[]> getCommodityDetail(@Param("com_id") int com_id);
@@ -46,7 +46,7 @@ public interface CommodityDetailRepository extends JpaRepository<CommodityEntity
             " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
             " LEFT JOIN commodity_categories cc ON c.COM_ID = cc.COM_ID\n" +
             " LEFT JOIN commodityImage ci ON c.COM_ID = ci.COM_ID\n" +
-            " WHERE c.STO_ID = :sto_id \n" +
+            " WHERE c.STO_ID = :sto_id AND c.COM_TYPE=0\n" +
             " GROUP BY c.COM_ID \n" +
             " ORDER BY c.COM_UPLOADDATE DESC" ,nativeQuery = true)
     public List<Object[]> getCommodityList(@Param("sto_id") int sto_id);

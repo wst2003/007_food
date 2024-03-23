@@ -32,5 +32,6 @@ public class GetIndResponseDTO {
         private double commodity_money;
         private int rating_type;
         private String com_name;
+        private String com_image;
     }
 }

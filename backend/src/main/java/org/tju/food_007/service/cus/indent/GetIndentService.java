@@ -8,10 +8,8 @@ import org.tju.food_007.dto.cus.mapper.GenerateIndentComRequstMapper;
 import org.tju.food_007.dto.cus.mapper.GenerateIndentRequestMapper;
 import org.tju.food_007.model.IndentCommodityEntity;
 import org.tju.food_007.model.IndentEntity;
-import org.tju.food_007.repository.cus.indent.GenerateIndentComRepository;
-import org.tju.food_007.repository.cus.indent.GenerateIndentRepository;
-import org.tju.food_007.repository.cus.indent.IndentCommentDetailRepository;
-import org.tju.food_007.repository.cus.indent.IndentCommentRopsitory;
+import org.tju.food_007.repository.cus.indent.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +19,6 @@ import org.tju.food_007.dto.cus.indent.GetIndRequestDTO;
 import org.tju.food_007.dto.cus.indent.GetIndResponseDTO;
 import org.tju.food_007.dto.cus.indent.mapper.GetIndResponseMapper;
 import org.tju.food_007.model.*;
-import org.tju.food_007.repository.cus.indent.GetIndComPositionRepository;
-import org.tju.food_007.repository.cus.indent.GetIndCommodityRepository;
-import org.tju.food_007.repository.cus.indent.GetIndentComRepository;
-import org.tju.food_007.repository.cus.indent.GetIndentRepository;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,6 +48,8 @@ public class GetIndentService {
     GetIndentRepository getIndentRepository;
 
     @Autowired
+    GetIndentComImageRepository getIndentComImageRepository;
+    @Autowired
     GenerateIndentRepository generateIndentRepository;
     @Autowired
     GenerateIndentComRepository generateIndentComRepository;
@@ -61,6 +57,7 @@ public class GetIndentService {
     IndentCommentRopsitory indentCommentRopsitory;
     @Autowired
     IndentCommentDetailRepository indentCommentDetailRepository;
+
     private final GenerateIndentComRequstMapper generateIndentComRequstMapper=GenerateIndentComRequstMapper.INSTANCE;
     private final GenerateIndentRequestMapper generateIndentRequestMapper=GenerateIndentRequestMapper.INSTANCE;
 
@@ -95,6 +92,7 @@ public class GetIndentService {
                 tempComDTO.setCommodity_money(Double.parseDouble(IndCom.getCommodityMoney().toString()));
                 tempComDTO.setRating_type(IndCom.getRatingType());
                 tempComDTO.setCom_name(commodity.getComName());
+                tempComDTO.setCom_image(getIndentComImageRepository.findFirstByComId(IndCom.getComId()).getComImage());
                 tempComDTOs.add(tempComDTO);
                 sto_id=commodity.getStoId();
             }

@@ -15,6 +15,9 @@ public class RegularCommodityEntity {
     @Basic
     @Column(name = "com_expirationDate")
     private Timestamp comExpirationDate;
+    @Basic
+    @Column(name = "com_producedDate")
+    private Timestamp comProducedDate;
 
     public int getRegularComId() {
         return regularComId;
@@ -43,5 +46,13 @@ public class RegularCommodityEntity {
     @Override
     public int hashCode() {
         return Objects.hash(regularComId, comExpirationDate);
+    }
+
+    public Timestamp getComProducedDate() {
+        return comProducedDate;
+    }
+
+    public void setComProducedDate(Timestamp comProducedDate) {
+        this.comProducedDate = comProducedDate;
     }
 }

@@ -22,17 +22,8 @@ public class MysteryBoxEntity {
     @Column(name = "category_count")
     private int categoryCount;
     @Basic
-    @Column(name = "item_price")
-    private BigDecimal itemPrice;
-    @Basic
-    @Column(name = "item_introduction")
-    private String itemIntroduction;
-    @Basic
     @Column(name = "item_image")
     private String itemImage;
-    @Basic
-    @Column(name = "item_name")
-    private String itemName;
 
     public int getMysteryBoxId() {
         return mysteryBoxId;
@@ -66,22 +57,6 @@ public class MysteryBoxEntity {
         this.categoryCount = categoryCount;
     }
 
-    public BigDecimal getItemPrice() {
-        return itemPrice;
-    }
-
-    public void setItemPrice(BigDecimal itemPrice) {
-        this.itemPrice = itemPrice;
-    }
-
-    public String getItemIntroduction() {
-        return itemIntroduction;
-    }
-
-    public void setItemIntroduction(String itemIntroduction) {
-        this.itemIntroduction = itemIntroduction;
-    }
-
     public String getItemImage() {
         return itemImage;
     }
@@ -90,24 +65,16 @@ public class MysteryBoxEntity {
         this.itemImage = itemImage;
     }
 
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MysteryBoxEntity that = (MysteryBoxEntity) o;
-        return mysteryBoxId == that.mysteryBoxId && categoryCount == that.categoryCount && Objects.equals(highestPrice, that.highestPrice) && Objects.equals(lowestPrice, that.lowestPrice) && Objects.equals(itemPrice, that.itemPrice) && Objects.equals(itemIntroduction, that.itemIntroduction) && Objects.equals(itemImage, that.itemImage) && Objects.equals(itemName, that.itemName);
+        return mysteryBoxId == that.mysteryBoxId && categoryCount == that.categoryCount && Objects.equals(highestPrice, that.highestPrice) && Objects.equals(lowestPrice, that.lowestPrice) && Objects.equals(itemImage, that.itemImage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mysteryBoxId, highestPrice, lowestPrice, categoryCount, itemPrice, itemIntroduction, itemImage, itemName);
+        return Objects.hash(mysteryBoxId, highestPrice, lowestPrice, categoryCount, itemImage);
     }
 }
