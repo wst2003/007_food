@@ -81,12 +81,13 @@
               console.log('Login submitted successfully.');
               console.log(response.data);
               
-              if(response.data.msg==='success') {
+              if(response.data.msg==='登录成功') {
                 /*------------------------*/
                 /*登录成功后编辑此处跳转界面*/
                 /*------------------------*/
                 localStorage.setItem("user_phone",phoneNumber.value );
                 globalData.userInfo.user_id= response.data.user_id ;
+                // console.log(globalData.userInfo.user_id)
                 if (response.data.user_type==1){
                   sessionStorage.removeItem("user_type");
                   sessionStorage.setItem("user_type", response.data.user_type);

@@ -148,7 +148,7 @@ function computeDistance(){
         map.addOverlay(mk);
 
         var promise = new Promise((resolve, reject) => {
-            globalData.mapObj.walkingRoute(currentPoint,sto_point,false, (distance, duration) => {
+            globalData.mapObj.walkingRoute(currentPoint.lat,currentPoint.lng,sto_point.lat,sto_point.lng,false, (distance, duration) => {
                 //console.log('Distance:', distance, 'Duration:', duration);
                 calcList.push([distance,duration])
                 if (!distance.includes("公里")){ markedPoint.push(point);}

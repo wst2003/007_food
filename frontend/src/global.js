@@ -81,7 +81,10 @@ const userInfo={
 }
 const mapObj={
     map:null,
-    walkingRoute(start,end,flag=false, callback){
+    // 直接传经纬度即可
+    walkingRoute(begin_lat,begin_lng,end_lat,end_lng,flag=false, callback){
+        let start = new BaiduMap.Point(begin_lng, begin_lat); 
+        let end = new BaiduMap.Point(end_lng, end_lat); 
         var distance=null;
         var duration=null;
         if(flag==false){
@@ -108,7 +111,9 @@ const mapObj={
             walking.search(start, end);
         }
     },
-    ridingRoute(start,end,flag=false, callback){
+    ridingRoute(begin_lat,begin_lng,end_lat,end_lng,flag=false, callback){
+        let start = new BaiduMap.Point(begin_lng, begin_lat); 
+        let end = new BaiduMap.Point(end_lng, end_lat); 
         var distance=null;
         var duration=null;
         if(flag==false){

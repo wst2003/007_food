@@ -14,12 +14,14 @@ import IndentDetailPage from '@/components/customer/IndentDetailPage.vue';
 import IndentConfirmPage from '@/components/indent/IndentConfirmPage.vue';
 import UploadCommodity from '@/components/store/UploadCommodity.vue';
 import UploadBlindBoxPage from '@/components/store/UploadBlindBoxPage.vue';
+import UploadSelector from '@/components/store/UploadSelector.vue';
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: "/uploadblindbox",
+            redirect: "/UploadSelector",
 
         },
         {
@@ -75,7 +77,7 @@ const router = createRouter({
             component: StoreDetailPage
         },
         {
-            path: '/myIndent',
+            path: '/myIndent', 
             name: 'myIndent',
             component: MyIndentPage
         },
@@ -113,7 +115,12 @@ const router = createRouter({
             path:'/uploadblindbox',
             name:'uploadblindbox',
             component:UploadBlindBoxPage
-        }
+        },
+        {
+            path:'/UploadSelector',
+            name: 'UploadSelector',
+            component:UploadSelector
+        },
     ]
 });
 
