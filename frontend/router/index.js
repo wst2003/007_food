@@ -12,12 +12,14 @@ import StoreRegisterPage from '@/components/public/StoreRegisterPage.vue';
 import CommentPage from '@/components/customer/CommentPage.vue';
 import IndentDetailPage from '@/components/customer/IndentDetailPage.vue';
 import IndentConfirmPage from '@/components/indent/IndentConfirmPage.vue';
+import UploadCommodity from '@/components/store/UploadCommodity.vue';
+import UploadBlindBoxPage from '@/components/store/UploadBlindBoxPage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: "/searchCommodity",
+            redirect: "/uploadblindbox",
 
         },
         {
@@ -101,6 +103,16 @@ const router = createRouter({
             path:'/indentConfirm',
             name: 'indentConfirm',
             component:IndentConfirmPage
+        },
+        {
+            path:'/uploadCommodity',
+            name:'uploadCommodity',
+            component:UploadCommodity
+        },
+        {
+            path:'/uploadblindbox',
+            name:'uploadblindbox',
+            component:UploadBlindBoxPage
         }
     ]
 });
