@@ -22,8 +22,10 @@
               </nut-circle-progress>
             </div>
             <div class="licence" @click="showLicence">{{ "营业执照 >" }}</div>
+           
           </div>
         </div>
+        
       </div>
       <div>
         <nut-tabs v-model="tabValue" @click="changeTabCb">

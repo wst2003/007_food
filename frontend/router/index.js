@@ -11,12 +11,17 @@ import CustomerRegisterPage from '@/components/public/CustomerRegisterPage.vue';
 import StoreRegisterPage from '@/components/public/StoreRegisterPage.vue';
 import CommentPage from '@/components/customer/CommentPage.vue';
 import IndentDetailPage from '@/components/customer/IndentDetailPage.vue';
+import IndentConfirmPage from '@/components/indent/IndentConfirmPage.vue';
+import UploadCommodity from '@/components/store/UploadCommodity.vue';
+import UploadBlindBoxPage from '@/components/store/UploadBlindBoxPage.vue';
+import UploadSelector from '@/components/store/UploadSelector.vue';
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: "/searchCommodity",
+            redirect: "/UploadSelector",
 
         },
         {
@@ -72,7 +77,7 @@ const router = createRouter({
             component: StoreDetailPage
         },
         {
-            path: '/myIndent',
+            path: '/myIndent', 
             name: 'myIndent',
             component: MyIndentPage
         },
@@ -95,7 +100,27 @@ const router = createRouter({
             path:'/indentdetail',
             name:'indentdetail',
             component:IndentDetailPage
-        }
+        },
+        {
+            path:'/indentConfirm',
+            name: 'indentConfirm',
+            component:IndentConfirmPage
+        },
+        {
+            path:'/uploadCommodity',
+            name:'uploadCommodity',
+            component:UploadCommodity
+        },
+        {
+            path:'/uploadblindbox',
+            name:'uploadblindbox',
+            component:UploadBlindBoxPage
+        },
+        {
+            path:'/UploadSelector',
+            name: 'UploadSelector',
+            component:UploadSelector
+        },
     ]
 });
 

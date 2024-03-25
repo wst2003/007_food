@@ -14,7 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/sto")
-public class StoinformationdetailController {
+public class
+StoinformationdetailController {
 
     @Autowired
     private StoinformationdetailService stoinformationdetailService;

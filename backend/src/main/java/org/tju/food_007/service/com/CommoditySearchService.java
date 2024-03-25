@@ -70,8 +70,10 @@ public class CommoditySearchService {
                     commodityPriceCurveResponseDTOS.add(commodityPriceCurveResponseDTO);
                 }
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                CommodityPriceCurveResponseDTO maxDTO = null;
+                CommodityPriceCurveResponseDTO maxDTO = new CommodityPriceCurveResponseDTO();
                 LocalDateTime currentDateTime = LocalDateTime.now();
+                maxDTO.setCom_pc_time(formatter.format(currentDateTime));
+                maxDTO.setCom_pc_price(Double.parseDouble(tempObj[3].toString()));
 
                 for (CommodityPriceCurveResponseDTO dto : commodityPriceCurveResponseDTOS) {
                     LocalDateTime curveDateTime = LocalDateTime.parse(dto.getCom_pc_time(), formatter);

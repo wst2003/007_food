@@ -36,7 +36,7 @@
 
       <nut-row :gutter="5" v-for="commodity in commodityData" :key="commodity.id1">
         <nut-col :span="12">
-          <nut-cell style="background: #e5f1e3;height:165px" @click="showDetail(commodity.id1,commodity.position1,commodity.distance1,commodity.price1,commodity.name1)">
+          <nut-cell style="background: #e5f1e3;height:165px" @click="showDetail(commodity.id1,commodity.position1,commodity.distance1,commodity.price1,commodity.name1,commodity.left1)">
             <div>
               <div>
                 <nut-image style="margin-bottom: 5px;" :round="true" :radius="8" :src="commodity.commodityImage1" width="100%" height="100px" :fit="contain" />
@@ -93,7 +93,7 @@
         </nut-col>
 
         <nut-col :span="12" v-if="commodity.id2!=-1">
-          <nut-cell style="background: #e5f1e3;height:165px" @click="showDetail(commodity.id2,commodity.position2,commodity.distance2,commodity.price2,commodity.name2)">
+          <nut-cell style="background: #e5f1e3;height:165px" @click="showDetail(commodity.id2,commodity.position2,commodity.distance2,commodity.price2,commodity.name2,commodity.left2)">
             <div>
               <div>
                 <nut-image style="margin-bottom: 5px;" :round="true" :radius="8" :src="commodity.commodityImage2" width="100%" height="100px" :fit="contain" />
@@ -205,7 +205,7 @@ const query_content = ref("");
 
 const commodityData=ref([]);
 
-const showDetail=(id,position,distance,price,name)=>{
+const showDetail=(id,position,distance,price,name,left)=>{
   console.log(name)
   router.push({
     path:'/commodityDetail',
@@ -214,7 +214,8 @@ const showDetail=(id,position,distance,price,name)=>{
       position:position,
       distance:distance,
       price:price,
-      name:name
+      name:name,
+      left:left
     }
   })
 }
