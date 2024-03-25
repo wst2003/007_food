@@ -11,11 +11,9 @@ import java.util.Objects;
 public class CommodityImageEntityPK implements Serializable {
     @Column(name = "com_ID")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int comId;
     @Column(name = "com_image")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String comImage;
 
     public int getComId() {

@@ -10,11 +10,9 @@ import java.util.Objects;
 @Table(name = "commodityPriceCurve", schema = "food_007", catalog = "")
 @IdClass(CommodityPriceCurveEntityPK.class)
 public class CommodityPriceCurveEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "com_ID")
     private int comId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "com_pc_time")
     private Timestamp comPcTime;

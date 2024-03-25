@@ -31,6 +31,7 @@ public interface CustomRegistrationRequestMapper {
     @Mapping(target = "cusNickname",source = "cus_nickname")
     @Mapping(target = "cusPayPassword",source = "cus_payPassword")
     @Mapping(target = "cusState",ignore = true)
+    @Mapping(target = "userLogo",ignore = true)
     CustomerEntity requestToCusEntity(CustomRegistrationRequestDTO request);
 
 }

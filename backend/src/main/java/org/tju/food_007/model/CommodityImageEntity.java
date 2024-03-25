@@ -8,11 +8,9 @@ import java.util.Objects;
 @Table(name = "commodityImage", schema = "food_007", catalog = "")
 @IdClass(CommodityImageEntityPK.class)
 public class CommodityImageEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "com_ID")
     private int comId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "com_image")
     private String comImage;

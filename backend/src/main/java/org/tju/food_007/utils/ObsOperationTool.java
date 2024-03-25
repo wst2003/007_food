@@ -17,7 +17,7 @@ public class ObsOperationTool {
 
     private static String endPoint = "obs.cn-east-3.myhuaweicloud.com";
 
-    private static ObsClient obsClient = new ObsClient(ak, sk,endPoint);
+    public static ObsClient obsClient = new ObsClient(ak, sk,endPoint);
 
     /**
      * 判断对象是否存在

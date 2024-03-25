@@ -8,16 +8,22 @@ import java.util.Objects;
 @Entity
 @Table(name = "regular_commodity", schema = "food_007", catalog = "")
 public class RegularCommodityEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "regular_com_ID")
     private int regularComId;
     @Basic
     @Column(name = "com_expirationDate")
     private Timestamp comExpirationDate;
+    @Basic
+    @Column(name = "com_producedDate")
+    private Timestamp comProducedDate;
 
     public int getRegularComId() {
         return regularComId;
+    }
+
+    public void setRegularComId(Integer regularComId) {
+        this.regularComId = regularComId;
     }
 
     public void setRegularComId(int regularComId) {
@@ -43,5 +49,13 @@ public class RegularCommodityEntity {
     @Override
     public int hashCode() {
         return Objects.hash(regularComId, comExpirationDate);
+    }
+
+    public Timestamp getComProducedDate() {
+        return comProducedDate;
+    }
+
+    public void setComProducedDate(Timestamp comProducedDate) {
+        this.comProducedDate = comProducedDate;
     }
 }

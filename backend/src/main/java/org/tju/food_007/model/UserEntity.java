@@ -42,6 +42,10 @@ public class UserEntity {
         return userId;
     }
 
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     public void setUserId(int userId) {
         this.userId = userId;
     }
@@ -74,6 +78,10 @@ public class UserEntity {
         return userState;
     }
 
+    public void setUserState(Integer userState) {
+        this.userState = userState;
+    }
+
     public void setUserState(int userState) {
         this.userState = userState;
     }
@@ -98,12 +106,20 @@ public class UserEntity {
         return userType;
     }
 
+    public void setUserType(Integer userType) {
+        this.userType = userType;
+    }
+
     public void setUserType(int userType) {
         this.userType = userType;
     }
 
     public int getUserGender() {
         return userGender;
+    }
+
+    public void setUserGender(Integer userGender) {
+        this.userGender = userGender;
     }
 
     public void setUserGender(int userGender) {

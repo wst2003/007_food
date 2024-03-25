@@ -22,6 +22,17 @@
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.huaweicloud</groupId>
+            <artifactId>esdk-obs-java-bundle</artifactId>
+            <version>3.23.5</version>
+        </dependency>
+        <!--若您的项目对三方依赖占用空间大小较为敏感，可使用下方代码引用普通版 SDK。具体差别见说明-->
+        <!--<dependency>-->
+        <!--        <groupId>com.huaweicloud</groupId>-->
+        <!--        <artifactId>esdk-obs-java</artifactId>-->
+        <!--        <version>versionNumber</version>-->
+        <!--</dependency>-->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>

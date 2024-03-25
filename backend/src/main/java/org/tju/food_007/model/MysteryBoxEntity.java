@@ -5,13 +5,16 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+/**
+ * @author WGY
+ * @create 2024-03-20-16:42
+ */
 @Entity
 @Table(name = "mystery_box", schema = "food_007", catalog = "")
 public class MysteryBoxEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "mystery_box_ID")
-    private int mysteryBoxId;
+    private Integer mysteryBoxId;
     @Basic
     @Column(name = "highest_price")
     private BigDecimal highestPrice;
@@ -20,25 +23,16 @@ public class MysteryBoxEntity {
     private BigDecimal lowestPrice;
     @Basic
     @Column(name = "category_count")
-    private int categoryCount;
-    @Basic
-    @Column(name = "item_price")
-    private BigDecimal itemPrice;
-    @Basic
-    @Column(name = "item_introduction")
-    private String itemIntroduction;
+    private Integer categoryCount;
     @Basic
     @Column(name = "item_image")
     private String itemImage;
-    @Basic
-    @Column(name = "item_name")
-    private String itemName;
 
-    public int getMysteryBoxId() {
+    public Integer getMysteryBoxId() {
         return mysteryBoxId;
     }
 
-    public void setMysteryBoxId(int mysteryBoxId) {
+    public void setMysteryBoxId(Integer mysteryBoxId) {
         this.mysteryBoxId = mysteryBoxId;
     }
 
@@ -58,28 +52,12 @@ public class MysteryBoxEntity {
         this.lowestPrice = lowestPrice;
     }
 
-    public int getCategoryCount() {
+    public Integer getCategoryCount() {
         return categoryCount;
     }
 
-    public void setCategoryCount(int categoryCount) {
+    public void setCategoryCount(Integer categoryCount) {
         this.categoryCount = categoryCount;
-    }
-
-    public BigDecimal getItemPrice() {
-        return itemPrice;
-    }
-
-    public void setItemPrice(BigDecimal itemPrice) {
-        this.itemPrice = itemPrice;
-    }
-
-    public String getItemIntroduction() {
-        return itemIntroduction;
-    }
-
-    public void setItemIntroduction(String itemIntroduction) {
-        this.itemIntroduction = itemIntroduction;
     }
 
     public String getItemImage() {
@@ -90,24 +68,16 @@ public class MysteryBoxEntity {
         this.itemImage = itemImage;
     }
 
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MysteryBoxEntity that = (MysteryBoxEntity) o;
-        return mysteryBoxId == that.mysteryBoxId && categoryCount == that.categoryCount && Objects.equals(highestPrice, that.highestPrice) && Objects.equals(lowestPrice, that.lowestPrice) && Objects.equals(itemPrice, that.itemPrice) && Objects.equals(itemIntroduction, that.itemIntroduction) && Objects.equals(itemImage, that.itemImage) && Objects.equals(itemName, that.itemName);
+        return Objects.equals(mysteryBoxId, that.mysteryBoxId) && Objects.equals(highestPrice, that.highestPrice) && Objects.equals(lowestPrice, that.lowestPrice) && Objects.equals(categoryCount, that.categoryCount) && Objects.equals(itemImage, that.itemImage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mysteryBoxId, highestPrice, lowestPrice, categoryCount, itemPrice, itemIntroduction, itemImage, itemName);
+        return Objects.hash(mysteryBoxId, highestPrice, lowestPrice, categoryCount, itemImage);
     }
 }

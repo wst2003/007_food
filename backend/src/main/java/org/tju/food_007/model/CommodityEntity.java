@@ -42,6 +42,10 @@ public class CommodityEntity {
         return comId;
     }
 
+    public void setComId(Integer comId) {
+        this.comId = comId;
+    }
+
     public void setComId(int comId) {
         this.comId = comId;
     }
@@ -74,6 +78,10 @@ public class CommodityEntity {
         return comLeft;
     }
 
+    public void setComLeft(Integer comLeft) {
+        this.comLeft = comLeft;
+    }
+
     public void setComLeft(int comLeft) {
         this.comLeft = comLeft;
     }
@@ -82,12 +90,20 @@ public class CommodityEntity {
         return stoId;
     }
 
+    public void setStoId(Integer stoId) {
+        this.stoId = stoId;
+    }
+
     public void setStoId(int stoId) {
         this.stoId = stoId;
     }
 
     public int getComType() {
         return comType;
+    }
+
+    public void setComType(Integer comType) {
+        this.comType = comType;
     }
 
     public void setComType(int comType) {
