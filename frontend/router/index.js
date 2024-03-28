@@ -15,13 +15,13 @@ import IndentConfirmPage from '@/components/indent/IndentConfirmPage.vue';
 import UploadCommodity from '@/components/store/UploadCommodity.vue';
 import UploadBlindBoxPage from '@/components/store/UploadBlindBoxPage.vue';
 import UploadSelector from '@/components/store/UploadSelector.vue';
-
+import IndentManagePage from '@/components/store/IndentManagePage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: "/UploadSelector",
+            redirect: "/testpage",
 
         },
         {
@@ -121,6 +121,11 @@ const router = createRouter({
             name: 'UploadSelector',
             component:UploadSelector
         },
+        {
+            path:'/indentmanagepage',
+            name:'indentmanagepage',
+            component:IndentManagePage
+        }
     ]
 });
 

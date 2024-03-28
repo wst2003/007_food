@@ -61,6 +61,7 @@ public class StoUploadCommodityService {
             CommodityPriceCurveEntity newPriceNode= new CommodityPriceCurveEntity();
             newPriceNode.setComId(inserted_com.getComId());
             newPriceNode.setComPcPrice(BigDecimal.valueOf(curveInfo.getCom_pc_price()));
+            System.out.println("curveInfo.getCom_pc_time()"+curveInfo.getCom_pc_time());
             newPriceNode.setComPcTime(Timestamp.valueOf(curveInfo.getCom_pc_time()));
             stoSetPriceRepository.save(newPriceNode);
         }
@@ -97,6 +98,7 @@ public class StoUploadCommodityService {
 
     public void UploadCommodityImage(StoUploadImageRequestDTO formDTO) throws IOException {
         Integer com_image_index=0;
+        System.out.println("formDTO.getCom_id() ： "+formDTO.getCom_id());
         //TODO:判断该id是否存在
         for(MultipartFile image_file : formDTO.getImages()){
             InputStream image_obs=image_file.getInputStream();

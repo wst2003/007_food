@@ -87,18 +87,22 @@
                 /*------------------------*/
                 localStorage.setItem("user_phone",phoneNumber.value );
                 globalData.userInfo.user_id= response.data.user_id ;
+                console.log(globalData.userInfo.user_id)
                 // console.log(globalData.userInfo.user_id)
                 if (response.data.user_type==1){
                   sessionStorage.removeItem("user_type");
                   sessionStorage.setItem("user_type", response.data.user_type);
+                  router.push({
+                        path: '/UploadSelector',
+                  });
                 }
                 else if (response.data.user_type==0){
                   sessionStorage.removeItem("user_type");
                   sessionStorage.setItem("user_type", response.data.user_type);
-                }
-                router.push({
+                  router.push({
                         path: '/home',
-                });
+                  });
+                }
             } else{
                 baseClick(response.data.msg);
                 console.log(response.data.msg);
