@@ -3,12 +3,10 @@ package org.tju.food_007.service.com;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tju.food_007.dto.com.CommodityImageResponseDTO;
-import org.tju.food_007.dto.com.CommodityPriceCurveResponseDTO;
-import org.tju.food_007.dto.com.SearchCommodityRequestDTO;
-import org.tju.food_007.dto.com.SearchCommodityResponseDTO;
+import org.tju.food_007.dto.com.*;
 import org.tju.food_007.repository.com.CommoditySearchRepository;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -54,6 +52,8 @@ public class CommoditySearchService {
             if(tempObj[6]!=null)tempDTO.setCom_left((Integer)tempObj[6]);
             if(tempObj[7]!=null)tempDTO.setPraise_rate(Double.parseDouble(tempObj[7].toString()));
             if(tempObj[8]!=null)tempDTO.setSto_ID((Integer)tempObj[8]);
+            if(tempObj[12]!=null)tempDTO.setCom_expirationDate(tempObj[12].toString());
+            if(tempObj[17]!=null)tempDTO.setCom_producedDate(tempObj[17].toString());
             if(tempObj[15]!=null)tempDTO.setCom_position(tempObj[15].toString());
             if(tempObj[14]!=null){
                 List<String> images = Arrays.stream(tempObj[14].toString().split(",")).toList();
@@ -88,6 +88,49 @@ public class CommoditySearchService {
             }
             response.add(tempDTO);
         }
+
+        //进行剩余时间比例筛选
+        if (request.getRemaining_proportion() != null) {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            // 创建一个用于记录需要移除的DTO的迭代器
+            Iterator<SearchCommodityResponseDTO> iterator = response.iterator();
+
+            while (iterator.hasNext()) {
+                SearchCommodityResponseDTO commodity = iterator.next();
+                System.out.println(commodity.getCom_ID());
+
+                LocalDateTime expirationDate = LocalDateTime.parse(commodity.getCom_expirationDate().replace(".0", ""), formatter);
+                LocalDateTime producedDate = LocalDateTime.parse(commodity.getCom_producedDate().replace(".0", ""), formatter);
+
+                if(expirationDate.isBefore(currentDateTime)){
+                    if(Math.abs(request.getRemaining_proportion()) > 1e-10){
+                        iterator.remove();
+                    }
+                }
+                else{
+                    // 计算保质期和剩余保质期
+                    Duration guaranteePeriod = Duration.between(producedDate, expirationDate);
+                    Duration remainPeriod = Duration.between(currentDateTime, expirationDate);
+
+                    // 计算保质期比例
+                    long guaranteePeriodDays = guaranteePeriod.toDays();
+                    long remainPeriodDays = remainPeriod.toDays();
+                    double ratio = (double) remainPeriodDays / (double) guaranteePeriodDays;
+                    System.out.println(commodity.getCom_name()+"当前剩余时间比例："+ratio);
+
+                    // 比较保质期比例与剩余保质期比例
+                    if (ratio > request.getRemaining_proportion()) {
+                        iterator.remove();
+                    }
+                }
+
+            }
+        }
+
+
+
 
         if(request.getSort_by()==0 && request.getSort_order()==0){
             response.sort(new Comparator<SearchCommodityResponseDTO>() {
