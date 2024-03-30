@@ -1,5 +1,7 @@
 package org.tju.food_007.service.com;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,8 +9,12 @@ import org.springframework.stereotype.Service;
 import org.tju.food_007.dto.com.*;
 import org.tju.food_007.repository.com.CommodityDetailRepository;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -45,6 +51,7 @@ public class CommodityInfomationService {
         if(objects.getFirst()[10]!=null)commodityDetailDTO.setSto_openingTime(objects.getFirst()[10].toString());
         if(objects.getFirst()[11]!=null)commodityDetailDTO.setSto_closingTime(objects.getFirst()[11].toString());
         if(objects.getFirst()[12]!=null)commodityDetailDTO.setCom_expirationDate(objects.getFirst()[12].toString());
+        if(objects.getFirst()[17]!=null)commodityDetailDTO.setCom_producedDate(objects.getFirst()[17].toString());
         if(objects.getFirst()[13]!=null){
             List<String> categories = Arrays.stream(objects.getFirst()[13].toString().split(",")).toList();
             List<CommodityCategoriesResponseDTO> categoriesResponseDTOS =new ArrayList<>();
@@ -120,6 +127,7 @@ public class CommodityInfomationService {
             if(tempObj[10]!=null)tempDetailDTO.setSto_openingTime(tempObj[10].toString());
             if(tempObj[11]!=null)tempDetailDTO.setSto_closingTime(tempObj[11].toString());
             if(tempObj[12]!=null)tempDetailDTO.setCom_expirationDate(tempObj[12].toString());
+            if(tempObj[16]!=null)tempDetailDTO.setCom_producedDate(tempObj[16].toString());
             if(tempObj[13]!=null){
                 List<String> categories = Arrays.stream(tempObj[13].toString().split(",")).toList();
                 List<CommodityCategoriesResponseDTO> categoriesResponseDTOS =new ArrayList<>();
@@ -156,6 +164,44 @@ public class CommodityInfomationService {
             response.add(tempDetailDTO);
         }
 
+        if (request.getRemaining_proportion() != null) {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            // 创建一个用于记录需要移除的DTO的迭代器
+            Iterator<CommodityDetailDTO> iterator = response.iterator();
+
+            while (iterator.hasNext()) {
+                CommodityDetailDTO commodity = iterator.next();
+
+                LocalDateTime expirationDate = LocalDateTime.parse(commodity.getCom_expirationDate().replace(".0", ""), formatter);
+                LocalDateTime producedDate = LocalDateTime.parse(commodity.getCom_producedDate().replace(".0", ""), formatter);
+
+                if(expirationDate.isBefore(currentDateTime)){
+                    if(Math.abs(request.getRemaining_proportion()) > 1e-10){
+                        iterator.remove();
+                    }
+                }
+                else{
+                    // 计算保质期和剩余保质期
+                    Duration guaranteePeriod = Duration.between(producedDate, expirationDate);
+                    Duration remainPeriod = Duration.between(currentDateTime, expirationDate);
+
+                    // 计算保质期比例
+                    long guaranteePeriodDays = guaranteePeriod.toDays();
+                    long remainPeriodDays = remainPeriod.toDays();
+                    double ratio = (double) remainPeriodDays / (double) guaranteePeriodDays;
+                    System.out.println(commodity.getCom_name()+"当前剩余时间比例："+ratio);
+
+                    // 比较保质期比例与剩余保质期比例
+                    if (ratio > request.getRemaining_proportion()) {
+                        iterator.remove();
+                    }
+                }
+
+            }
+        }
+
         int page_size = request.getPage_size();
         int page_num = request.getPage_num();
         System.out.println("查询到总数为" + response.size());
@@ -172,4 +218,73 @@ public class CommodityInfomationService {
     }
 
 
+    public CommodityStatisticsDTO getCommodityStatistics(int sto_id){
+        CommodityStatisticsDTO StatisticsResponse = new CommodityStatisticsDTO();
+
+        int half_num=0;
+        int quater_num =0;
+        int out_num =0;
+        List<ComPeriod> response =new ArrayList<>();
+
+        List<Object[]> objects = commodityDetailRepository.getCommodityStatistics(sto_id);
+
+        // 筛选出所有信息
+        for(Object[] tempObj : objects){
+            ComPeriod comPeriod = new ComPeriod();
+            if(tempObj[0]!=null) comPeriod.setCom_id((Integer) tempObj[0]);
+            if(tempObj[1]!=null) comPeriod.setCom_expirationDate(tempObj[1].toString());
+            if(tempObj[2]!=null) comPeriod.setCom_producedDate(tempObj[2].toString());
+            response.add(comPeriod);
+        }
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // 创建一个用于记录需要移除的DTO的迭代器
+        Iterator<ComPeriod> iterator = response.iterator();
+
+        while (iterator.hasNext()) {
+            ComPeriod commodity = iterator.next();
+
+            LocalDateTime expirationDate = LocalDateTime.parse(commodity.getCom_expirationDate().replace(".0", ""), formatter);
+            LocalDateTime producedDate = LocalDateTime.parse(commodity.getCom_producedDate().replace(".0", ""), formatter);
+
+            if(expirationDate.isBefore(currentDateTime)){
+               out_num++;
+            }
+            else{
+                // 计算保质期和剩余保质期
+                Duration guaranteePeriod = Duration.between(producedDate, expirationDate);
+                Duration remainPeriod = Duration.between(currentDateTime, expirationDate);
+
+                // 计算保质期比例
+                long guaranteePeriodDays = guaranteePeriod.toDays();
+                long remainPeriodDays = remainPeriod.toDays();
+                double ratio = (double) remainPeriodDays / (double) guaranteePeriodDays;
+
+                // 比较保质期比例与剩余保质期比例
+                if (ratio <= 0.5) {
+                    half_num++;
+                }
+                if(ratio <= 0.25){
+                    quater_num++;
+                }
+            }
+        }
+
+        StatisticsResponse.setHalf_num(half_num);
+        StatisticsResponse.setQuater_num(quater_num);
+        StatisticsResponse.setOut_num(out_num);
+
+        return StatisticsResponse;
+    }
+
+    @Getter
+    @Setter
+    public static class ComPeriod
+    {
+        private int com_id;
+        private String com_expirationDate;
+        private String com_producedDate;
+    }
 }

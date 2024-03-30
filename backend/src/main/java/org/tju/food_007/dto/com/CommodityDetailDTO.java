@@ -16,6 +16,7 @@ public class CommodityDetailDTO {
     private double com_oriPrice;
     private double praise_rate;
     private String com_expirationDate;
+    private String com_producedDate;
     private CommodityPriceCurveResponseDTO[] commodityPriceCurve;
     private CommodityImageResponseDTO[] commodityImage;
     private CommodityCategoriesResponseDTO[] commodity_categories;

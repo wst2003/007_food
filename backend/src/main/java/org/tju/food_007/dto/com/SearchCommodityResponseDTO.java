@@ -15,4 +15,7 @@ public class SearchCommodityResponseDTO {
     private Double com_dist= (double) 0;
     private String commodityImage;
     private Integer sto_ID;
+    private Integer left_day = 0;
+    private String com_expirationDate;
+    private String com_producedDate;
 }

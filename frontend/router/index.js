@@ -16,14 +16,13 @@ import UploadCommodity from '@/components/store/UploadCommodity.vue';
 import UploadBlindBoxPage from '@/components/store/UploadBlindBoxPage.vue';
 import UploadSelector from '@/components/store/UploadSelector.vue';
 import MysteryBoxDetailPage from '@/components/commodity/MysteryBoxDetailPage.vue'
-import test from '@/components/commodity/TestPage.vue'
-
+import IndentManagePage from '@/components/store/IndentManagePage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: "/UploadSelector",
+            redirect: "/testpage",
 
         },
         {
@@ -48,11 +47,6 @@ const router = createRouter({
             meta: {
                 keepAlive: true
             }
-        },
-        {
-            path:'/test',
-            name:'test',
-            component: test
         },
         {
             path: '/mysteryBoxDetail',
@@ -133,6 +127,11 @@ const router = createRouter({
             name: 'UploadSelector',
             component:UploadSelector
         },
+        {
+            path:'/indentmanagepage',
+            name:'indentmanagepage',
+            component:IndentManagePage
+        }
     ]
 });
 

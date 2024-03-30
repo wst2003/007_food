@@ -46,6 +46,10 @@
               multiple
               :auto-upload="false"
               maximum="5"
+              url='/api/sto/uploadImage'
+              :data="addPicData"
+              :ref="uploadRef"
+              name='images'
             >
             </nut-uploader>
           </nut-form-item>
@@ -134,7 +138,10 @@ import * as echarts from 'echarts';
 import { onMounted } from 'vue';
 import globalData from"../../global.js"
 import axios from 'axios';
+const uploadRef = ref(null);
+const categories=ref([])
 const router=useRouter();
+const addPicData={com_id:'0'}
 const formData=ref({
     com_name:' ',
     com_type:0,
@@ -166,12 +173,23 @@ const show_produceDate_pick=ref(false)
 const show_expirationDate_pick=ref(false)
 const show_priceNode_pick=ref(false)
 
+const transformDateString=(date)=>{
+    if(date.getMonth().toString()==0)
+    return date.getFullYear().toString()+'-12-'+date.getDate().toString()
+    else if(date.getMonth().toString()<10)
+    return date.getFullYear().toString()+'-0'+date.getMonth().toString()+'-'+date.getDate().toString()
+    else
+    return date.getFullYear().toString()+'-'+date.getMonth().toString()+'-'+date.getDate().toString()
+}
 const selectTypeClose=()=>{
     console.log(pickType.value)
     commodityType.value='';
     for(let i in pickType.value){
         console.log(i)
         commodityType.value+=pickType.value[i]+' '
+    }
+    for(let i in pickType.value){
+        categories.value.push({'com_category':pickType.value[i]})
     }
     if(commodityType.value===''){
         commodityType.value='请选择商品类别'
@@ -180,13 +198,15 @@ const selectTypeClose=()=>{
 
 const confirm_produceDate_pick=()=>{
     let pickDay=formData.value.com_producedDate
-    pickProduceDate.value=pickDay.getFullYear().toString()+'-'+(pickDay.getMonth()+1).toString()+'-'+pickDay.getDate().toString()
+    pickDay.setMonth(pickDay.getMonth()+1)
+    pickProduceDate.value=transformDateString(pickDay)
     show_produceDate_pick.value=false
 }
 
 const confirm_expirationDate_pick=()=>{
     let pickDay=formData.value.com_expirationDate
-    pickexpirationDate.value=pickDay.getFullYear().toString()+'-'+(pickDay.getMonth()+1).toString()+'-'+pickDay.getDate().toString()
+    pickDay.setMonth(pickDay.getMonth()+1)
+    pickexpirationDate.value=transformDateString(pickDay)
     show_expirationDate_pick.value=false
 }
 
@@ -267,6 +287,16 @@ onMounted(()=>{
 
 const addCommodity=()=>{
     var stoID=globalData.userInfo.user_id
+    var com_expirationDate=transformDateString(formData.value.com_expirationDate)
+    var com_producedDate=transformDateString(formData.value.com_producedDate)
+    var price_curve=[]
+    for(let i=0;i<formData.value.price_curve.length;++i){
+        var nowCurve=formData.value.price_curve[i];
+        var date=transformDateString(nowCurve.com_pc_time)+' 00:00:00'
+        price_curve.push({com_pc_time:date,com_pc_price:nowCurve.com_pc_price});
+    }
+    
+    console.log(categories.value)
     axios.post('/api/sto/uploadRegularCommodity',  JSON.stringify({ 
             com_name:formData.value.com_name,
             com_introduction:formData.value.introduction,
@@ -275,33 +305,24 @@ const addCommodity=()=>{
             com_type:0,
             com_oriPrice:formData.value.com_oriPrice,
             praise_rate:1,
-            com_expirationDate:formData.value.com_expirationDate,
-            com_producedDate:formData.value.com_producedDate,
-            price_curve:formData.value.price_curve,
-            categories:formData.value.categories
+            com_expirationDate:com_expirationDate,
+            com_producedDate:com_producedDate,
+            price_curve:price_curve,
+            categories:categories.value
           }), {
           headers: {
               'Content-Type': 'application/json'
           }
           })
           .then(response => {
-              console.log('Login submitted successfully.');
-              console.log(response.data);
-              axios.post('/api/sto/uploadImage',JSON.stringify({
-                images:formData.value.images,
-                com_id:response.data.com_ID
-              }),{
-                headers:{
-                    'Content-Type':'multipart/form-data'
-                }
-              }).then(response_image=>{
-                console.log(response_image.data.msg)
-              })
-            
+            addPicData.com_id=response.data.com_Id
+            console.log(addPicData.com_id)
+            uploadRef.value.submit();
           })
           .catch((error) => {
               console.log('An error occurred:', error);
           });
+          
 }
 </script>
 

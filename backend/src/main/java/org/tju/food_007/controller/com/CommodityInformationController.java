@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tju.food_007.dto.com.CommodityDetailDTO;
+import org.tju.food_007.dto.com.CommodityStatisticsDTO;
 import org.tju.food_007.dto.com.GetCommodityListRequestDTO;
 import org.tju.food_007.service.com.CommodityInfomationService;
 
 import java.sql.Array;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/com")
@@ -34,7 +36,8 @@ public class CommodityInformationController {
             @RequestParam int sto_ID,
             @RequestParam int page_size,
             @RequestParam int page_num,
-            @RequestParam(required = false) String com_type // 将com_type设置为可选参数
+            @RequestParam(required = false) String com_type, // 将com_type设置为可选参数
+            @RequestParam(required = false) Double remaining_proportion
     ) {
         System.out.println("正在进行商品列表查询");
         // 创建一个GetCommodityListRequestDTO对象
@@ -44,8 +47,7 @@ public class CommodityInformationController {
         requestDTO.setPage_size(page_size);
         requestDTO.setPage_num(page_num);
         requestDTO.setCom_type(com_type);
-
-
+        requestDTO.setRemaining_proportion(remaining_proportion);
 
         List<CommodityDetailDTO> response = commodityInfomationService.getCommodityList(requestDTO);
 
@@ -53,5 +55,11 @@ public class CommodityInformationController {
         return new ResponseEntity<>(response.toArray(new CommodityDetailDTO[0]),HttpStatus.OK);
     }
 
+    @RequestMapping(value="/ProductStatistics",method = RequestMethod.GET)
+    public ResponseEntity<CommodityStatisticsDTO> getCommodityStatistics(@RequestParam int sto_id)
+    {
+        CommodityStatisticsDTO response = commodityInfomationService.getCommodityStatistics(sto_id);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 }
