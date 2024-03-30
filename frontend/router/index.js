@@ -15,6 +15,8 @@ import IndentConfirmPage from '@/components/indent/IndentConfirmPage.vue';
 import UploadCommodity from '@/components/store/UploadCommodity.vue';
 import UploadBlindBoxPage from '@/components/store/UploadBlindBoxPage.vue';
 import UploadSelector from '@/components/store/UploadSelector.vue';
+import MysteryBoxDetailPage from '@/components/commodity/MysteryBoxDetailPage.vue'
+import test from '@/components/commodity/TestPage.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -46,6 +48,16 @@ const router = createRouter({
             meta: {
                 keepAlive: true
             }
+        },
+        {
+            path:'/test',
+            name:'test',
+            component: test
+        },
+        {
+            path: '/mysteryBoxDetail',
+            name: 'mysteryBoxDetail',
+            component: MysteryBoxDetailPage
         },
         {
             path: '/SelectIdentity',

@@ -1,5 +1,5 @@
 <template>
-  <nut-navbar :title="route.query.name" left-show @click-back="goBackPage">
+  <nut-navbar :title="mysteryBoxInfo.com_name" left-show @click-back="goBackPage">
     <template #left>
       <div>Back</div>
     </template>
@@ -27,56 +27,51 @@
       <nut-row>
         <nut-col :span="12">
           <div style="display: flex;flex-direction: row;margin-bottom: 15px;">
-          <nut-tag style="
+          <nut-tag type="primary" style="
             background-color: #93B090;
             border-radius: 30px;
             ">
             {{ "当前" }} </nut-tag>
-            <div style="font-size: 30px; font-weight: 500;margin-left: 20px;color: black;">
-            {{ "¥"+route.query.price }}
+          <div style="font-size: 30px; font-weight: 500;margin-left: 20px;color: black;">
+            {{ "¥"+mysteryBoxInfo.com_oriPrice }}
           </div>
-          </div>
+        </div>
         </nut-col>
-        <nut-col :span="12">
-          <nut-input-number style="float:right;" v-model="buying_quantity" min="0" :max="route.query.left" />
+        <nut-col :span="12" >
+          <nut-input-number style="float: right;" v-model="buying_quantity" min="0" :max="mysteryBoxInfo.com_left" />
         </nut-col>
       </nut-row>
       <nut-row style="display: flex;align-items: center;">
         <Shop style="margin-right: 15px;"/>
-        {{ " " + route.query.position }}
+        <span>
+          <span>
+        {{ " " + mysteryBoxInfo.sto_name }}</span>
+        <span>{{  }}</span>
+        </span>
       </nut-row>
       <nut-row style="display: flex;align-items: center;">
         <Clock style="margin-right: 15px;"/>
-        {{ timePeriod }}
+        {{ mysteryBoxInfo.sto_openingTime + " - " + mysteryBoxInfo.sto_closingTime }}
+      </nut-row>
+      <nut-row style="display: flex;align-items: center;">
+        <Ask style="margin-right: 15px;"/>
+        {{ mysteryBoxInfo.com_introduction }}
       </nut-row>
     </div>
   </nut-cell>
 
-  <div style="font-family: Source Han Sans SC;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 12px;
-      letter-spacing: 0px;
-      margin: 20px 20px  10px 20px;
-    ">
-    {{ "保质期&价格" }}
-  </div>
-  <div style="margin: 10px 20px 20px 20px;color: #C8C8C8;font-size: 10px;">
-    {{ "商品的价格会随着保质期剩余的天数越少越便宜。保质期剩余天数少于1天的商品将会自动下架" }}
-  </div>
-  <div id="main" style="width:auto;height: 300px;"></div>
-
   <!-- Auto recommendation block -->
   <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore">
     <div v-for="(item) in recommendationList" :key=item.com_ID>
-      <div class="rcmd-block" :style="{backgroundImage: 'url(https://007-food.obs.cn-east-3.myhuaweicloud.com/' + item.commodityImage + ')'}" >
+      <div class="rcmd-block"
+        :style="{ backgroundImage: 'url(https://007-food.obs.cn-east-3.myhuaweicloud.com/' + item.commodityImage + ')' }">
         <div class="info-tag">
           <div>
             {{ item.com_name }}
           </div>
           <div style="font-size: 14px;color: #808080;">
-            <span>{{ item.com_position+"     " }}</span>
-            <span style="padding-left: 20px;">{{ item.com_dist+"km" }}</span>
+            <span>{{ item.com_position + " " }}</span>
+            <span style="padding-left: 20px;">{{ item.com_dist + "km" }}</span>
           </div>
         </div>
       </div>
@@ -115,55 +110,19 @@
 </template>
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { Shop, Clock } from '@nutui/icons-vue';
-import { useRoute, useRouter } from 'vue-router';
-import * as echarts from 'echarts';
+import { Shop, Clock, Ask } from '@nutui/icons-vue';
+import { useRouter } from 'vue-router';
+
 import globalData from "../../global.js"
 import axios from 'axios';
 
 const buying_quantity = ref(0);// quantity in shopping cart
 // Whenever quantity is modified, synchronize with shopping cart
 watch(buying_quantity, () => {
-  globalData.shoppingCart.modify(route.query.id, buying_quantity.value, buying_quantity.value * route.query.price)
+  globalData.shoppingCart.modify(mysteryBoxInfo.value.mystery_box_ID, buying_quantity.value, buying_quantity.value * mysteryBoxInfo.value.com_oriPrice)
 })
 
-var option = {
-  tooltip: {
-    trigger: 'axis'
-  },
-  xAxis: {
-    type: 'category',
-    boundaryGap: false,
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
-  yAxis: {
-    type: 'value'
-  },
-  series: [
-    {
-      data: [820, 932, 901, 934, 1290, 1330, 1320],
-      type: 'line',
-      areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: "#93B090" },
-          { offset: 1, color: "#FBFCFA" },
-        ]),
-      },
-      itemStyle: {
-        normal: {
-          color: '#93B090', // 点的颜色
-          lineStyle: {
-            color: '#93B090' // 线的颜色
-          }
-        }
-      }
-    }
-  ]
-};
-
-var myChart;
 const router = useRouter();
-const route = useRoute();
 const hasMore = ref(true);
 
 const recommendationInfo = {
@@ -171,10 +130,16 @@ const recommendationInfo = {
   page_size: 5,
 }
 
+// restore recommendation info
 const recommendationList = ref([]);
+// restore mystery box info
+const mysteryBoxInfo = ref({});
 
 const ifLoading = ref(false);
 
+const list = ref([]);
+
+const swiperRef = ref();
 
 const loadMore = () => {
 
@@ -198,46 +163,21 @@ const loadMore = () => {
 
 }
 
-const convert = (response) => {
-  timePeriod.value = response.sto_openingTime + " - " + response.sto_closingTime;
-
-  option.xAxis.data = [];
-  option.series[0].data = [];
-  for (let i = 0; i < response.commodityPriceCurve.length; ++i) {
-    var nowCurve = response.commodityPriceCurve[i];
-    option.xAxis.data.push(nowCurve.com_pc_time);
-    option.series[0].data.push(nowCurve.com_pc_price);
-  }
-
-  list.value = [];
-  for (let i = 0; i < response.commodityImage.length; ++i)
-    list.value.push("https://007-food.obs.cn-east-3.myhuaweicloud.com/" + response.commodityImage[i].com_image);
-  console.log(list.value);
-  console.log(option);
-  myChart.setOption(option);
-}
-
 onMounted(() => {
-  console.log(route.query);
-  myChart = echarts.init(document.getElementById('main'));
-  // myChart.setOption(option);
 
-  axios.get('api/com/commoditydetail', {
+  axios.get('api/mys/getmysterybox', {
     params: {
-      com_ID: route.query.id    // TODO: replace with router's params
+      mystery_box_ID: 17,   // TODO: modify mystery_box_ID
     }
+  }).then(response => {
+    mysteryBoxInfo.value = response.data[0];
+    const images = mysteryBoxInfo.value.contain_images;
+    for (let i = 0; i < images.length; ++i)
+      list.value.push("https://007-food.obs.cn-east-3.myhuaweicloud.com/" + images[i].com_image);
   })
-    .then(response => {
-      console.log(response.data);
-      convert(response.data);
-    })
 
-  axios.get('api/com/searchCommodity', {
+  axios.get('api/mys/getmysterybox', {
     params: {
-      content: "",
-      com_type: "",
-      sort_by: 1,
-      sort_order: 0,
       page_size: recommendationInfo.page_size,
       page_num: ++recommendationInfo.page_num
     }
@@ -248,11 +188,11 @@ onMounted(() => {
   })
 })
 
-const timePeriod = ref("");
 
 
-const list = ref([]);
-const swiperRef = ref();
+
+
+
 const handlePrev = () => {
   swiperRef.value?.prev();
 };
@@ -275,9 +215,9 @@ const EnterIndentConfirmPage = () => {
 </script>
 
 <style>
-.info-tag{
+.info-tag {
   background-color: #eaf3e8;
-  border-radius:  0 0 20px 20px;
+  border-radius: 0 0 20px 20px;
   position: absolute;
   bottom: -1%;
   width: 100%;
