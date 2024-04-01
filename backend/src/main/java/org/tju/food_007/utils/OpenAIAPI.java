@@ -39,7 +39,7 @@ public class OpenAIAPI {
     /**
      * api密匙
      */
-    String apiKey = "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";
+    String apiKey = "MYKEY";
 
     /**
      * 发送消息
