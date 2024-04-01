@@ -39,7 +39,7 @@ public class OpenAIAPI {
     /**
      * api密匙
      */
-    String apiKey = "MYKEY";
+//    String apiKey = "MYKEY";
 
     /**
      * 发送消息
@@ -65,7 +65,7 @@ public class OpenAIAPI {
         try {
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 7890));
             String body = HttpRequest.post(chatEndpoint)
-                    .header("Authorization", "Bearer "+apiKey)
+//                    .header("Authorization", "Bearer "+apiKey)
                     .header("Content-Type", "application/json")
                     .body(JSONUtil.toJsonStr(paramMap))
                     .setProxy(proxy)
