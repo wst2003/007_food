@@ -31,5 +31,8 @@ public interface GenerateIndentRequestMapper {
     @Mapping(target = "pricePerformanceRatio", ignore = true) // 评分可能稍后添加
     @Mapping(target = "deliveryMethod", source = "delivery_method")
     @Mapping(target = "deliveryAddress", source = "delivery_address")
+    @Mapping(target = "deliveryAltitude", source = "delivery_altitude")
+    @Mapping(target = "deliveryLongitude", source = "delivery_longitude")
+
     IndentEntity dtoToEntity(GenerateIndentRequestDTO dto);
 }
