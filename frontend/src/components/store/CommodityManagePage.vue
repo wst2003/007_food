@@ -203,7 +203,7 @@
 import {onMounted, ref} from "vue";
 import { Search2 } from '@nutui/icons-vue'
 import axios from "axios";
-const sto_id=12;
+const sto_id=29;
 const onClickBack = () => {
   console.log('[Navbar]: on click back')
 }
@@ -257,8 +257,10 @@ const clearQuery=()=>{
 const convert=(datas)=>{
   console.log(datas)
   commodityList.value=[]
-
-  for(let data in datas) {
+  // console.log(datas)
+  for(let i=0;i<datas.length;++i) {
+    var data=datas[i];
+    // console.log(data);
     let tempData = {
       id: 0,
       name: "洽洽香瓜子",
@@ -271,13 +273,13 @@ const convert=(datas)=>{
     tempData.id = data.com_ID;
     tempData.name = data.com_name;
     tempData.left = data.com_left;
-    tempData.image = data.commodityImage;
+    tempData.image = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+data.commodityImage;
     tempData.price = data.com_price;
     tempData.left_day = data.left_day;
 
     commodityList.value.push(tempData);
   }
-
+  console.log(commodityList.value)
 }
 
 const search=()=>{

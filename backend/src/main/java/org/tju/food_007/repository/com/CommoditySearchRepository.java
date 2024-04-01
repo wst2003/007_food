@@ -22,7 +22,7 @@ public interface CommoditySearchRepository extends JpaRepository<CommodityEntity
             "   rc.COM_PRODUCEDDATE " +
             " FROM commodity c\n" +
             " JOIN store s ON c.STO_ID = s.STO_ID\n" +
-            " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
+            " RIGHT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
             " LEFT JOIN commodity_categories cc ON c.COM_ID = cc.COM_ID\n" +
             " LEFT JOIN commodityImage ci ON c.COM_ID = ci.COM_ID\n" +
             " LEFT JOIN user u ON u.USER_ID = s.STO_ID\n" +
@@ -52,7 +52,7 @@ public interface CommoditySearchRepository extends JpaRepository<CommodityEntity
             "   rc.COM_PRODUCEDDATE " +
             " FROM commodity c\n" +
             " JOIN store s ON c.STO_ID = s.STO_ID\n" +
-            " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
+            " RIGHT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
             " LEFT JOIN commodity_categories cc ON c.COM_ID = cc.COM_ID\n" +
             " LEFT JOIN commodityImage ci ON c.COM_ID = ci.COM_ID\n" +
             " LEFT JOIN user u ON u.USER_ID = s.STO_ID\n" +
