@@ -11,4 +11,5 @@ public class GetCommodityListRequestDTO {
     private int page_size;
     private int page_num;
     private String com_type;
+    private Double remaining_proportion;
 }

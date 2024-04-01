@@ -19,7 +19,8 @@ public interface CommodityDetailRepository extends JpaRepository<CommodityEntity
             "  s.STO_OPENINGTIME,s.STO_CLOSINGTIME,rc.COM_EXPIRATIONDATE ,\n" +
             "  GROUP_CONCAT(DISTINCT cc.COM_CATEGORY) AS Categories,\n" +
             "  GROUP_CONCAT(DISTINCT ci.COM_IMAGE) AS Images,\n" +
-            "  pc.COM_PC_TIME, pc.COM_PC_PRICE\n" +
+            "  pc.COM_PC_TIME, pc.COM_PC_PRICE ," +
+            "  rc.COM_PRODUCEDDATE \n" +
             " FROM commodity c\n" +
             " JOIN store s ON c.STO_ID = s.STO_ID\n" +
             " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
@@ -38,9 +39,10 @@ public interface CommodityDetailRepository extends JpaRepository<CommodityEntity
             "  s.STO_OPENINGTIME,s.STO_CLOSINGTIME,rc.COM_EXPIRATIONDATE ,\n" +
             "  GROUP_CONCAT(DISTINCT cc.COM_CATEGORY) AS Categories,\n" +
             "  GROUP_CONCAT(DISTINCT ci.COM_IMAGE) AS Images,\n" +
-            "  (SELECT GROUP_CONCAT(CONCAT(pc.COM_PC_TIME, '#', pc.COM_PC_PRICE))\n" +
-            "   FROM commodityPriceCurve pc\n" +
-            "   WHERE pc.COM_ID = c.COM_ID)  As PriceCru " +
+            "  (SELECT GROUP_CONCAT(CONCAT(pc.COM_PC_TIME, '#', pc.COM_PC_PRICE)) \n" +
+            "   FROM commodityPriceCurve pc \n" +
+            "   WHERE pc.COM_ID = c.COM_ID)  As PriceCru , " +
+            "   rc.COM_PRODUCEDDATE " +
             " FROM commodity c\n" +
             " JOIN store s ON c.STO_ID = s.STO_ID\n" +
             " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
@@ -60,9 +62,10 @@ public interface CommodityDetailRepository extends JpaRepository<CommodityEntity
             "  s.STO_OPENINGTIME,s.STO_CLOSINGTIME,rc.COM_EXPIRATIONDATE ,\n" +
             "  GROUP_CONCAT(DISTINCT cc.COM_CATEGORY) AS Categories,\n" +
             "  GROUP_CONCAT(DISTINCT ci.COM_IMAGE) AS Images,\n" +
-            "  (SELECT GROUP_CONCAT(CONCAT(pc.COM_PC_TIME, '#', pc.COM_PC_PRICE))\n" +
+            "  (SELECT GROUP_CONCAT(CONCAT(pc.COM_PC_TIME, '#', pc.COM_PC_PRICE)) \n" +
             "   FROM commodityPriceCurve pc\n" +
-            "   WHERE pc.COM_ID = c.COM_ID)  As PriceCru " +
+            "   WHERE pc.COM_ID = c.COM_ID)  As PriceCru ," +
+            "   rc.COM_PRODUCEDDATE " +
             " FROM commodity c\n" +
             " JOIN store s ON c.STO_ID = s.STO_ID\n" +
             " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
@@ -74,4 +77,12 @@ public interface CommodityDetailRepository extends JpaRepository<CommodityEntity
             " ORDER BY c.COM_UPLOADDATE DESC" ,nativeQuery = true)
     public List<Object[]> getCommodityListByCat(@Param("sto_id") int sto_ID, @Param("type") String type);
 
+
+    @Query(value="SELECT DISTINCT" +
+            " c.COM_ID, rc.COM_EXPIRATIONDATE, rc.COM_PRODUCEDDATE " +
+            " FROM commodity c " +
+            " JOIN store s ON c.STO_ID = s.STO_ID " +
+            " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID " +
+            " WHERE c.STO_ID = :sto_id AND c.COM_TYPE = 0 ",nativeQuery = true)
+    public List<Object[]> getCommodityStatistics(@Param("sto_id") int sto_id);
 }

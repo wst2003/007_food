@@ -43,6 +43,10 @@
               multiple
               :auto-upload="false"
               maximum="5"
+              url='/api/sto/uploadImage'
+              :data="addPicData"
+              :ref="uploadRef"
+              name='images'
             >
             </nut-uploader>
           </nut-form-item>
@@ -106,8 +110,9 @@ const formData=ref({
     highest_price:0,
     lowest_price:0,
     category_count:0
-
 })
+const addPicData={com_id:'0'}
+const uploadRef = ref(null);
 const categoryType=ref(["水果",'饼干','熟食'])
 
 const pickType=ref([])
@@ -118,9 +123,17 @@ const goBack=()=>{
         router.go(-1);
     }
 
+const transformDateString=(date)=>{
+    if(date.getMonth().toString()==0)
+    return date.getFullYear().toString()+'-12-'+date.getDate().toString()
+    else if(date.getMonth().toString()<10)
+    return date.getFullYear().toString()+'-0'+date.getMonth().toString()+'-'+date.getDate().toString()
+    else
+    return date.getFullYear().toString()+'-'+date.getMonth().toString()+'-'+date.getDate().toString()
+}
 const showType=ref(false)
 const show_produceDate_pick=ref(false)
-
+const categories=ref([])
 const selectTypeClose=()=>{
     console.log(pickType.value)
     commodityType.value='';
@@ -128,8 +141,11 @@ const selectTypeClose=()=>{
         console.log(i)
         commodityType.value+=pickType.value[i]+' '
     }
+    for(let i in pickType.value){
+        categories.value.push({'com_category':pickType.value[i]})
+    }
     if(commodityType.value===''){
-        commodityType.value='请选择盲盒类别'
+        commodityType.value='请选择商品类别'
     }
 }
 
@@ -141,6 +157,7 @@ const confirm_produceDate_pick=()=>{
 
 const addCommodity=()=>{
     var stoID=globalData.userInfo.user_id
+    var com_uploadDate=transformDateString(formData.value.com_uploadDate)
     axios.post('/api/sto/uploadMysteryBox',  JSON.stringify({ 
             com_name:formData.value.com_name,
             com_introduction:formData.value.introduction,
@@ -149,11 +166,11 @@ const addCommodity=()=>{
             com_type:0,
             com_oriPrice:formData.value.com_oriPrice,
             praise_rate:1,
-            com_uploadDate:formData.value.com_uploadDate,
+            com_uploadDate:com_uploadDate,
             highest_price:formData.value.highest_price,
             lowest_price:formData.value.lowest_price,
             category_count:formData.value.category_count,
-            categories:formData.value.categories
+            categories:categories.value
           }), {
           headers: {
               'Content-Type': 'application/json'
@@ -162,16 +179,9 @@ const addCommodity=()=>{
           .then(response => {
               console.log('Login submitted successfully.');
               console.log(response.data);
-              axios.post('/api/sto/uploadImage',JSON.stringify({
-                images:formData.value.images,
-                com_id:response.data.com_ID
-              }),{
-                headers:{
-                    'Content-Type':'multipart/form-data'
-                }
-              }).then(response_image=>{
-                console.log(response_image.data.msg)
-              })
+              addPicData.com_id=response.data.com_Id
+                console.log(addPicData.com_id)
+                uploadRef.value.submit();
             
           })
           .catch((error) => {

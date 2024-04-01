@@ -18,7 +18,8 @@ public interface CommoditySearchRepository extends JpaRepository<CommodityEntity
             "  u.USER_ADDRESS,\n" +
             "  (SELECT GROUP_CONCAT(CONCAT(pc.COM_PC_TIME, '#', pc.COM_PC_PRICE))\n" +
             "   FROM commodityPriceCurve pc\n" +
-            "   WHERE pc.COM_ID = c.COM_ID)  As PriceCru " +
+            "   WHERE pc.COM_ID = c.COM_ID)  As PriceCru ," +
+            "   rc.COM_PRODUCEDDATE " +
             " FROM commodity c\n" +
             " JOIN store s ON c.STO_ID = s.STO_ID\n" +
             " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
@@ -47,7 +48,8 @@ public interface CommoditySearchRepository extends JpaRepository<CommodityEntity
             "  u.USER_ADDRESS,\n" +
             "  (SELECT GROUP_CONCAT(CONCAT(pc.COM_PC_TIME, '#', pc.COM_PC_PRICE))\n" +
             "   FROM commodityPriceCurve pc\n" +
-            "   WHERE pc.COM_ID = c.COM_ID)  As PriceCru " +
+            "   WHERE pc.COM_ID = c.COM_ID)  As PriceCru , " +
+            "   rc.COM_PRODUCEDDATE " +
             " FROM commodity c\n" +
             " JOIN store s ON c.STO_ID = s.STO_ID\n" +
             " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID\n" +
