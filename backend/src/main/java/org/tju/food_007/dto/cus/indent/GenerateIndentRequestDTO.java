@@ -14,4 +14,6 @@ public class GenerateIndentRequestDTO {
     private String delivery_address;
     private String ind_notes;
     private Double ind_money;
+    private Double delivery_altitude;
+    private Double delivery_longitude;
 }

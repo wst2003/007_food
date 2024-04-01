@@ -25,7 +25,7 @@ public class IndentCommodityEntity {
     @Column(name = "rating_type")
     private int ratingType;
 
-    public int getIndId() {
+    public Integer getIndId() {
         return indId;
     }
 
