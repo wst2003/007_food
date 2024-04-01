@@ -17,41 +17,73 @@ import UploadBlindBoxPage from '@/components/store/UploadBlindBoxPage.vue';
 import UploadSelector from '@/components/store/UploadSelector.vue';
 import MysteryBoxDetailPage from '@/components/commodity/MysteryBoxDetailPage.vue'
 import IndentManagePage from '@/components/store/IndentManagePage.vue';
+import CommodityManagePage from "@/components/store/CommodityManagePage.vue";
+import SearchBoxPage from "@/components/customer/SearchBoxPage.vue";
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: "/indentmanagepage",
+            redirect: "/searchCommodity",
 
         },
         {
             path: '/home',
             name: 'home',
             component: HomePage,
-            // children: [
-            //     {
-            //         path: '/searchCommodity',
-            //         name: 'searchCommodity',
-            //         component: SearchCommodityPage,
-            //         meta: {
-            //             keepAlive: true //需要被缓存
-            //         }
-            //     },
-            //     {
-            //         path: '/commodityDetail',
-            //         name: 'commodityDetail',
-            //         component: CommodityDetailPage
-            //     }
-            // ]
+            children: [
+                {
+                    path: '/mysteryBoxDetail',
+                    name: 'mysteryBoxDetail',
+                    component: MysteryBoxDetailPage
+                },
+                {
+                    path: '/searchCommodity',
+                    name: 'searchCommodity',
+                    component: SearchCommodityPage,
+                    meta: {
+                        keepAlive: true //需要被缓存
+                    }
+                },
+                {
+                    path: '/commodityDetail',
+                    name: 'commodityDetail',
+                    component: CommodityDetailPage
+                },
+                {
+                    path: '/storeDetail',
+                    name: 'storeDetail',
+                    component: StoreDetailPage
+                },
+                {
+                    path: '/myIndent',
+                    name: 'myIndent',
+                    component: MyIndentPage
+                },
+                {
+                    path:'/comment',
+                    name:'comment',
+                    component:CommentPage
+                },
+                {
+                    path:'/indentdetail',
+                    name:'indentdetail',
+                    component:IndentDetailPage
+                },
+                {
+                    path:'/indentConfirm',
+                    name: 'indentConfirm',
+                    component:IndentConfirmPage
+                },
+                {
+                    path:'/searchBox',
+                    name:'searchBox',
+                    component:SearchBoxPage
+                }
+            ],
             meta: {
                 keepAlive: true
             }
-        },
-        {
-            path: '/mysteryBoxDetail',
-            name: 'mysteryBoxDetail',
-            component: MysteryBoxDetailPage
         },
         {
             path: '/SelectIdentity',
@@ -64,30 +96,6 @@ const router = createRouter({
             component: LoginPage
         },
         {
-            path: '/searchCommodity',
-            name: 'searchCommodity',
-            component: SearchCommodityPage,
-            meta: {
-                keepAlive: true //需要被缓存
-            }
-        },
-        {
-            path: '/commodityDetail',
-            name: 'commodityDetail',
-            component: CommodityDetailPage
-        },
-        {
-
-            path: '/storeDetail',
-            name: 'storeDetail',
-            component: StoreDetailPage
-        },
-        {
-            path: '/myIndent', 
-            name: 'myIndent',
-            component: MyIndentPage
-        },
-        {
             path:'/cusregister',
             name:'cusregister',
             component:CustomerRegisterPage
@@ -97,21 +105,7 @@ const router = createRouter({
             name:'storegister',
             component:StoreRegisterPage
         },
-        {
-            path:'/comment',
-            name:'comment',
-            component:CommentPage
-        },
-        {
-            path:'/indentdetail',
-            name:'indentdetail',
-            component:IndentDetailPage
-        },
-        {
-            path:'/indentConfirm',
-            name: 'indentConfirm',
-            component:IndentConfirmPage
-        },
+
         {
             path:'/uploadCommodity',
             name:'uploadCommodity',
@@ -131,6 +125,11 @@ const router = createRouter({
             path:'/indentmanagepage',
             name:'indentmanagepage',
             component:IndentManagePage
+        },
+        {
+            path:'/commodityManage',
+            name:'commodityManage',
+            component:CommodityManagePage
         }
     ]
 });
