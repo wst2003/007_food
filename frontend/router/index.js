@@ -24,7 +24,7 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect: "/storeDetail",
+            redirect: "/searchBox",
         },
         {
             path: '/home',

@@ -89,7 +89,7 @@
   const router=useRouter();
   onMounted(()=>{
     router.push({
-      path:'/searchCommodity'
+      path:'/searchBox'
     })
   })
   </script>
