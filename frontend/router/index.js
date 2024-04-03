@@ -81,10 +81,7 @@ const router = createRouter({
                     name:'searchBox',
                     component:SearchBoxPage
                 }
-            ],
-            meta: {
-                keepAlive: true
-            }
+            ]
         },
         {
             path: '/SelectIdentity',

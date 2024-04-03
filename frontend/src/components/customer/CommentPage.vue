@@ -94,11 +94,12 @@
 
 <script lang="js" setup>
     import axios from 'axios';
-    import {  useRouter } from 'vue-router';
+    import {  useRouter,useRoute } from 'vue-router';
     //import axios from 'axios';
     import { ref } from 'vue';
     import globalData from"../../global.js"
     const router=useRouter();
+    const route=useRoute();
     const stoName=ref('吉事花生鞍山新村二店');
     const commentData=ref({
         food_quality:5,
@@ -111,10 +112,18 @@
         router.go(-1);
     }
     const submitComment=()=>{
-        console.log(1)
+        console.log({
+          cus_id:globalData.userInfo.user_id,
+          ind_id:String(route.query.ind_id),
+          food_quality_score:commentData.value.food_quality,
+          service_quality_score:commentData.value.service_quality,
+          price_performance_ratio:commentData.value.cost_performance,
+          cmt_content:commentData.value.comment,
+          rating_type:commentData.value.rating_type
+        })
         axios.post('/api/cus/rating',JSON.stringify({ 
             cus_id:globalData.userInfo.user_id,
-            ind_id:5,
+            ind_id:String(route.query.ind_id),
             food_quality_score:commentData.value.food_quality,
             service_quality_score:commentData.value.service_quality,
             price_performance_ratio:commentData.value.cost_performance,
@@ -127,6 +136,7 @@
         })
         .then(response=>{
             console.log(response.data.msg)
+          router.go(-1);
         })
     }
 </script>
