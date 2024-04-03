@@ -16,6 +16,7 @@ import UploadCommodity from '@/components/store/UploadCommodity.vue';
 import UploadBlindBoxPage from '@/components/store/UploadBlindBoxPage.vue';
 import UploadSelector from '@/components/store/UploadSelector.vue';
 import MysteryBoxDetailPage from '@/components/commodity/MysteryBoxDetailPage.vue'
+import StoreManagePage from '@/components/store/StoreManagePage.vue'
 import IndentManagePage from '@/components/store/IndentManagePage.vue';
 const router = createRouter({
     history: createWebHistory(),
@@ -47,6 +48,11 @@ const router = createRouter({
             meta: {
                 keepAlive: true
             }
+        },
+        {
+            path: '/storeManage',
+            name: 'storeManage',
+            component: StoreManagePage
         },
         {
             path: '/mysteryBoxDetail',
