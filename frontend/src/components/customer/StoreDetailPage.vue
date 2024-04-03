@@ -32,7 +32,7 @@
           <nut-tab-pane style="padding: 0 0;" title="商品" pane-key="1">
             <nut-category :category="categoryData.category" @change="change">
               <nut-infinite-loading :has-more="hasMore" @load-more="loadMore" style="margin-left: 20px;">
-                <div v-for="(item, index) in curPageCommodity" :key="item.com_ID" @click="goToDetailPage(item.com_ID)">
+                <div v-for="(item, index) in curPageCommodity" :key="item.com_ID" @click="goToDetailPage(item.com_ID,item.commodityPriceCurve[item.commodityPriceCurve.length - 1].com_pc_price,sto_info.user_address)">
                   <div class="com-container">
                     <img src="../../assets/store_goto.svg" style="position:absolute; right: 5%;top:5%" />
                     <div>
@@ -83,11 +83,12 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRouter,useRoute } from 'vue-router';
 import storeBackground from '../../assets/store-background.png'
 import axios from 'axios';
-import { ref, reactive, onBeforeMount } from 'vue';
+import {ref, reactive, onMounted} from 'vue';
 const router = useRouter();
+const route=useRoute();
 const sto_info = ref({});
 const licenceFlag = ref(false)
 const loading = ref(true)
@@ -132,7 +133,7 @@ const changeTabCb = () => {
   if (tabValue.value == '1' && commentList.value.length === 0) {
     axios.get('/api/cus/getComment', {
       params: {
-        sto_ID: 16,   // TODO: modify to real ID
+        sto_ID: route.query.sto_id,   // TODO: modify to real ID
         page_num: commentInfo.page_num,
         page_size: commentInfo.page_size
       }
@@ -144,11 +145,13 @@ const changeTabCb = () => {
 
 
 const getStoreInfoData = () => {
+  console.log(route.query.sto_id)
   axios.get('/api/sto/informationdetail', {
     params: {
-      sto_ID: 16    // TODO: modify to real ID
+      sto_ID: route.query.sto_id    // TODO: modify to real ID
     }
   }).then(res => {
+    console.log(res.data)
     sto_info.value = res.data[0];
     for (const item of sto_info.value.storeLicense) {
       licenceImage.value.push({ src: 'https://007-food.obs.cn-east-3.myhuaweicloud.com/' + item.sto_license })
@@ -158,7 +161,7 @@ const getStoreInfoData = () => {
 
   axios.get('/api/sto/stocategories', {
     params: {
-      sto_ID: 16
+      sto_ID: route.query.sto_id
     }
   }).then(res => {
     for (const item of res.data.com_category) {
@@ -178,7 +181,7 @@ const change = (index) => {
   pageInfo.page_num = 1;
   axios.get('/api/com/commoditylist', {
     params: {
-      sto_ID: 16,
+      sto_ID: route.query.sto_id,
       page_size: pageInfo.page_size,
       page_num: pageInfo.page_num++,
       com_type: pageInfo.com_type
@@ -191,7 +194,7 @@ const change = (index) => {
 const loadMore = () => {
   axios.get('/api/com/commoditylist', {
     params: {
-      sto_ID: 16,
+      sto_ID: route.query.sto_id,
       page_size: pageInfo.page_size,
       page_num: pageInfo.page_num++,
       com_type: pageInfo.com_type
@@ -204,7 +207,7 @@ const loadMore = () => {
 const cmtLoadMore = () => {
   axios.get('/api/cus/getComment', {
     params: {
-      sto_ID: 16,
+      sto_ID: route.query.sto_id,
       page_num: commentInfo.page_num,
       page_size: commentInfo.page_size
     }
@@ -215,15 +218,21 @@ const cmtLoadMore = () => {
 
 
 // TODO: callback function for commodity detail info page
-const goToDetailPage = () => {
-
+const goToDetailPage = (id,price,address) => {
+  router.push({
+    path:'/commodityDetail',
+    query:{
+      id:id,
+      price:price,
+      position:address
+    }
+  })
 }
 
-
-onBeforeMount(() => {
+onMounted(()=>{
   getStoreInfoData();
-})
 
+})
 
 
 </script>

@@ -79,7 +79,7 @@
   </nut-infinite-loading>
 
   <!--Fixed block for shopping cart-->
-  <div style="width: 90%; height: 44px; position:fixed;bottom: 20px; margin: auto;left:0;right:0">
+  <div style="width: 90%; height: 44px; position:fixed;bottom: 70px; margin: auto;left:0;right:0">
     <div
       style="width: 100%; height: 44px; left: 0; top: 0; position: absolute; box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.25); border-radius: 50px" />
     <div
@@ -111,7 +111,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { Shop, Clock, Ask } from '@nutui/icons-vue';
-import { useRouter } from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 
 import globalData from "../../global.js"
 import axios from 'axios';
@@ -123,6 +123,7 @@ watch(buying_quantity, () => {
 })
 
 const router = useRouter();
+const route=useRoute();
 const hasMore = ref(true);
 
 const recommendationInfo = {
@@ -167,7 +168,7 @@ onMounted(() => {
 
   axios.get('api/mys/getmysterybox', {
     params: {
-      mystery_box_ID: 17,   // TODO: modify mystery_box_ID
+      mystery_box_ID: route.query.mystery_box_id,   // TODO: modify mystery_box_ID
     }
   }).then(response => {
     mysteryBoxInfo.value = response.data[0];

@@ -9,7 +9,7 @@
     </template>
   </nut-searchbar>
   <nut-infinite-loading v-model="infinityValue" :has-more="hasMore" @load-more="loadMore">
-    <nut-row v-for="box in boxes" :key="box.id">
+    <nut-row v-for="box in boxes" :key="box.id" @click="goDetail(box.id)">
       <nut-col :span="19">
         <nut-config-provider :theme-vars="themeVars">
           <nut-cell style="height: 200px;background-color: #C7E1C487">
@@ -136,16 +136,16 @@ import {
   Search2,
   Voice,
 } from "@nutui/icons-vue";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import axios from "axios";
-import BaiduMap from '../BaiduMap.vue'
+import BaiduMap from '../BaiduMap.vue';
 const pageSize=ref(6);
 const pageNum=ref(0);
 // const sortBy=ref(0);
 // const sortOrder=ref(0);
 
 // const route=useRoute();
-// const router=useRouter();
+const router=useRouter();
 
 const themeVars = ref({
   cellPadding:"0px 0px",
@@ -232,7 +232,14 @@ const loadMore = () => {
   }, 1000);
 };
 
-
+const goDetail=(id)=>{
+  router.push({
+    path:'/mysteryBoxDetail',
+    query:{
+      mystery_box_id:id
+    }
+  })
+}
 </script>
 
 <style scoped>
