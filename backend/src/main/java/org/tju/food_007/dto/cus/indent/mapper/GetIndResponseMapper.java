@@ -25,9 +25,10 @@ public interface GetIndResponseMapper {
     @Mapping(source = "ind.pricePerformanceRatio", target = "price_performance_ratio")
     @Mapping(source = "ind.deliveryMethod", target = "delivery_method")
     @Mapping(source = "ind.deliveryAddress", target = "delivery_address")
-    @Mapping(source = "sto.userAddress", target = "com_position")
+    @Mapping(source = "user.userAddress", target = "com_position")
     @Mapping(source ="ind_dto",target = "commodities")
+    @Mapping(source = "store.stoId",target = "sto_ID")
     GetIndResponseDTO entityToResponse
-            (IndentEntity ind , GetIndResponseDTO.IndComDTO[] ind_dto , UserEntity sto);
+            (IndentEntity ind , GetIndResponseDTO.IndComDTO[] ind_dto , UserEntity user, StoreEntity store);
 
 }
