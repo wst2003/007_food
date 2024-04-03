@@ -22,6 +22,7 @@ public class GetIndResponseDTO {
     private String delivery_address;
     private String com_position;
     private IndComDTO[] commodities;
+    private Integer sto_ID;
 
 
     @Getter
