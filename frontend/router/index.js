@@ -19,6 +19,7 @@ import MysteryBoxDetailPage from '@/components/commodity/MysteryBoxDetailPage.vu
 import IndentManagePage from '@/components/store/IndentManagePage.vue';
 import CommodityManagePage from "@/components/store/CommodityManagePage.vue";
 import SearchBoxPage from "@/components/customer/SearchBoxPage.vue";
+import PathPlanningPage from '@/components/store/PathPlanningPage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -129,6 +130,11 @@ const router = createRouter({
             path:'/commodityManage',
             name:'commodityManage',
             component:CommodityManagePage
+        },
+        {
+            path:'/pathPlanningPage',
+            name:'pathPlanningPage',
+            component:PathPlanningPage
         }
     ]
 });

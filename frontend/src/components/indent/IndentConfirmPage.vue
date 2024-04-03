@@ -162,8 +162,10 @@ const generateIndent=()=>{
             com_arr:indent_items.items,
             delivery_method:delivery_method.value,
             delivery_address:delivery_address.value,
+            delivery_altitude:globalData.userPosition.latitude,
+            delivery_longitude:globalData.userPosition.longitude, 
             ind_notes:ind_note.value,
-            ind_money:globalData.shoppingCart.getTotalPrice()
+            ind_money:globalData.shoppingCart.getTotalPrice(),
           }), {
           headers: {
               'Content-Type': 'application/json'
