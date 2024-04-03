@@ -26,5 +26,7 @@ public class GetIndentResponseDTO {
     private BigDecimal price_performance_ratio;
     private Integer delivery_method;
     private String delivery_address;
+    private BigDecimal delivery_altitude;
+    private BigDecimal delivery_longitude;
     private ArrayList<IndentComInfo> commodities; // 商品信息列表
 }

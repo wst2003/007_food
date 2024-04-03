@@ -105,39 +105,44 @@ public class GetIndentService {
 
         return responses;
     }
+    
+    public ArrayList<GetIndentResponseDTO> GetIndent(ArrayList<Integer> ind_ids){
 
+        ArrayList<GetIndentResponseDTO> responseDTOs =new ArrayList<GetIndentResponseDTO>();
+        ArrayList<IndentEntity> aim_inds=generateIndentRepository.findByIndIdIn(ind_ids);
+        for(IndentEntity aim_ind:aim_inds) {
+            GetIndentResponseDTO responseDTO=new GetIndentResponseDTO();
+            responseDTO.setInd_id(aim_ind.getIndId());
+            responseDTO.setCus_id(aim_ind.getCusId());
+            responseDTO.setInd_money(aim_ind.getIndMoney());
+            responseDTO.setInd_creationTime(aim_ind.getIndCreationTime().toString()); // 假设这是一个DateTime对象，需要转换为字符串
+            responseDTO.setInd_verificationCode(aim_ind.getIndVerificationCode());
+            responseDTO.setInd_notes(aim_ind.getIndNotes());
+            responseDTO.setInd_state(aim_ind.getIndState());
+            responseDTO.setFood_quality_score(aim_ind.getFoodQualityScore());
+            responseDTO.setService_quality_score(aim_ind.getServiceQualityScore());
+            responseDTO.setPrice_performance_ratio(aim_ind.getPricePerformanceRatio());
+            responseDTO.setDelivery_method(aim_ind.getDeliveryMethod());
+            responseDTO.setDelivery_address(aim_ind.getDeliveryAddress());
+            responseDTO.setDelivery_altitude(aim_ind.getDeliveryAltitude());
+            responseDTO.setDelivery_longitude(aim_ind.getDeliveryLongitude());
 
-    public GetIndentResponseDTO GetIndent(Integer ind_id){
-
-        GetIndentResponseDTO responseDTO =new GetIndentResponseDTO();
-        IndentEntity aim_ind=generateIndentRepository.findByIndId(ind_id);
-        responseDTO.setInd_id(aim_ind.getIndId());
-        responseDTO.setCus_id(aim_ind.getCusId());
-        responseDTO.setInd_money(aim_ind.getIndMoney());
-        responseDTO.setInd_creationTime(aim_ind.getIndCreationTime().toString()); // 假设这是一个DateTime对象，需要转换为字符串
-        responseDTO.setInd_verificationCode(aim_ind.getIndVerificationCode());
-        responseDTO.setInd_notes(aim_ind.getIndNotes());
-        responseDTO.setInd_state(aim_ind.getIndState());
-        responseDTO.setFood_quality_score(aim_ind.getFoodQualityScore());
-        responseDTO.setService_quality_score(aim_ind.getServiceQualityScore());
-        responseDTO.setPrice_performance_ratio(aim_ind.getPricePerformanceRatio());
-        responseDTO.setDelivery_method(aim_ind.getDeliveryMethod());
-        responseDTO.setDelivery_address(aim_ind.getDeliveryAddress());
-
-        ArrayList<IndentCommodityEntity> arr_com= generateIndentComRepository.findByIndId(ind_id);
-        ArrayList<IndentComInfo>arr_com_info=new ArrayList<IndentComInfo>();
-        for(IndentCommodityEntity com : arr_com){
-            IndentComInfo com_info =new IndentComInfo();
-            com_info.setCom_id(com.getComId());
-            com_info.setInd_quantity(com.getIndQuantity());
-            com_info.setCommodity_money(com.getCommodityMoney());
-            com_info.setRating_type(com.getRatingType());
-            com_info.setCom_name(indentCommentDetailRepository.findByComId(com.getComId()).getComName());
-            com_info.setCom_position("上海");
-            arr_com_info.add(com_info);
+            ArrayList<IndentCommodityEntity> arr_com = generateIndentComRepository.findByIndId(aim_ind.getIndId());
+            ArrayList<IndentComInfo> arr_com_info = new ArrayList<IndentComInfo>();
+            for (IndentCommodityEntity com : arr_com) {
+                IndentComInfo com_info = new IndentComInfo();
+                com_info.setCom_id(com.getComId());
+                com_info.setInd_quantity(com.getIndQuantity());
+                com_info.setCommodity_money(com.getCommodityMoney());
+                com_info.setRating_type(com.getRatingType());
+                com_info.setCom_name(indentCommentDetailRepository.findByComId(com.getComId()).getComName());
+                com_info.setCom_position("上海");
+                arr_com_info.add(com_info);
+            }
+            responseDTO.setCommodities(arr_com_info);
+            responseDTOs.add(responseDTO);
         }
-        responseDTO.setCommodities(arr_com_info);
-        return responseDTO;
+        return responseDTOs;
     }
 
 }

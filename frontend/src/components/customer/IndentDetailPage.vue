@@ -147,12 +147,17 @@
 <script lang="js" setup>
 import {ref} from 'vue';
 import { Clock ,Locationg3,Edit} from '@nutui/icons-vue';
+import {  useRouter } from 'vue-router';
+const router=useRouter();
 const commodity_name=ref('商品名称')
 const indentDetail=ref({
     time:'时间',
     address:'地点',
     identNumber:'期货码'
 })
+const goBack=()=>{
+  router.go(-1);
+}
 </script>
 
 <style scoped>

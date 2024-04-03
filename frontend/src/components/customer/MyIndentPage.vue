@@ -39,7 +39,7 @@
           </nut-col>
           <nut-col :span="8">
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail"> 查看详情 </nut-tag>
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent"> 评价 </nut-tag>
+            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)"> 评价 </nut-tag>
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
           </nut-col>
           </nut-row>
@@ -96,13 +96,15 @@
 
 <script setup>
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import {  useRouter } from 'vue-router';
 const state = ref('1');
 const router=useRouter();
 // const route=useRoute();
 // const cus_ID=route.query.cus_ID;
-const cus_ID=11;
+import globalData from"../../global.js"
+// import {stat} from "@babel/core/lib/gensync-utils/fs";
+const cus_ID=globalData.userInfo.user_id;
 const indentData=ref([
 {
   ind_id:"1",
@@ -117,6 +119,7 @@ const indentData=ref([
 ])
 
 onMounted(()=>{
+  console.log("!!!"+cus_ID)
   indentData.value.pop();
   searchIndent(state.value);
 })
@@ -154,14 +157,15 @@ const convert=(data)=>{
 }
 
 const searchIndent=(state)=>{
-  // console.log()
+  console.log(state.toString())
   axios.get('/api/cus/getInd',{
     params:{
       cus_ID:parseInt(cus_ID),
-      state:(state=='1'?0:5)
+      state:(state.paneKey=='1'||state=='1'?null:5)
     }
   }).then(response=>{
     var data=response.data;
+    console.log(data)
     convert(data);
   })
 }
@@ -177,9 +181,14 @@ const changeType=(state)=>{
   searchIndent(state);
 }
 
-const gradeIndent=()=>{
+const gradeIndent=(ind_id)=>{
+  console.log(ind_id)
   router.push({
-    path:'/comment'
+    path:'/comment',
+    query:{
+      ind_id:ind_id
+    }
+
   })
 
 }

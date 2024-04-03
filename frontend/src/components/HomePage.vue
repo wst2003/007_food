@@ -1,9 +1,9 @@
 <template>
     <router-view v-slot="{ Component,route }">
       <keep-alive >
-        <component v-if="route.meta.keepAlive" :is="Component" />
+        <component v-if="route.meta.keepAlive" :is="Component" :key="currentActiveIndex"/>
       </keep-alive>
-      <component v-if="!route.meta.keepAlive" :is="Component" />
+      <component v-if="!route.meta.keepAlive" :is="Component" :key="currentActiveIndex"/>
     </router-view> 
     <nut-config-provider :theme-vars="themeVars">
       <nut-tabbar class="tabbar" v-model="active" @tab-switch="tabSwitch" bottom safe-area-inset-bottom placeholder>
@@ -68,6 +68,16 @@
       path:'/storeDetail'
     })
   }
+    if(index===1){
+      router.push({
+        path:'/searchBox'
+      })
+    }
+    if(index===3){
+      router.push({
+        path:'/myIndent'
+      })
+    }
   };
   
   

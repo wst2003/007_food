@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.tju.food_007.model.CommoditiesCategoriesEntity;
 import org.tju.food_007.repository.com.GetCommodityCategoryRepository;
+import org.tju.food_007.utils.OpenAIAPI;
 
 import java.util.ArrayList;
 

@@ -24,6 +24,7 @@ import org.tju.food_007.dto.cus.indent.GetIndRequestDTO;
 import org.tju.food_007.dto.cus.indent.GetIndResponseDTO;
 import org.tju.food_007.service.cus.indent.GetIndentService;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * @author WGY
@@ -50,8 +51,7 @@ public class GetIndentController {
 
 
     @GetMapping("/getIndById")
-    public ResponseEntity<GetIndentResponseDTO> GetIndent(@RequestParam("ind_id") int indentId){
-        return new ResponseEntity<>(getIndentService.GetIndent(indentId), HttpStatus.OK);
+    public ResponseEntity<ArrayList<GetIndentResponseDTO>> GetIndent(@RequestParam("ind_id") ArrayList<Integer> indentIds){
+        return new ResponseEntity<>(getIndentService.GetIndent(indentIds), HttpStatus.OK);
     }
-
 }
