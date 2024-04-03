@@ -20,12 +20,13 @@ import IndentManagePage from '@/components/store/IndentManagePage.vue';
 import CommodityManagePage from "@/components/store/CommodityManagePage.vue";
 import SearchBoxPage from "@/components/customer/SearchBoxPage.vue";
 import PathPlanningPage from '@/components/store/PathPlanningPage.vue';
+import StoreManagePage from '@/components/store/StoreManagePage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            redirect: "/searchBox",
+            redirect: "/login",
         },
         {
             path: '/home',
@@ -135,6 +136,12 @@ const router = createRouter({
             path:'/pathPlanningPage',
             name:'pathPlanningPage',
             component:PathPlanningPage
+        },
+        {
+
+            path:'/storemanage',
+            name:'storemanage',
+            component:StoreManagePage
         }
     ]
 });

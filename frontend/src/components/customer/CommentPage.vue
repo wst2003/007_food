@@ -80,7 +80,7 @@
     width: 118px;
     height: 44px;
     flex-shrink: 0;
-    background-color:#000000;">
+    background-color:#000000;" @click="submitComment">
         <div style="color: #FFF;
         text-align: center;
         text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
@@ -93,19 +93,41 @@
 </template>
 
 <script lang="js" setup>
+    import axios from 'axios';
     import {  useRouter } from 'vue-router';
+    //import axios from 'axios';
     import { ref } from 'vue';
+    import globalData from"../../global.js"
     const router=useRouter();
     const stoName=ref('吉事花生鞍山新村二店');
     const commentData=ref({
-        food_quality:' ',
-        service_quality:' ',
-        cost_performance:' ',
+        food_quality:5,
+        service_quality:5,
+        cost_performance:5,
         comment:' ',
-        rating_type:' '
+        rating_type:1
     })
     const goBack=()=>{
         router.go(-1);
+    }
+    const submitComment=()=>{
+        console.log(1)
+        axios.post('/api/cus/rating',JSON.stringify({ 
+            cus_id:globalData.userInfo.user_id,
+            ind_id:5,
+            food_quality_score:commentData.value.food_quality,
+            service_quality_score:commentData.value.service_quality,
+            price_performance_ratio:commentData.value.cost_performance,
+            cmt_content:commentData.value.comment,
+            rating_type:commentData.value.rating_type
+          }), {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+        })
+        .then(response=>{
+            console.log(response.data.msg)
+        })
     }
 </script>
     

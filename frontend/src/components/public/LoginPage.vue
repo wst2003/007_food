@@ -93,7 +93,7 @@
                   sessionStorage.removeItem("user_type");
                   sessionStorage.setItem("user_type", response.data.user_type);
                   router.push({
-                        path: '/UploadSelector',
+                        path: '/storemanage',
                   });
                 }
                 else if (response.data.user_type==0){
