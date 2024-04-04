@@ -39,7 +39,7 @@
           </nut-col>
           <nut-col :span="8">
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail"> 查看详情 </nut-tag>
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)"> 评价 </nut-tag>
+            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)" v-if="indent.ind_state=='待评价'"> 评价 </nut-tag>
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
           </nut-col>
           </nut-row>
@@ -82,7 +82,7 @@
             <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
           </nut-col>
           <nut-col :span="8">
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent"> 评价 </nut-tag>
+            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent" > 评价 </nut-tag>
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
           </nut-col>
           </nut-row>
@@ -140,7 +140,7 @@ const convert=(data)=>{
 
     tempData.ind_id=now.ind_ID;
     tempData.com_position=now.com_position;
-    tempData.ind_state=indState[now.ind_state-1];
+    tempData.ind_state=indState[now.ind_state];
     
     tempData.ind_money=now.ind_money;
     tempData.commodity.pop();
@@ -193,7 +193,12 @@ const gradeIndent=(ind_id)=>{
 
 }
 const newIndent=()=>{
-
+  router.push({
+    path:'/storeDetail',
+    // query:{
+    //   sto_id:
+    // }
+  })
 }
 
 const goDetail=()=>{

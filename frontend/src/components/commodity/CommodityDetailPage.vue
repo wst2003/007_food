@@ -43,7 +43,14 @@
       </nut-row>
       <nut-row style="display: flex;align-items: center;">
         <Shop style="margin-right: 15px;"/>
+        <span @click="router.push({
+           path:'/storeDetail',
+           query:{
+              sto_id:sto_ID
+           }
+        })">
         {{ " " + route.query.position }}
+          </span>
       </nut-row>
       <nut-row style="display: flex;align-items: center;">
         <Clock style="margin-right: 15px;"/>
@@ -175,7 +182,7 @@ const recommendationList = ref([]);
 
 const ifLoading = ref(false);
 
-
+const sto_ID=ref(0);
 const loadMore = () => {
 
   setTimeout(() => {
@@ -199,6 +206,8 @@ const loadMore = () => {
 }
 
 const convert = (response) => {
+  sto_ID.value=response.sto_ID;
+  console.log(sto_ID.value)
   timePeriod.value = response.sto_openingTime + " - " + response.sto_closingTime;
 
   option.xAxis.data = [];
