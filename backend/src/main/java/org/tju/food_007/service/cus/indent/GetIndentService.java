@@ -57,6 +57,8 @@ public class GetIndentService {
     IndentCommentRopsitory indentCommentRopsitory;
     @Autowired
     IndentCommentDetailRepository indentCommentDetailRepository;
+    @Autowired
+    GetIndStoreRespository getIndStoreRespository;
 
     private final GenerateIndentComRequstMapper generateIndentComRequstMapper=GenerateIndentComRequstMapper.INSTANCE;
     private final GenerateIndentRequestMapper generateIndentRequestMapper=GenerateIndentRequestMapper.INSTANCE;
@@ -96,8 +98,9 @@ public class GetIndentService {
                 tempComDTOs.add(tempComDTO);
                 sto_id=commodity.getStoId();
             }
-            UserEntity store=getIndComPositionRepository.findByUserId(sto_id);
-            tempDTO=getIndResponseMapper.entityToResponse(indent ,tempComDTOs.toArray(new GetIndResponseDTO.IndComDTO[0]),store);
+            UserEntity user=getIndComPositionRepository.findByUserId(sto_id);
+            StoreEntity store =getIndStoreRespository.findByStoId(sto_id);
+            tempDTO=getIndResponseMapper.entityToResponse(indent ,tempComDTOs.toArray(new GetIndResponseDTO.IndComDTO[0]),user,store);
 
             responses.add(tempDTO);
 
