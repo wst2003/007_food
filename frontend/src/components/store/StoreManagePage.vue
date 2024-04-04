@@ -1,36 +1,32 @@
 <template>
     <nut-config-provider :theme-vars="themeVars">
         <div v-if="!loading">
-            <nut-navbar :title="sto_info.sto_name" left-show @click-back="onClick"></nut-navbar>
-            <div class="store-info-container" :src="storeBackground">
-                <img :src="'https://007-food.obs.cn-east-3.myhuaweicloud.com/' + sto_info.sto_logo" class="sto-logo">
-                <div class="store-info">
-                    <div class="store-info-list">
-                        <div style="height: fit-content;">
-                            <div class="info info1">{{ sto_info.sto_name }}</div>
-                            <div class="info info2">{{ sto_info.sto_openingTime + " - " + sto_info.sto_closingTime }}
-                            </div>
-                            <div class="info info3">{{ sto_info.user_phone }}</div>
-                        </div>
+            <nut-navbar title="商店管理" left-show @click-back="onClick"></nut-navbar>
+            <div class="container">
+                <img src="../../assets/cat.svg" style="position:absolute;right: 0%;top:0%;transform: translateY(-100%);z-index: 1000;" />
+                <div style="color: #93B090;font-weight: 700;font-size: 16px;">智能库存管理助手</div>
+                <div style="display: flex;flex-direction: row;">
+                    <div style="display: flex; flex-direction: column;gap:20px">
+                        <span>保质期<b style="margin: 4px;">≤1/2</b>食品</span>
+                        <span>保质期<b style="margin: 4px;">≤1/4</b>食品</span>
+                        <span>已清库存</span>
                     </div>
-                    <div class="rate-container">
-
-                        <div style="">
-                            <nut-circle-progress :progress="sto_info.sto_rating * 20" color="#93B090" stroke-width="7"
-                                path-color="rgba(0,0,0,0)" style="width:60px;height: 60px;">
-                                <div class="rating-title">店铺评分</div>
-                                <div class="mark">{{ sto_info.sto_rating }}</div>
-                            </nut-circle-progress>
-                        </div>
-                        <div class="licence" @click="showLicence">{{ "营业执照 >" }}</div>
-
+                    <div style="display: flex; flex-direction: column;gap:20px;margin-left: 15px;">
+                        <span style="color:#93B090">{{'共'+statistics.half_num+'件' }}</span>
+                        <span style="color:#93B090;">{{'共'+statistics.quater_num+'件' }}</span>
+                        <span style="color:#93B090;">{{'共'+statistics.out_num+'件' }}</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column;gap:12px;margin-left: 20px;">
+                        <span class="click-button" @click="goToManagePage">快速管理</span>
+                        <span class="click-button" @click="goToManagePage">快速管理</span>
+                        <span class="click-button" @click="goToManagePage">查看</span>
                     </div>
                 </div>
 
             </div>
             <div>
-                <nut-tabs v-model="tabValue" @click="changeTabCb">
-                    <nut-tab-pane style="padding: 0 0;" title="商品" pane-key="1">
+                <nut-tabs v-model="tabValue" :animated-time="0" @click="changeTabCb">
+                    <nut-tab-pane style="padding: 0 0;" title="全部" pane-key="1">
                         <nut-category :category="categoryData.category" @change="change">
                             <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore"
                                 style="margin-left: 20px;">
@@ -56,26 +52,83 @@
                             </nut-infinite-loading>
                         </nut-category>
                     </nut-tab-pane>
-                    <nut-tab-pane title="评论" pane-key="2">
-                        <nut-infinite-loading v-model="cmtIfLoading" :has-more="cmtHasMore" @load-more="cmtLoadMore">
-                            <div v-for="(item, index) in commentList" :key="index" class="comment">
-                                <div
-                                    style="position: relative;margin-right: 20px;display: flex;flex-direction: row;  align-items: flex-start;">
-                                    <img :src="'https://007-food.obs.cn-east-3.myhuaweicloud.com/' + item.user_logo"
-                                        class="comment-avatar">
-                                    <div class="comment-container">
-                                        <div style="font-size: 15px;">
-                                            {{ item.user_name }}
+                    <nut-tab-pane style="padding: 0 0;" title="≤1/2" pane-key="2">
+                        <nut-category :category="categoryData.category" @change="change">
+                            <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore"
+                                style="margin-left: 20px;">
+                                <div v-for="(item, index) in curPageCommodity" :key="item.com_ID"
+                                    @click="goToDetailPage(item.com_ID)">
+                                    <div class="com-container">
+                                        <img src="../../assets/store_goto.svg"
+                                            style="position:absolute; right: 5%;top:5%" />
+                                        <div>
+                                            <img :src="item.commodityImage ? 'https://007-food.obs.cn-east-3.myhuaweicloud.com/' + curPageCommodity[index].commodityImage[0].com_image : ''"
+                                                style="width: 10vh;height: 10vh;" />
                                         </div>
-                                        <nut-ellipsis style="color: #646464;font-size: 13px;"
-                                            :content="item.cmt_content" direction="end" rows="5" expand-text="展开"
-                                            collapse-text="收起">
-                                        </nut-ellipsis>
-                                        <div class="comment-time">{{ item.cmt_time }}</div>
+                                        <div style="display: flex;flex-direction: column; margin-left: 20px;">
+                                            <div style="font-size: large;">{{ item.com_name }}</div>
+                                            <div>
+                                                <span style="color: #979797; font-size: 12.295px;">库存</span>
+                                                <span style="font-size: 12.295px;">{{ item.com_left }}</span>
+                                            </div>
+                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[item.commodityPriceCurve.length -1].com_pc_price }}</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </nut-infinite-loading>
+                            </nut-infinite-loading>
+                        </nut-category>
+                    </nut-tab-pane>
+                    <nut-tab-pane style="padding: 0 0;" title="≤1/4" pane-key="3">
+                        <nut-category :category="categoryData.category" @change="change">
+                            <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore"
+                                style="margin-left: 20px;">
+                                <div v-for="(item, index) in curPageCommodity" :key="item.com_ID"
+                                    @click="goToDetailPage(item.com_ID)">
+                                    <div class="com-container">
+                                        <img src="../../assets/store_goto.svg"
+                                            style="position:absolute; right: 5%;top:5%" />
+                                        <div>
+                                            <img :src="item.commodityImage ? 'https://007-food.obs.cn-east-3.myhuaweicloud.com/' + curPageCommodity[index].commodityImage[0].com_image : ''"
+                                                style="width: 10vh;height: 10vh;" />
+                                        </div>
+                                        <div style="display: flex;flex-direction: column; margin-left: 20px;">
+                                            <div style="font-size: large;">{{ item.com_name }}</div>
+                                            <div>
+                                                <span style="color: #979797; font-size: 12.295px;">库存</span>
+                                                <span style="font-size: 12.295px;">{{ item.com_left }}</span>
+                                            </div>
+                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[item.commodityPriceCurve.length -1].com_pc_price }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nut-infinite-loading>
+                        </nut-category>
+                    </nut-tab-pane>
+                    <nut-tab-pane style="padding: 0 0;" title="已售罄" pane-key="4">
+                        <nut-category :category="categoryData.category" @change="change">
+                            <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore"
+                                style="margin-left: 20px;">
+                                <div v-for="(item, index) in curPageCommodity" :key="item.com_ID"
+                                    @click="goToDetailPage(item.com_ID)">
+                                    <div class="com-container">
+                                        <img src="../../assets/store_goto.svg"
+                                            style="position:absolute; right: 5%;top:5%" />
+                                        <div>
+                                            <img :src="item.commodityImage ? 'https://007-food.obs.cn-east-3.myhuaweicloud.com/' + curPageCommodity[index].commodityImage[0].com_image : ''"
+                                                style="width: 10vh;height: 10vh;" />
+                                        </div>
+                                        <div style="display: flex;flex-direction: column; margin-left: 20px;">
+                                            <div style="font-size: large;">{{ item.com_name }}</div>
+                                            <div>
+                                                <span style="color: #979797; font-size: 12.295px;">库存</span>
+                                                <span style="font-size: 12.295px;">{{ item.com_left }}</span>
+                                            </div>
+                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[item.commodityPriceCurve.length -1].com_pc_price }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nut-infinite-loading>
+                        </nut-category>
                     </nut-tab-pane>
                 </nut-tabs>
             </div>
@@ -88,16 +141,16 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import storeBackground from '../../assets/store-background.png'
 import axios from 'axios';
-import { ref, reactive, onBeforeMount } from 'vue';
+import { ref, reactive } from 'vue';
 const router = useRouter();
 const sto_info = ref({});
 const licenceFlag = ref(false)
-const loading = ref(true), ifLoading = ref(false), cmtIfLoading = ref(false);
-const hasMore = ref(true), cmtHasMore = ref(true);
-const tabValue = ref('1')
-const commentList = ref([]);
+const loading = ref(true), ifLoading = ref(false);
+const hasMore = ref(true);
+const tabValue = ref('1');
+const statistics = ref({})
+
 
 const categoryData = reactive({
     categoryInfo: {},
@@ -112,15 +165,12 @@ const themeVars = ref({
 
 const curPageCommodity = ref([]);
 
+const storeID = 29;
 const pageInfo = {
-    page_size: 6,
+    page_size: 100,
     page_num: 1,
-    com_type: ""
-}
-
-const commentInfo = {
-    page_size: 10,
-    page_num: 1,
+    com_type: "",
+    remainingProportion: 1
 }
 
 const licenceImage = ref([]);
@@ -132,25 +182,44 @@ const onClick = () => {
     })
 };
 
-const changeTabCb = () => {
-    if (tabValue.value == '1' && commentList.value.length === 0) {
-        axios.get('/api/cus/getComment', {
-            params: {
-                sto_ID: 29,   // TODO: modify to real ID
-                page_num: commentInfo.page_num,
-                page_size: commentInfo.page_size
-            }
-        }).then(res => {
-            commentList.value = res.data
-        })
+const changeTabCb = (title) => {
+    hasMore.value = true;
+
+    if(title.title === '≤1/2'){
+        pageInfo.remainingProportion = 0.5;
     }
+    else if(title.title === '≤1/4'){
+        pageInfo.remainingProportion = 0.25;
+    }
+    else if(title.title === '已售罄'){
+        pageInfo.remainingProportion = 0;
+    }
+    else if(title.title === '全部'){
+        pageInfo.remainingProportion  =1;
+    }
+    curPageCommodity.value = [];
+
+    axios.get('/api/com/commoditylist',{
+        params: {
+            sto_ID: storeID,
+            page_size: pageInfo.page_size,
+            page_num: pageInfo.page_num++,
+            com_type: pageInfo.com_type,
+            remaining_proportion: pageInfo.remainingProportion
+        }
+    }).then(res=>{
+        curPageCommodity.value = curPageCommodity.value.concat(res.data);
+        if (res.data.length < pageInfo.page_size)
+                hasMore.value = false;
+    })
+    
 }
 
 
 const getStoreInfoData = () => {
     axios.get('/api/sto/informationdetail', {
         params: {
-            sto_ID: 29    // TODO: modify to real ID
+            sto_ID: storeID    // TODO: modify to real ID
         }
     }).then(res => {
         sto_info.value = res.data[0];
@@ -162,7 +231,7 @@ const getStoreInfoData = () => {
 
     axios.get('/api/sto/stocategories', {
         params: {
-            sto_ID: 29
+            sto_ID: storeID
         }
     }).then(res => {
         for (const item of res.data.com_category) {
@@ -173,9 +242,6 @@ const getStoreInfoData = () => {
     })
 }
 
-const showLicence = () => {
-    licenceFlag.value = true;
-}
 
 const change = (index) => {
     ifLoading.value = false;
@@ -184,13 +250,16 @@ const change = (index) => {
     pageInfo.page_num = 1;
     axios.get('/api/com/commoditylist', {
         params: {
-            sto_ID: 29,
+            sto_ID: storeID,
             page_size: pageInfo.page_size,
             page_num: pageInfo.page_num++,
-            com_type: pageInfo.com_type
+            com_type: pageInfo.com_type,
+            remaining_proportion: pageInfo.remainingProportion
         }
     }).then(res => {
         curPageCommodity.value = res.data;
+        if (res.data.length < pageInfo.page_size)
+                hasMore.value = false;
     })
 };
 
@@ -198,30 +267,19 @@ const loadMore = () => {
     setTimeout(() => {
         axios.get('/api/com/commoditylist', {
             params: {
-                sto_ID: 29,
+                sto_ID: storeID,
                 page_size: pageInfo.page_size,
                 page_num: pageInfo.page_num++,
-                com_type: pageInfo.com_type
+                com_type: pageInfo.com_type,
+                remaining_proportion: pageInfo.remainingProportion
             }
         }).then(res => {
-            curPageCommodity.value = curPageCommodity.value.concat(res.data);  // TODO: add stop loading logic
+            curPageCommodity.value = curPageCommodity.value.concat(res.data);
             ifLoading.value = false;
             if (res.data.length < pageInfo.page_size)
                 hasMore.value = false;
         })
     }, 1000);
-}
-
-const cmtLoadMore = () => {
-    axios.get('/api/cus/getComment', {
-        params: {
-            sto_ID: 29,
-            page_num: commentInfo.page_num,
-            page_size: commentInfo.page_size
-        }
-    }).then(res => {
-        commentList.value.concat(res.data);    // TODO: add stop loading logic
-    })
 }
 
 
@@ -230,16 +288,52 @@ const goToDetailPage = () => {
 
 }
 
+const goToManagePage = ()=>{
 
-onBeforeMount(() => {
+}
+
+
+const getStatistics = ()=>{
+    axios.get('/api/com/ProductStatistics',{
+        params:{
+            sto_id: storeID
+        }
+    }).then(res=>{
+        statistics.value = res.data;
+    })
+}
     getStoreInfoData();
-})
+    getStatistics();
 
 
 
 </script>
 
 <style scoped>
+.click-button{
+    background-color: #93B090;
+    color: white;
+    padding:3px 10px 3px 10px;
+    border-radius: 4px;
+text-align: center;
+
+}
+
+
+.container{
+    background-color: #EFF5EE;
+    border-radius: 20px;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    position: relative;
+}
+
 .sto-logo {
     filter: drop-shadow(0px 4px 25px #D8D8D8);
     height: 25vw;
