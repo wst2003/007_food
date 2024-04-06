@@ -31,7 +31,7 @@
                             <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore"
                                 style="margin-left: 20px;">
                                 <div v-for="(item, index) in curPageCommodity" :key="item.com_ID"
-                                    @click="goToDetailPage(item.com_ID)">
+                                    @click="goToDetailPage(item.com_ID,item.com_oriPrice)">
                                     <div class="com-container">
                                         <img src="../../assets/store_goto.svg"
                                             style="position:absolute; right: 5%;top:5%" />
@@ -284,12 +284,23 @@ const loadMore = () => {
 
 
 // TODO: callback function for commodity detail info page
-const goToDetailPage = () => {
-
+const goToDetailPage = (id,price) => {
+  router.push({
+    path:'/storeCommodityDetail',
+    query:{
+      id:id,
+      price:price
+    }
+  })
 }
 
 const goToManagePage = ()=>{
-
+  router.push({
+    path:'/commodityManage',
+    query:{
+      date:'1'
+    }
+  })
 }
 
 
