@@ -100,7 +100,8 @@
                   sessionStorage.removeItem("user_type");
                   sessionStorage.setItem("user_type", response.data.user_type);
                   router.push({
-                        path: '/home',
+                        // path: '/home',
+                        path:'cusinfopage'
                   });
                 }
             } else{
@@ -128,8 +129,8 @@
 </script>
 <style scoped>
     .total-layout{
-        width:99vw;
-        height: 95vh;
+        width:100vw;
+        height: 100vh;
         overflow: hidden;
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
         background: rgba(202, 211, 191, 0.74);

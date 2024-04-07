@@ -22,7 +22,7 @@ import CommodityManagePage from "@/components/store/CommodityManagePage.vue";
 import SearchBoxPage from "@/components/customer/SearchBoxPage.vue";
 import PathPlanningPage from '@/components/store/PathPlanningPage.vue';
 import StoreHomePage from "@/components/public/StoreHomePage.vue";
-
+import CusInfoPage from '@/components/customer/CusInfoPage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -152,6 +152,17 @@ const router = createRouter({
                     component: CommodityDetailPage
                 },
             ]
+        
+        },
+        {
+            path:'/storemanage',
+            name:'storemanage',
+            component:StoreManagePage
+        },
+        {
+            path:'/cusinfopage',
+            name:'cusinfopage',
+            component:CusInfoPage
         }
     ]
 });
