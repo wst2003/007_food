@@ -2,7 +2,9 @@
   <BaiduMap />
   <nut-searchbar v-model="query_content">
     <template #rightin>
-      <Voice />
+      <Voice @click="translationStart" v-if="voiceState"/>
+      <Voice @click="translationEnd" v-else/>
+<!--      <VoiceInput @click="getResult"/>-->
     </template>
     <template #rightout>
       <Search2 @click="userSearch"/>
@@ -169,6 +171,11 @@ import {
 import { useRouter } from "vue-router";
 import axios from "axios";
 import BaiduMap from '../BaiduMap.vue'
+
+import IatRecorder  from '@/assets/js/IatRecorder.js'
+const iatRecorder = new IatRecorder('en_us','mandarin','5f27b6a9')
+
+// import VoiceInput from "@/components/VoiceInput.vue";
 const pageSize=ref(6);
 const pageNum=ref(0);
 const sortBy=ref(0);
@@ -332,6 +339,26 @@ const confirm = ({ selectedValue, selectedOptions }) => {
 
   showActionSheet.value=false;
 };
+
+const voiceState=ref(true);
+const voiceResult=ref("");
+const translationStart=()=>{
+  iatRecorder.start()
+  voiceState.value=false;
+}
+
+const translationEnd=()=>{
+  iatRecorder.stop()
+  voiceState.value=true;
+  voiceResult.value=iatRecorder.resultText
+  console.log(voiceResult.value)
+  axios.post('http://119.8.11.44:6000/api/test/gpt',{
+    words:voiceResult.value
+  }).then(response=>{
+    console.log("上传完成")
+    console.log(response.data)
+  })
+}
 </script>
 
 <style scoped>
