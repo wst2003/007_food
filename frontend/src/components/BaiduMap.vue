@@ -1,16 +1,21 @@
 <template>
     <div class="uppermap" >
-        <div @click=" areaSelect " style="display: flex;">
+        <div @click=" areaSelect " style="display: flex;align-items: center;">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="19" viewBox="0 0 15 19" fill="none">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M6.46687 18.3965C7.13969 19.1026 8.21182 19.0822 8.86155 18.3511L12.8052 13.9115L13.01 13.6799C14.2787 12.1881 15 10.2305 15 8.15036C15 3.64904 11.6421 0 7.5 0C3.35786 0 0 3.64904 0 8.15036C0 10.4029 0.846031 12.5108 2.31367 14.038L6.46687 18.3965ZM7.49965 11.3054C9.10306 11.3054 10.4029 9.89284 10.4029 8.1504C10.4029 6.40795 9.10306 4.99542 7.49965 4.99542C5.89624 4.99542 4.59643 6.40795 4.59643 8.1504C4.59643 9.89284 5.89624 11.3054 7.49965 11.3054Z" fill="#93B090"/>
             </svg>
             <div class="locationpicker" >{{ areastr }}</div>
         </div>
         <!-- <img height="19" src="./assets/catuppermap.png" /> -->
-        <div @click="toggleHeight  " class="unfoldtextcss">{{ unfoldtext }} </div>
+           
     </div>
     <!-- <div @click=" areaSelect ">{{ areastr }}</div> -->
-    <div id="baidumap" :style="{ height: currentHeight}" @click="toggleHeight"></div> 
+    <div style="position: relative;">
+        <img src="../assets/cat.svg" @click="toggleHeight" style="position:absolute;right: 0;top:0;z-index: 100;transform:  translateX(-30%) translateY(-100%);"/>
+    <div id="baidumap" :style="{ height: currentHeight}" @click="toggleHeight">
+
+        </div> 
+    </div>
 </template>
 <script setup>
  /* eslint-disable */ 
@@ -345,9 +350,10 @@ function toggleHeight(e) {
 <style scoped>
 
     #baidumap{
-        width:95vw;
-        margin:auto;
+        margin: 10px 20px 10px 20px;
         transition: height 0.5s ease-in-out; /* 平滑过渡效果 */
+        border-radius: 4px;
+
     }    
     .locationpicker{
         color: black;
@@ -356,12 +362,12 @@ function toggleHeight(e) {
         font-weight: 500; 
         line-height: 24px; 
         word-wrap: break-word;
+        margin-left: 10px;
     }
     .uppermap{
         display: flex;
         position: relative;
-        top: 3px;
-        left: 5px;
+        margin: 10px 20px;
         justify-content: space-between;
     }
     .unfoldtextcss{
@@ -372,5 +378,8 @@ function toggleHeight(e) {
         line-height: 24px; 
         position: relative;
         right: 10px;
+    }
+    #baidumap{
+
     }
 </style>

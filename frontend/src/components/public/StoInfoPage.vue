@@ -14,8 +14,8 @@
         <nut-form-item label="地址">
           <nut-input v-model="formData.user_gender" placeholder="请输入地址" type="text" :disabled="true"/>
         </nut-form-item>
-        <nut-form-item label="备注">
-          <nut-textarea v-model="formData.cus_nickname" placeholder="请输入备注" type="text" :disabled="true"/>
+        <nut-form-item label="商店介绍">
+          <nut-textarea v-model="formData.sto_introduction" placeholder="请输入备注" type="text" :disabled="true"/>
         </nut-form-item>
       </nut-form>
       <nut-button class="confirm-button" @click="quit" primary>
@@ -31,7 +31,7 @@ const formData = ref({
   user_address: '',
   user_balance: '',
   user_gender: '',
-  cus_nickname: '',
+  sto_introduction: '',
   user_logo:''
 })
 
@@ -42,9 +42,9 @@ const goBack=()=>{
   router.go(-1);
 }
 onMounted(()=>{
-  axios.get('/api/cus/getInfo',{
+  axios.get('/api/sto/informationdetail',{
       params: {
-        cus_id:globalData.userInfo.user_id
+        sto_ID:globalData.userInfo.user_id
       }
     }, {
           headers: {
@@ -52,12 +52,12 @@ onMounted(()=>{
           }
         })
         .then(response=>{
-            formData.value.user_phone=response.data.user_phone
-            formData.value.user_address=response.data.user_address
-            formData.value.user_balance=response.data.user_balance
-            formData.value.user_gender=response.data.user_gender
-            formData.value.cus_nickname=response.data.cus_nickname
-            formData.value.user_logo=response.data.user_logo
+            formData.value.user_phone=response.data[0].user_phone
+            formData.value.user_address=response.data[0].user_address
+            formData.value.user_balance=response.data[0].user_balance
+            formData.value.user_gender=response.data[0].user_gender
+            formData.value.sto_introduction=response.data[0].sto_introduction
+            formData.value.user_logo=response.data[0].user_logo
         })
 })
 const quit=()=>{

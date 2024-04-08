@@ -103,7 +103,7 @@ const tabSwitch = (item, index) => {
   }
   if(index===3){
     router.push({
-      path:'/storemanage'
+      path:'/stoinfopage'
     })
   }
 };
