@@ -26,7 +26,7 @@
     My,
   } from "@nutui/icons-vue";
   import { useRouter } from 'vue-router';
-  const active = ref(2);
+  const active = ref(null);
   const List = [
     {
       title: "盲盒",
@@ -65,6 +65,11 @@
     if(index===2){
       router.push({
         path:'/myIndent'
+      })
+    }
+    if(index===3){
+      router.push({
+        path:'/cusinfopage'
       })
     }
   };

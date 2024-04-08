@@ -1,8 +1,9 @@
 <template>
     <nut-navbar title="出行路径规划" left-show @click-back="returnPage"></nut-navbar>
     <div class="container">
-        <div id="baidumap2" ></div> 
-        <div class="info-container">
+        <div id="baidumap2" ></div>
+        <div style="font-size: large;margin-left: 30vw;margin-top: 30px;font-weight: bold; color: #93B090;" v-if="destinations.length==0">今日无配送需求！</div> 
+        <div class="info-container" v-else>
             <div class="line1">智能配送规划助手</div>
             <div class="line2">今日还需配送{{destinations.length}}单，已根据要求送达时间和用户位置为您规划最优路线</div>
             <div>
@@ -16,16 +17,18 @@
                 <span class="line3b">分钟</span>
             </div>
             <div v-if="solutionPath.length>1" style="margin-top:10px">
-                当前目的地：<span style="color: #93B090;font-weight: 700; ">{{posi[solutionPath[1]].address}}</span>
+                <div>路径规划：
+                    <div style="color: #93B090;font-weight: 700; ">{{ pathStr }} </div>
+                </div>
+                <div>当前目的地：<span style="color: #93B090;font-weight: bold; ">{{posi[solutionPath[1]].address}}</span></div>
             </div>
-            
-            
             <!-- <nut-steps :current="2" class="steps" :v-if="cur_index!=null">
                 <nut-step :title="destinations[solutionPath[cur_index-1]].address" content="描述信息">1</nut-step>
                 <nut-step :title="destinations[solutionPath[cur_index]].address" content="描述信息">2</nut-step>
                 <nut-step :title="destinations[solutionPath[cur_index+1]].address" content="描述信息">3</nut-step>
             </nut-steps> -->
         </div>
+        
     </div>
 </template>
 
@@ -39,7 +42,10 @@ import globalData from '../../global.js'
 import { useRouter } from 'vue-router';
 const router=useRouter();
 var global_map=null;//地图对象
-var currentPoint=null; // 当前定位信息,BMapPoint
+var current_location={
+    latitude:0,
+    longitude:0
+}; // 当前定位信息
 var sto_location={
     address:"",
     latitude:0,
@@ -54,10 +60,12 @@ const destinations=reactive([])//存储infoCls
 const posi=reactive([])// 存储所有点，在destinations的基础上添加商家本身
 var solutionPath=reactive([])// 存储posi中的元素序号
 const cur_index=ref(null)
+const pathStr=ref("")
 function infoCls(data){
-    this.date=data.ind_creationTime;//yyyy:MM:dd HH:mm:ss 用于排查今日订单
-    this.state=data.ind_state;//0为待送货，1为送货完成
-    this.method=data.delivery_method;//配送方法，1为商家配送
+    console.log(data)
+    // this.date=data.ind_creationTime;//yyyy:MM:dd HH:mm:ss 用于排查今日订单
+    // this.state=data.ind_state;//0为待送货，1为送货完成
+    // this.method=data.delivery_method;//配送方法，1为商家配送
     this.address=data.delivery_address;
     this.latitude=data.delivery_altitude;
     this.longitude=data.delivery_longitude;
@@ -69,7 +77,7 @@ onMounted(()=>{
     // 调用QQ地图API，获取位置
     geolocation.getLocation(
         function(position){
-            console.log('current location'+position)
+            console.log('current location：'+position)
             var {lng,lat}=qqMapTransBMap(position.lng,position.lat);
             afterLocation(lat,lng)
         },
@@ -100,7 +108,6 @@ function qqMapTransBMap(lng, lat) {
 function initalization(lat,lng){
     //初始化
     global_map = new BaiduMap.Map("baidumap2");
-    console.log('地图对象',global_map)
     globalData.mapObj.map=global_map
     let point = new BaiduMap.Point(lng, lat); // 百度BD09坐标
     global_map.centerAndZoom(point, 15); // 地图实例化
@@ -111,7 +118,8 @@ function initalization(lat,lng){
     var mk = new BaiduMap.Marker(point);
     global_map.addOverlay(mk);
     global_map.panTo(point);
-    currentPoint  = point; // 百度BD09坐标
+    current_location.latitude  = point.lat; // 百度BD09坐标
+    current_location.longitude  = point.lng; // 百度BD09坐标
 
     // 将坐标与地址设置到全局变量
     globalData.userPosition.setCoordination(lat,lng)
@@ -123,46 +131,79 @@ function initalization(lat,lng){
     })
 }
 function afterLocation(lat,lng){
+    //********** 
+    lat=31.282431
+    lng=121.212268
+    // 同济嘉定校区大门坐标，用于测试；正式版需要注释掉
     initalization(lat,lng) // 初始化地图与位置信息
     var ind_ids=[]
-    // axios.get('/api/sto/getIndentList', {
+    console.log('SessionStorage中的id '+sessionStorage.getItem("user_id"))
+    axios.get('/api/sto/getIndentList', {
+        params: {
+            // sto_id: 29,
+            sto_id: sessionStorage.getItem("user_id"), //To be replaced 
+        }
+      }).then(res => {
+        // 获取该商家的订单列表
+        console.log('该商家所有订单:')
+        console.log(res.data)
+        ind_ids=res.data
+        return axios.get('/api/cus/getIndById',{
+            params: {
+                ind_id: ind_ids,
+                // ind_id: [1,2,3,4,5],
+            },
+            paramsSerializer: params => {
+                // 这里使用 qs 来序列化参数，`indices: false` 表示不添加索引
+                return qs.stringify(params, { arrayFormat: 'repeat' })
+            }
+        })
+      }).then(res =>{
+        console.log('订单详情列表：')
+        console.log(res.data)
+        // 拉取订单详细信息
+        // 获取今天的日期，并格式化为 yyyy:MM:dd 格式
+        const today = new Date();
+        const todayStr = today.getFullYear() + '-' + 
+                        ('0' + (today.getMonth() + 1)).slice(-2) + '-' + 
+                        ('0' + today.getDate()).slice(-2);
+                        console.log(todayStr)
+        res.data.forEach(element => {
+            if(element.delivery_method==1&&element.ind_state==0&&element.ind_creationTime.startsWith(todayStr)){
+                destinations.push(new infoCls(element))
+            }
+        });
+        console.log('今日需配送的订单:')
+        console.log(destinations)
+        return axios.get('/api/sto/informationdetail',{
+            params: {
+                // sto_ID: 29,
+              sto_ID: sessionStorage.getItem("user_id"), //To be replaced 
+            }
+        })
+      }).then(res =>{
+        // 获取商家位置
+        sto_location.address=res.data[0].user_address
+        sto_location.latitude=res.data[0].sto_latitude 
+        sto_location.longitude=res.data[0].sto_longitude
+        console.log('商家位置:')
+        console.log(sto_location)
+      }).then(()=>{
+
+        if(destinations.length!=0){
+            destinations.forEach(ele=>{
+                var mk = new BaiduMap.Marker( new BaiduMap.Point(ele.longitude, ele.latitude));
+                global_map.addOverlay(mk);
+            })
+            Traveller()
+        }
+      })
+
+    // axios.get('/api/sto/informationdetail',{
     //     params: {
-    //         sto_id: 29,
-    //     //   sto_id: globalData.userInfo.user_id, //To be replaced 
+    //         sto_ID: 29,
+    //     //  sto_ID: globalData.userInfo.user_id, //To be replaced 
     //     }
-    //   }).then(res => {
-    //     // 获取该商家的订单列表
-    //     console.log(res.data)
-    //     ind_ids=res.data
-    //     return axios.get('/api/cus/getIndById',{
-    //         params: {
-    //             // ind_id: ind_ids,
-    //             ind_id: [1,2,3,4,5],
-    //         },
-    //         paramsSerializer: params => {
-    //             // 这里使用 qs 来序列化参数，`indices: false` 表示不添加索引
-    //             return qs.stringify(params, { arrayFormat: 'repeat' })
-    //         }
-    //     })
-    //   }).then(res =>{
-    //     // 拉取订单详细信息
-    //     // 获取今天的日期，并格式化为 yyyy:MM:dd 格式
-    //     const today = new Date();
-    //     const todayStr = today.getFullYear() + ':' + 
-    //                     ('0' + (today.getMonth() + 1)).slice(-2) + ':' + 
-    //                     ('0' + today.getDate()).slice(-2);
-    //     res.data.forEach(element => {
-    //         if(element.delivery_method==1&&element.ind_state==0&&element.ind_creationTime.startsWith(todayStr)){
-    //             destinations.push(infoCls(element))
-    //         }
-    //     });
-    //     console.log(destinations)
-    //     return axios.get('/api/sto/informationdetail',{
-    //         params: {
-    //             sto_ID: 29,
-    //         //   sto_ID: globalData.userInfo.user_id, //To be replaced 
-    //         }
-    //     })
     //   }).then(res =>{
     //     // 获取商家位置
     //     sto_location.address=res.data[0].user_address
@@ -170,35 +211,16 @@ function afterLocation(lat,lng){
     //     sto_location.longitude=res.data[0].sto_longitude
     //     console.log(sto_location)
     //   }).then(()=>{
-        // destinations.forEach(ele=>{
-        //     var mk = new BaiduMap.Marker( new BaiduMap.Point(ele.longitude, ele.latitude));
-        //     global_map.addOverlay(mk);
-        // })
+    //     // 加偏移，得到测试点
+    //     destinations.push(new infoCls({delivery_address:'测试点1',delivery_altitude:sto_location.latitude-0.001,delivery_longitude:sto_location.longitude-0.001}))
+    //     destinations.push(new infoCls({delivery_address:'测试点2',delivery_altitude:sto_location.latitude-0.02,delivery_longitude:sto_location.longitude-(-0.01)}))
+    //     destinations.push(new infoCls({delivery_address:'测试点3',delivery_altitude:sto_location.latitude-(-0.01),delivery_longitude:sto_location.longitude-0.02}))
+    //     destinations.forEach(ele=>{
+    //         var mk = new BaiduMap.Marker( new BaiduMap.Point(ele.longitude, ele.latitude));
+    //         global_map.addOverlay(mk);
+    //     }) 
     //     Traveller()
     //   })
-
-    axios.get('/api/sto/informationdetail',{
-        params: {
-            sto_ID: 29,
-        //  sto_ID: globalData.userInfo.user_id, //To be replaced 
-        }
-      }).then(res =>{
-        // 获取商家位置
-        sto_location.address=res.data[0].user_address
-        sto_location.latitude=res.data[0].sto_latitude 
-        sto_location.longitude=res.data[0].sto_longitude
-        console.log(sto_location)
-      }).then(()=>{
-        // 加偏移，得到测试点
-        destinations.push(new infoCls({delivery_address:'测试点1',delivery_altitude:sto_location.latitude-0.001,delivery_longitude:sto_location.longitude-0.001}))
-        destinations.push(new infoCls({delivery_address:'测试点2',delivery_altitude:sto_location.latitude-0.02,delivery_longitude:sto_location.longitude-(-0.01)}))
-        destinations.push(new infoCls({delivery_address:'测试点3',delivery_altitude:sto_location.latitude-(-0.01),delivery_longitude:sto_location.longitude-0.02}))
-        destinations.forEach(ele=>{
-            var mk = new BaiduMap.Marker( new BaiduMap.Point(ele.longitude, ele.latitude));
-            global_map.addOverlay(mk);
-        }) 
-        Traveller()
-      })
 
 }
 function Traveller(){
@@ -236,7 +258,25 @@ function Traveller(){
                 console.log(distance,duration)
             })
     })
+    // 更新路径显示
+    // console.log(posi)
+    pathStr.value = concatenateAddresses(posi, solutionPath);
 }
+// 将地址连接为字符串的函数
+function concatenateAddresses(arr, order) {
+    let concatenatedAddress = '';
+    for (let i = 0; i < order.length; i++) {
+        let index = order[i];
+        if (index < arr.length) {
+            concatenatedAddress += arr[index].address;
+            if (i < order.length - 1) {
+                concatenatedAddress += ' -> ';
+            }
+        }
+    }
+    return concatenatedAddress;
+} 
+
 
 const convertToKilometers = distance => {
     // 移除非数字字符
@@ -344,10 +384,11 @@ function returnPage(){
 }
 
 function Routing(){
+    // posi数组用于做路径规划，其中第一个元素是当前位置
     posi.push({
-        address:sto_location.address,
-        lat:sto_location.latitude,
-        lng:sto_location.longitude
+        address:"当前位置",
+        lat:current_location.latitude,
+        lng:current_location.longitude
     })
     destinations.forEach(ele=>{
         posi.push({
@@ -356,6 +397,11 @@ function Routing(){
             lng:ele.longitude
         })
     })
+    // posi.push({
+    //     address:sto_location.address,
+    //     lat:sto_location.latitude,
+    //     lng:sto_location.longitude
+    // })
     // 创建邻接矩阵
     let adjacencyMatrix = [];
     for (let i = 0; i < posi.length; i++) {
@@ -372,9 +418,16 @@ function Routing(){
     }
     console.log(posi)
     // 输出邻接矩阵以查看结果
-    console.log();
     adjacencyMat=adjacencyMatrix
     let result = solveTSP();
+    // 在问题求解的最后将商店位置push上去
+    posi.push({
+        address:sto_location.address,
+        lat:sto_location.latitude,
+        lng:sto_location.longitude
+    })
+    result.path.pop()
+    result.path.push(posi.length-1)
     console.log(`Shortest path: ${result.path.map(i => i + 1).join(' -> ')}`);
     console.log(`Shortest distance: ${result.distance.toFixed(2)} km`);
     solutionPath=result.path

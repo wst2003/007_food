@@ -86,6 +86,7 @@
                 /*登录成功后编辑此处跳转界面*/
                 /*------------------------*/
                 localStorage.setItem("user_phone",phoneNumber.value );
+                sessionStorage.setItem("user_id",response.data.user_id);
                 globalData.userInfo.user_id= response.data.user_id ;
                 console.log(globalData.userInfo.user_id)
                 // console.log(globalData.userInfo.user_id)
@@ -100,8 +101,8 @@
                   sessionStorage.removeItem("user_type");
                   sessionStorage.setItem("user_type", response.data.user_type);
                   router.push({
-                        // path: '/home',
-                        path:'cusinfopage'
+                        path: '/home',
+                        // path:'cusinfopage'
                   });
                 }
             } else{
