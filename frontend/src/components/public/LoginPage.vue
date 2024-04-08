@@ -86,6 +86,7 @@
                 /*登录成功后编辑此处跳转界面*/
                 /*------------------------*/
                 localStorage.setItem("user_phone",phoneNumber.value );
+                sessionStorage.setItem("user_id",response.data.user_id);
                 globalData.userInfo.user_id= response.data.user_id ;
                 console.log(globalData.userInfo.user_id)
                 // console.log(globalData.userInfo.user_id)
@@ -101,6 +102,7 @@
                   sessionStorage.setItem("user_type", response.data.user_type);
                   router.push({
                         path: '/home',
+                        // path:'cusinfopage'
                   });
                 }
             } else{
@@ -128,8 +130,8 @@
 </script>
 <style scoped>
     .total-layout{
-        width:99vw;
-        height: 95vh;
+        width:100vw;
+        height: 100vh;
         overflow: hidden;
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
         background: rgba(202, 211, 191, 0.74);

@@ -20,20 +20,14 @@
   <script setup lang="js">
   import { h,onMounted,ref } from 'vue';
   import {
-    Home,
     Category,
     Find,
     Cart,
     My,
   } from "@nutui/icons-vue";
   import { useRouter } from 'vue-router';
-  const active = ref(2);
+  const active = ref(null);
   const List = [
-    {
-      title: "店铺",
-      icon: h(Home),
-      name: "home",
-    },
     {
       title: "盲盒",
       icon: h(Category),
@@ -58,24 +52,24 @@
   
   const tabSwitch = (item, index) => {
     console.log(item, index);
-    if(index === 2){
+    if(index === 1){
         router.push({
         path:'/searchCommodity'
       })
     }
-    if(index === 0){
-    router.push({
-      path:'/storeDetail'
-    })
-  }
-    if(index===1){
+    if(index===0){
       router.push({
         path:'/searchBox'
       })
     }
-    if(index===3){
+    if(index===2){
       router.push({
         path:'/myIndent'
+      })
+    }
+    if(index===3){
+      router.push({
+        path:'/cusinfopage'
       })
     }
   };

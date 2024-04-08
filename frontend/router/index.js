@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import SearchCommodityPage from '@/components/customer/SearchCommodityPage.vue';
-import HomePage from "@/components/HomePage.vue"
+import HomePage from "@/components/public/HomePage.vue"
 import CommodityDetailPage from "@/components/commodity/CommodityDetailPage.vue";
 import LoginPage from '@/components/public/LoginPage.vue';
 import SelectIdentityPage from '@/components/public/SelectIdentityPage.vue';
@@ -21,6 +21,9 @@ import IndentManagePage from '@/components/store/IndentManagePage.vue';
 import CommodityManagePage from "@/components/store/CommodityManagePage.vue";
 import SearchBoxPage from "@/components/customer/SearchBoxPage.vue";
 import PathPlanningPage from '@/components/store/PathPlanningPage.vue';
+import StoreHomePage from "@/components/public/StoreHomePage.vue";
+import CusInfoPage from '@/components/customer/CusInfoPage.vue';
+import StoInfoPage from '@/components/public/StoInfoPage.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -103,12 +106,6 @@ const router = createRouter({
             name:'storegister',
             component:StoreRegisterPage
         },
-
-        {
-            path:'/uploadCommodity',
-            name:'uploadCommodity',
-            component:UploadCommodity
-        },
         {
             path:'/uploadblindbox',
             name:'uploadblindbox',
@@ -120,24 +117,58 @@ const router = createRouter({
             component:UploadSelector
         },
         {
-            path:'/indentmanagepage',
-            name:'indentmanagepage',
-            component:IndentManagePage
-        },
-        {
-            path:'/commodityManage',
-            name:'commodityManage',
-            component:CommodityManagePage
-        },
-        {
             path:'/pathPlanningPage',
             name:'pathPlanningPage',
             component:PathPlanningPage
         },
         {
-            path:'/storemanage',
-            name:'storemanage',
-            component:StoreManagePage
+            path:'/storeHome',
+            name:'storeHome',
+            component:StoreHomePage,
+            children:[
+                {
+                    path:'/uploadCommodity',
+                    name:'uploadCommodity',
+                    component:UploadCommodity
+                },
+                {
+                    path:'/indentmanagepage',
+                    name:'indentmanagepage',
+                    component:IndentManagePage
+                },
+                {
+                    path:'/commodityManage',
+                    name:'commodityManage',
+                    component:CommodityManagePage
+                },
+                {
+
+                    path:'/storemanage',
+                    name:'storemanage',
+                    component:StoreManagePage
+                },
+                {
+                    path: '/storeCommodityDetail',
+                    name: 'storeCommodityDetail',
+                    component: CommodityDetailPage
+                },
+            ]
+        
+        },
+        // {
+        //     path:'/storemanage',
+        //     name:'storemanage',
+        //     component:StoreManagePage
+        // },
+        {
+            path:'/cusinfopage',
+            name:'cusinfopage',
+            component:CusInfoPage
+        },
+        {
+            path:'/stoinfopage',
+            name:'stoinfopage',
+            component:StoInfoPage
         }
     ]
 });
