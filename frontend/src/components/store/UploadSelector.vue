@@ -25,7 +25,6 @@
             <div style="width: 95%; height: 1px; left: 16px; right: 16px;top: 95%; position: absolute; border-radius: 0.12px; border: 1px #E6E6E6 solid"></div> -->
         </div>
     </nut-popup>
-
    <nut-button type="info" @click="ShowUploadSelector" > 上传商品  </nut-button>
 </template>
 

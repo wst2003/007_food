@@ -59,6 +59,10 @@
                             {{ item.ind_creationTime }}
                         </div>
                     </nut-space>
+                    <br>
+                    <nut-space v-if="sendOrTake==1">
+                        <div @click="pathPlanClick">配送规划 &gt;</div>
+                    </nut-space>
                 </div>
                 <div>
                     <nut-space style="margin-top:5%;">
@@ -284,6 +288,11 @@ indInfo.value.forEach(element => {
     element.totalMoney='￥'+totalMoney.toString()
 });
 })
+function pathPlanClick(){
+    router.push({
+        path:'/pathPlanningPage'
+    })
+}
 </script>
 
 <style scoped>

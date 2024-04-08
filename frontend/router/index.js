@@ -154,11 +154,11 @@ const router = createRouter({
             ]
         
         },
-        {
-            path:'/storemanage',
-            name:'storemanage',
-            component:StoreManagePage
-        },
+        // {
+        //     path:'/storemanage',
+        //     name:'storemanage',
+        //     component:StoreManagePage
+        // },
         {
             path:'/cusinfopage',
             name:'cusinfopage',
