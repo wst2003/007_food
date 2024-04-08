@@ -16,3 +16,7 @@ window.addEventListener('unhandledrejection', event => {
 app.config.errorHandler = function(err) {
     console.log("global", err);
 };
+
+window.onerror = function () {
+    return true;
+};

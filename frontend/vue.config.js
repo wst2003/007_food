@@ -40,6 +40,9 @@ module.exports = defineConfig({
         }
   },
   devServer: {
+    client: { //加上这个就好了
+      overlay: false,
+    },
     proxy: {
       '/api': {
         target: BaseUrl,
