@@ -95,7 +95,7 @@
 
 import {ref} from 'vue';
 import { useRouter } from 'vue-router';
-import globalData from"../../global.js"
+// import globalData from"../../global.js"
 import axios from 'axios';
 const router=useRouter();
 const formData=ref({
@@ -156,7 +156,7 @@ const confirm_produceDate_pick=()=>{
 }
 
 const addCommodity=()=>{
-    var stoID=globalData.userInfo.user_id
+    var stoID=sessionStorage.getItem("user_id")
     var com_uploadDate=transformDateString(formData.value.com_uploadDate)
     axios.post('/api/sto/uploadMysteryBox',  JSON.stringify({ 
             com_name:formData.value.com_name,

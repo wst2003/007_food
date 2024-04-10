@@ -148,7 +148,7 @@ function afterLocation(lat,lng){
         console.log('该商家所有订单:')
         console.log(res.data)
         ind_ids=res.data
-        return axios.get('/api/cus/getIndById',{
+        return axios.get('/api/cus/',{
             params: {
                 ind_id: ind_ids,
                 // ind_id: [1,2,3,4,5],

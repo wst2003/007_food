@@ -136,7 +136,7 @@ import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 import * as echarts from 'echarts';
 import { onMounted } from 'vue';
-import globalData from"../../global.js"
+// import globalData from"../../global.js"
 import axios from 'axios';
 const uploadRef = ref(null);
 const categories=ref([])
@@ -286,7 +286,7 @@ onMounted(()=>{
 })
 
 const addCommodity=()=>{
-    var stoID=globalData.userInfo.user_id
+    var stoID=sessionStorage.getItem("user_id")
     var com_expirationDate=transformDateString(formData.value.com_expirationDate)
     var com_producedDate=transformDateString(formData.value.com_producedDate)
     var price_curve=[]

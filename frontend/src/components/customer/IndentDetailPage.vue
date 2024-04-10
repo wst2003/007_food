@@ -126,38 +126,59 @@
     <div style="
     position:relative;
     margin-top:2vh;
-    width: 396px;
+    width: 100vw;
     height: 447px;
     flex-shrink: 0;
     border-radius: 10px;
     background: #FBFCFA;
     box-shadow: 0px 0px 7.1px 0px rgba(0, 0, 0, 0.10);">
-        <nut-steps direction="vertical" :current="2" 
+        <nut-steps direction="vertical" :current="indentDetail.status" 
         style="
         position:absolute;
-        top:10%;
-        left:10%;">
-            <nut-step title="未开始" content="您的订单已经打包完成，商品已发出">1</nut-step>
-            <nut-step title="进行中" content="您的订单正在配送途中">2</nut-step>
-            <nut-step title="已完成" content="收货地址为：北京市经济技术开发区科创十一街18号院京东大厦">3</nut-step>
+        top:5%;
+        left:20vw;
+        width:100vw;">
+            <nut-step title="未收货" content="您的订单还未收货">0</nut-step>
+            <nut-step title="待取货" content="您的订单待取货">2</nut-step>
+            <nut-step title="确认取货" content="您的订单确认取货">1</nut-step>            
+            <nut-step title="已核销" content="您的订单已核销">3</nut-step>
+            <nut-step title="待评价" content="您的订单待评价">5</nut-step>
+
           </nut-steps>
     </div>
 </template>
 
 <script lang="js" setup>
-import {ref} from 'vue';
+import axios from 'axios'
+import {onMounted, ref} from 'vue';
 import { Clock ,Locationg3,Edit} from '@nutui/icons-vue';
-import {  useRouter } from 'vue-router';
+import {  useRouter,useRoute } from 'vue-router';
 const router=useRouter();
+const route=useRoute();
 const commodity_name=ref('商品名称')
 const indentDetail=ref({
     time:'时间',
     address:'地点',
-    identNumber:'期货码'
+    identNumber:'期货码',
+    status:'0'
 })
 const goBack=()=>{
   router.go(-1);
 }
+onMounted(()=>{
+    console.log( route.query.ind_id)
+    axios.get('/api/cus/getIndById', {
+      params: {
+        ind_id: route.query.ind_id,
+      }
+    }).then(response => {
+        indentDetail.value.time=response.data[0].ind_creationTime;
+        indentDetail.value.address=response.data[0].delivery_address;
+        indentDetail.value.identNumber=response.data[0].ind_verificationCode;
+        indentDetail.value.status=response.data[0].ind_state
+    })
+    console.log("111"+indentDetail.value.status)
+})
 </script>
 
 <style scoped>

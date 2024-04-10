@@ -38,7 +38,7 @@
             <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
           </nut-col>
           <nut-col :span="8">
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail"> 查看详情 </nut-tag>
+            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail(indent.ind_id)"> 查看详情 </nut-tag>
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)" v-if="indent.ind_state=='待评价'"> 评价 </nut-tag>
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
           </nut-col>
@@ -102,9 +102,9 @@ const state = ref('1');
 const router=useRouter();
 // const route=useRoute();
 // const cus_ID=route.query.cus_ID;
-import globalData from"../../global.js"
+// import globalData from"../../global.js"
 // import {stat} from "@babel/core/lib/gensync-utils/fs";
-const cus_ID=globalData.userInfo.user_id;
+const cus_ID=sessionStorage.getItem("user_id");
 const indentData=ref([
 {
   ind_id:"1",
@@ -201,9 +201,12 @@ const newIndent=()=>{
   })
 }
 
-const goDetail=()=>{
+const goDetail=(ind_id)=>{
   router.push({
-    path:'/indentdetail'
+    path:'/indentdetail',
+    query:{
+      ind_id:ind_id
+    }
   })
 }
 </script>

@@ -36,7 +36,7 @@ const formData = ref({
 })
 
 import {  useRouter } from 'vue-router';
-import globalData from"../../global.js"
+// import globalData from"../../global.js"
 const router=useRouter();
 const goBack=()=>{
   router.go(-1);
@@ -44,7 +44,7 @@ const goBack=()=>{
 onMounted(()=>{
   axios.get('/api/sto/informationdetail',{
       params: {
-        sto_ID:globalData.userInfo.user_id
+        sto_ID:sessionStorage.getItem("user_id")
       }
     }, {
           headers: {
@@ -62,7 +62,7 @@ onMounted(()=>{
 })
 const quit=()=>{
   axios.post('/api/pub/login/quit',  JSON.stringify({ 
-              user_id:globalData.userInfo.user_id
+              user_id:sessionStorage.getItem("user_id")
             }), {
             headers: {
                 'Content-Type': 'application/json'

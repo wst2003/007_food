@@ -101,7 +101,7 @@ import { StarFillN } from '@nutui/icons-vue';
 const ind_note=ref("") //TODO: note block
 const delivery_method=ref(0)
 const delivery_address=globalData.userPosition.address 
-const cus_Id=globalData.userInfo.user_id //TODO: confirmity
+const cus_Id=sessionStorage.getItem("user_id")//TODO: confirmity
 
 function toggleMethod(){
     if(delivery_method.value==0)delivery_method.value=1;
