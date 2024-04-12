@@ -4,6 +4,7 @@ const NutUIResolver = require('@nutui/auto-import-resolver')
 const {plugins} = require("eslint-plugin-vue/lib/configs/base");
 
 const BaseUrl = "http://localhost:6000"
+// const BaseUrl = "http://119.8.11.44:6000"
 // const BaseUrl = "http://127.0.0.1:4523/m1/4090306-0-default/api"
 const imageURL = "https://food-bank.obs.cn-east-3.myhuaweicloud.com/"
 

@@ -22,6 +22,7 @@
                 </div>
                 <div>当前目的地：<span style="color: #93B090;font-weight: bold; ">{{posi[solutionPath[1]].address}}</span></div>
             </div>
+
             <!-- <nut-steps :current="2" class="steps" :v-if="cur_index!=null">
                 <nut-step :title="destinations[solutionPath[cur_index-1]].address" content="描述信息">1</nut-step>
                 <nut-step :title="destinations[solutionPath[cur_index]].address" content="描述信息">2</nut-step>
@@ -148,7 +149,8 @@ function afterLocation(lat,lng){
         console.log('该商家所有订单:')
         console.log(res.data)
         ind_ids=res.data
-        return axios.get('/api/cus/',{
+
+        return axios.get('/api/cus/getIndById',{
             params: {
                 ind_id: ind_ids,
                 // ind_id: [1,2,3,4,5],
@@ -197,7 +199,7 @@ function afterLocation(lat,lng){
             })
             Traveller()
         }
-      })
+      }).catch(err => console.log(err))
 
     // axios.get('/api/sto/informationdetail',{
     //     params: {
@@ -379,8 +381,6 @@ function lineDistance(a_lat, a_lng, b_lat, b_lng) {
 function returnPage(){
     console.log('returnPage触发')
     router.go(-1)
-    
-   
 }
 
 function Routing(){

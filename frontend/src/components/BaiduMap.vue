@@ -12,8 +12,7 @@
     <!-- <div @click=" areaSelect ">{{ areastr }}</div> -->
     <div style="position: relative;">
         <img src="../assets/cat.svg" @click="toggleHeight" style="position:absolute;right: 0;top:0;z-index: 100;transform:  translateX(-30%) translateY(-100%);"/>
-    <div id="baidumap" :style="{ height: currentHeight}" @click="toggleHeight">
-
+        <div id="baidumap" :style="{ height: currentHeight}" @click="toggleHeight">
         </div> 
     </div>
 </template>
@@ -196,7 +195,7 @@ function afterLocation(lat,lng){
     }}).then(res=>{
         console.log(res.data)
         sto_ids=res.data.sto_id
-        return axios.get('http://127.0.0.1:4523/m1/4090306-0-default/api/sto/informationdetail',{
+        return axios.get('/api/sto/informationdetail',{
             params:{
                 sto_ID:sto_ids
             },
