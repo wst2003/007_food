@@ -234,8 +234,12 @@
                 user_password:formData.value.user_password,
                 user_address:formData.value.user_address,
                 user_gender:formData.value.user_gender,
-                cus_nickname:formData.value.cus_nickname,
-                cus_payPassword:formData.value.cus_payPassword
+                sto_name:formData.value.sto_name,
+                sto_introduction:formData.value.sto_introduction,
+                sto_openingTime:formData.value.sto_openingTime,
+                sto_closingTime:formData.value.sto_closingTime,
+                sto_latitude:formData.value.sto_latitude,
+                sto_longitude:formData.value.sto_longitude
             }), {
             headers: {
                 'Content-Type': 'application/json'
