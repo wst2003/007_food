@@ -3,7 +3,7 @@
     <nut-form style="
     position:relative;
     width: 100vw;
-    height: 323px;
+    height: 180vh;
     flex-shrink: 0;
     border-radius: 4px;
     background: #FBFCFA;">
@@ -48,7 +48,7 @@
               maximum="5"
               url='/api/sto/uploadImage'
               :data="addPicData"
-              :ref="uploadRef"
+              ref="uploadRef"
               name='images'
             >
             </nut-uploader>
@@ -141,7 +141,7 @@ import axios from 'axios';
 const uploadRef = ref(null);
 const categories=ref([])
 const router=useRouter();
-const addPicData={com_id:'0'}
+const addPicData=ref({com_id:0})
 const formData=ref({
     com_name:' ',
     com_type:0,
@@ -315,8 +315,8 @@ const addCommodity=()=>{
           }
           })
           .then(response => {
-            addPicData.com_id=response.data.com_Id
-            console.log(addPicData.com_id)
+            addPicData.value.com_id=response.data.com_Id
+            console.log(addPicData.value.com_id)
             uploadRef.value.submit();
           })
           .catch((error) => {

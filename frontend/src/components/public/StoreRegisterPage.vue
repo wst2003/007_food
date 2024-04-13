@@ -124,7 +124,6 @@
     const phoneError=ref('')
     const showBottom=ref(false)
     const mess=ref('')
-    const cus_payPassword_val=ref('')
     import axios from 'axios';
     import { useRouter } from 'vue-router';
     const router = useRouter();
@@ -227,8 +226,6 @@
             baseClick('请输入昵称');
         }else if(formData.value.user_gender===''){
             baseClick('请选择性别');
-        }else if(formData.value.cus_payPassword!=cus_payPassword_val.value){
-            baseClick('两次输入的支付密码不一致！')
         }else if(formData.value.user_address===''){
             baseClick('请输入地址')
         }else{
