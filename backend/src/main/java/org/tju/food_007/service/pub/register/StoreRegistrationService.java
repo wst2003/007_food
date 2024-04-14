@@ -53,7 +53,7 @@ public class StoreRegistrationService {
         newUser.setUserState(1);
         newUser.setUserBalance(BigDecimal.valueOf(0));
         newUser.setUserRegTime(Timestamp.valueOf(now));
-        newUser.setUserType(0);
+        newUser.setUserType(1);
         if (userRegistrationRepository.existsByUserPhone(newUser.getUserPhone())) {
             System.out.println("该号码已存在："+newUser.getUserPhone());
             response.setMsg("该号码已存在");

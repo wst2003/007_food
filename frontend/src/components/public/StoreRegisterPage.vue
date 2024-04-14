@@ -249,7 +249,7 @@
             .then(response => {
                 console.log('Login submitted successfully.');
                 console.log(response.data);
-                if(response.data.msg==='success') {
+                if(response.data.msg==='Store成功注册') {
                     baseClick('注册成功！前往登录界面！')
                     /*------------------------*/
                     /*登录成功后编辑此处跳转界面*/
@@ -294,8 +294,8 @@
             minutes='0'+date.getMinutes().toString()
         else
             minutes=date.getMinutes().toString()
-        console.log('time'+ hours+':'+minutes)
-        return hours+':'+minutes
+        console.log('time'+ hours+':'+minutes+':00')
+        return hours+':'+minutes+':00'
     }
 </script>
 <style scoped>

@@ -75,9 +75,9 @@
     </nut-form>
 
 
-    <nut-popup v-model:visible="showType" @close="selectTypeClose">
-        <nut-checkbox-group v-model="pickType" style="display:flex;flex-direction:column;">
-            <nut-checkbox v-for="(item,index) in categoryType" :key='index' :label=item> {{ item }} </nut-checkbox>
+    <nut-popup style="border-radius: 5px;" v-model:visible="showType" @close="selectTypeClose">
+        <nut-checkbox-group v-model="pickType" style="display:flex;flex-direction:column;height:25vh;border-radius: 5px;">
+            <nut-checkbox style="margin-top:1vh;margin-left:2vw;" v-for="(item,index) in categoryType" :key='index' :label=item> {{ item }} </nut-checkbox>
         </nut-checkbox-group>
     </nut-popup>
 
@@ -88,7 +88,9 @@
           @confirm="confirm_produceDate_pick"
         ></nut-date-picker>
     </nut-popup>
-
+    <nut-popup v-model:visible="showBottom" round position="bottom" style="justify-content: center;align-items: center;" :style="{ height: '20%' }">
+        <div style="position:absolute;top:30%;left:30%;">{{ mess }}</div>
+    </nut-popup>
 </template>
 
 <script lang="js" setup>
@@ -97,6 +99,7 @@ import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 // import globalData from"../../global.js"
 import axios from 'axios';
+import { onMounted } from 'vue';
 const router=useRouter();
 const formData=ref({
     com_name:' ',
@@ -119,6 +122,17 @@ const pickType=ref([])
 const pickProduceDate=ref('请选择上架日期')
 
 const commodityType=ref('请选择盲盒类别');
+
+const showBottom=ref(false);
+const mess=ref('')
+
+onMounted(()=>{
+    axios.get('/api/com/getCategories', {
+    }).then((res) => {
+      categoryType.value=res.data
+    })
+})
+
 const goBack=()=>{
         router.go(-1);
     }
@@ -177,17 +191,58 @@ const addCommodity=()=>{
           }
           })
           .then(response => {
-              console.log('Login submitted successfully.');
-              console.log(response.data);
-              addPicData.com_id=response.data.com_Id
-                console.log(addPicData.com_id)
-                uploadRef.value.submit();
+            // addPicData.value.com_id=response.data.com_Id
+            // console.log(addPicData.value.com_id)
+            const formDataPic = new FormData();
+            var count=0;
+            formData.value.images.forEach((file) => {
+                console.log(file.url);
+                const pic=dataURLtoFile(file.url,'pic'+count.toString()+'.jpg')
+                formDataPic.append('images', pic); // 将文件添加到FormData中
+                count++;
+            });
+            formDataPic.append('com_id',response.data.com_ID)
+            axios.post('/api/sto/uploadImage',  formDataPic, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+                })
+                .then(response => {
+                    console.log(response.data)
+                    if(response.data==='成功上传图片'){
+                        baseClick("成功上传商品")
+                        goBack()
+                    }else{
+                        baseClick("未成功上传商品！")
+                    }
+                })
             
           })
           .catch((error) => {
               console.log('An error occurred:', error);
           });
 }
+
+function dataURLtoFile(dataurl, filename) {
+    // 获取到base64编码
+    const arr = dataurl.split(',')
+    // 将base64编码转为字符串
+    const bstr = window.atob(arr[1])
+    let n = bstr.length
+    const u8arr = new Uint8Array(n) // 创建初始化为0的，包含length个元素的无符号整型数组
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new File([u8arr], filename, {
+        type: 'image/jpeg',
+    })
+}
+
+const baseClick = (message) => {
+
+showBottom.value=true;
+mess.value=message
+};
 </script>
 
 <style scoped>
