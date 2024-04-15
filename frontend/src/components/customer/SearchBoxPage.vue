@@ -1,129 +1,75 @@
 <template>
-  <BaiduMap />
-  <nut-searchbar v-model="query_content">
-    <template #rightin>
-      <Voice />
-    </template>
-    <template #rightout>
-      <Search2 @click="userSearch"/>
-    </template>
-  </nut-searchbar>
-  <nut-infinite-loading v-model="infinityValue" :has-more="hasMore" @load-more="loadMore">
-    <nut-row v-for="box in boxes" :key="box.id" @click="goDetail(box.id)">
-      <nut-col :span="19">
-        <nut-config-provider :theme-vars="themeVars">
-          <nut-cell style="height: 200px;background-color: #C7E1C487">
-            <div style="width: 100%">
-              <nut-cell style="width: 15%;height: 15%;position: absolute;z-index: 100;margin-top: 110px;background-color: #93B090;--nut-cell-box-shadow: v-bind(0px 0px 0px 0px)">
-                <div style="font-family: Source Han Sans C;
-                  font-size: 15px;
-                  font-weight: 900;
-                  line-height: 13px;
-                  text-align: left;
-                  color:#FFFFFF;
-                  margin:auto
-               ">
-                <span style="font-family: Source Han Sans C;
-                  font-size: 12px;
-                  font-weight: 900;
-                  line-height: 13px;
-                  text-align: left;
-                  margin-right: 5px;
-                 ">{{"¥"}}</span>{{box.price}}
+  <div v-if="!loading">
+    <BaiduMap />
+    <nut-searchbar v-model="query_content">
+      <template #rightin>
+        <Voice @click="translationStart" v-if="voiceState" />
+        <Voice @click="translationEnd" v-else />
+        <!--      <VoiceInput @click="getResult"/>-->
+      </template>
+      <template #rightout>
+        <Search2 @click="userSearch" />
+      </template>
+    </nut-searchbar>
+    <div class="sort-bar">
+      <div  @click="sortOptionClick(1)" :class="!sortOptionStatus['s1']? 'sort-tag':'sort-tag-clicked'">按价格排序</div>
+      <div  @click="sortOptionClick(2)" :class="!sortOptionStatus['s2']? 'sort-tag':'sort-tag-clicked'" >按评分排序</div>
+    </div>
+    <nut-infinite-loading v-model="infinityValue" :has-more="hasMore" @load-more="loadMore">
+      <nut-config-provider :theme-vars="themeVars">
+        <div class="container">
+          <div v-for="(item, index) in commodityList" :key="index" style="display: flex;" >
+            <div class="commodity-card"
+              @click="showDetail(com_ID, com_position, com_dist, com_price, com_name, com_left)">
+              <div style="height: 150px;position: relative;">
+                <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 0 0 0;" />
+                <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">
+                  <div style="background-color: white;">
+                    <div class="price-tag">
+                      {{ '¥' + item.com_oriPrice }}
+                    </div>
+                  </div>
+                  <div class="left-tag">
+                    <span style="color:#969696;font-size: 10px;">剩余</span>
+                    <span style="font-size: 13px;color: #93B090;font-weight: 700;margin: 0 2px 0 2px;">{{ item.com_left
+                      }}</span>
+                    <span style="color:#969696;font-size: 10px;">件</span>
+                  </div>
                 </div>
-              </nut-cell>
-              <nut-cell style="width: 30%;height: 15%;position: absolute;z-index: 99;margin-top: 110px;margin-left:10%;--nut-cell-box-shadow: v-bind(0px 0px 0px 0px);">
-                <div style="margin:auto">
-                <span style="font-family: Source Han Sans SC;
-                  font-size: 10px;
-                  font-weight: 700;
-                  line-height: 13px;
-                  text-align: left;
-                  color: #969696;
-                ">
-                  {{"剩余"}}
-                </span>
-                  <span style="font-family: Source Han Sans SC;
-                  font-size: 14px;
-                  font-weight: 700;
-                  line-height: 13px;
-                  text-align: left;
-                  color: #93B090;
-                 ">
-                  {{box.left}}
-                </span>
-                  <span style="font-family: Source Han Sans SC;
-                  font-size: 10px;
-                  font-weight: 700;
-                  line-height: 13px;
-                  text-align: left;
-                  color: #969696;
-                ">
-                  {{"份"}}
-                </span>
-                </div>
-              </nut-cell>
-              <nut-image :src="box.main_url" height="70%" width="100%" :round="true" :radius="6"/>
-              <div style="width: 100%">
-                <nut-ellipsis style="font-family: Source Han Sans SC;
-                      font-size: 14px;
-                      font-weight: 400;
-                      line-height: 16px;
-                      letter-spacing: 1px;
-                      text-align: left;
-                      color:#131212;
-                      margin-left: 15px;
-                      margin-top: 5px;
-                      width:100%" :content="box.name"
-                              direction="end"
-                ></nut-ellipsis>
               </div>
-
-              <!--            <div style="width: 70%">-->
-              <nut-row >
-                <nut-col :span="14">
-                  <nut-ellipsis style="font-family: Source Han Sans SC;
-                        font-size: 10px;
-                        font-weight: 400;
-                        line-height: 16px;
-                        text-align: left;
-                        margin-left: 15px;
-                        margin-top: 10px;
-                        width:100%" :content="box.address"
-                                direction="end"
-                  ></nut-ellipsis>
-                </nut-col>
-                <nut-col :span="6">
-                  <nut-ellipsis style="font-family: Source Han Sans SC;
-                        font-size: 10px;
-                        font-weight: 400;
-                        line-height: 16px;
-                        text-align: left;
-                        margin-left: 15px;
-                        margin-top: 10px;
-                        width:100%" :content="box.introduction"
-                                direction="end"
-                  ></nut-ellipsis>
-                </nut-col>
-              </nut-row>
-              <!--            </div>-->
-
+              <div
+                style="background-color:#e9f2e7;border-radius: 0 0 0 20px;display: flex;justify-content: center;flex-direction: column;padding-left: 10px;position: relative;padding:10px">
+                <div style="font-size: 14.5px;width:70%;">
+                  {{ item.com_name }}
+                </div>
+                <div
+                  style="font-size: 11px;color:#808080;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 80%;">
+                  {{ item.com_position }}
+                </div>
+                <div class="rate-container">
+                  <div class="rate">
+                    {{ item.praise_rate }}
+                  </div>
+                </div>
+                <div class="distance">
+                  {{ item.com_dist + 'km' }}
+                </div>
+              </div>
+            </div>
+            <div style="background-color: #808080;width: 20%;margin-bottom: 20px;border-radius: 0 20px 20px 0;background: #93B090;box-shadow: -3px 0px 4px 0px rgba(0, 0, 0, 0.25);z-index: 10;
+            display: flex;flex-direction: column;align-items: center;justify-content: center;">
+              <div v-for="(item2, index2) in item.contain_images" :key='index1 + "_" +index2'>
+                <img :src="item2.com_image"  style="border-radius: 50%;width:50px;height: 50px;border: 3px solid #FFF;box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);"  />
+              </div>
             </div>
 
-          </nut-cell>
-        </nut-config-provider>
+          </div>
+        </div>
+      </nut-config-provider>
 
-      </nut-col>
-      <nut-col :span="5">
-        <nut-cell style="height: 200px;background-color: #93B090;display: block;">
-          <nut-image :src="box.url[0]" width="60" height="60" fit="cover" round style="margin: auto" />
-          <nut-image :src="box.url[1]" width="60" height="60" fit="cover" round style="margin: auto" />
-          <nut-image :src="box.url[2]" width="60" height="60" fit="cover" round style="margin: auto" />
-        </nut-cell>
-      </nut-col>
-    </nut-row>
-    <!-- <div class="test" v-for="(item, index) in sum" :key="index">{{ index }}</div> -->
-  </nut-infinite-loading>
+      <!-- <div class="test" v-for="(item, index) in sum" :key="index">{{ index }}</div> -->
+    </nut-infinite-loading>
+  </div>
 
 
 </template>
@@ -131,93 +77,152 @@
 
 
 <script setup>
-import { onMounted,ref } from "vue";
+import { ref } from "vue";
 import {
   Search2,
   Voice,
 } from "@nutui/icons-vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
-import BaiduMap from '../BaiduMap.vue';
-const pageSize=ref(6);
-const pageNum=ref(0);
-// const sortBy=ref(0);
-// const sortOrder=ref(0);
+import BaiduMap from '../BaiduMap.vue'
+import IatRecorder from '@/assets/js/IatRecorder.js'
+import { reactive } from "vue";
+const iatRecorder = new IatRecorder('en_us', 'mandarin', '5f27b6a9')
+
+// import VoiceInput from "@/components/VoiceInput.vue";
+const pageSize = ref(6);
+const pageNum = ref(0);         
+const sortBy = ref(0);
+const loading = ref(true)
+const comType = ref(null);
 
 // const route=useRoute();
-const router=useRouter();
+const router = useRouter();
+
+const sortOptionStatus = reactive({
+  s1: false,
+  s2: false,
+})
+
+const typeOptionStatus = reactive({
+  t1: false,
+  t2: false,
+  t3: false,
+  t4: false,
+  t5: false
+})
+
+const typeName = {
+  t1: '零食',
+  t2: '饮品',
+  t3: '肉类',
+  t4: '水果',
+  t5: '便当'
+}
+
+const sortName = {
+  s1: 0,
+  s2: 1,
+}
+
 
 const themeVars = ref({
-  cellPadding:"0px 0px",
+  cellPadding: "0px 0px",
   primaryColor: "#acc2a9",
   primaryColorEnd: "#acc2a9",
 });
 const query_content = ref("");
 
-const boxes=ref([]);
+const commodityData = ref([]);
 
+const commodityList = ref([]);
 
-const convert=(response)=>{
-
-  for(let i=0;i<response.length;i++) {
-    var data = response[i];
-    var tempData = {
-      id: "",
-      name: "PEANUTS奶油盲盒系列",
-      address: "吉事花生鞍山新村二店",
-      url: ["url", "url", "url"],
-      main_url:"",
-      introduction: "好，真好，太好了",
-      price: 1.1,
-      left: 2
-    };
-
-    tempData.id=String(data.mystery_box_ID);
-    tempData.name=data.com_name;
-    tempData.address=data.user_address;
-    for(let i=0;i<3;++i){
-      tempData.url[i]='https://007-food.obs.cn-east-3.myhuaweicloud.com/'+data.contain_images[i].com_image
-    }
-    tempData.main_url='https://007-food.obs.cn-east-3.myhuaweicloud.com/'+data.item_image;
-    tempData.introduction=data.com_introduction;
-    tempData.price=data.com_oriPrice;
-    tempData.left=data.com_left;
-
-    boxes.value.push(tempData);
-  }
-}
-
-const searchCommodity=()=>{
-  pageNum.value++;
-  axios.get('/api/mys/getmysterybox',{
-    params:{
-      mystery_box_ID:null,
-      sto_ID:null,
-      page_size:pageSize.value,
-      page_num:pageNum.value,
-      sort_by:0,
-      sort_order:1
+const showDetail = (id, position, distance, price, name, left) => {
+  console.log(name)
+  router.push({
+    path: '/commodityDetail',
+    query: {
+      id: id,
+      position: position,
+      distance: distance,
+      price: price,
+      name: name,
+      left: left
     }
   })
-      .then(response=>{
-        convert(response.data);
-        console.log(response.data);
-        if(response.data.length<pageSize.value){
-          hasMore.value=false;
-        }
-      })
 }
 
-onMounted(()=>{
-  // console.log("888");
-  searchCommodity();
-})
+const sortOptionClick = (num)=>{
+  pageNum.value = 0;
+  commodityList.value = [];
+  let key = 's'+num;
+  if(sortOptionStatus[key]){
+    sortOptionStatus[key] = false;
+    sortBy.value = '';
+    searchBox();
+    return;
+  }
+  for(let i=1;i<2;i++){
+    sortOptionStatus['s'+i] = false;
+  }
+  sortOptionStatus[key] = true;
+  sortBy.value = sortName[key];
+  searchBox();
+} 
 
-const userSearch=()=>{
-  boxes.value=[];
+
+const typeOptionClick = (num) => {
   pageNum.value=0;
-  hasMore.value=true;
-  searchCommodity();
+  commodityList.value = [];
+  let key = 't'+num;
+  if(typeOptionStatus[key]){
+    typeOptionStatus[key] = false;
+    comType.value = '';
+    searchBox();
+    return;
+  }
+  for(let i=1;i<6;i++){
+    typeOptionStatus['t'+i] = false;
+  }
+  typeOptionStatus[key] = true;
+  comType.value = typeName[key];
+  searchBox();
+}
+
+const searchBox = () => {
+  pageNum.value++;
+  console.log(sortBy.value)
+  axios.get('/api/mys/getmysterybox', {
+    params: {
+      sort_by: sortBy.value,
+      page_size: pageSize.value,
+      page_num: pageNum.value
+    }  
+  })
+    .then(response => {
+      console.log(response.data)
+      for(let i=0;i<response.data.length;i++){
+        response.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+response.data[i].item_image;
+        for(let j=0;j<response.data[i].contain_images.length;j++){
+          response.data[i].contain_images[j].com_image = "https://007-food.obs.cn-east-3.myhuaweicloud.com/" + response.data[i].contain_images[j].com_image;
+        }
+      }
+      commodityList.value = commodityList.value.concat(response.data);
+      loading.value = false;
+      if (response.data.length < pageSize.value) {
+        hasMore.value = false;
+      }
+    })
+}
+
+
+searchBox();
+
+const userSearch = () => {
+  commodityData.value = [];
+  pageNum.value = 0;
+  hasMore.value = true;
+  searchBox();
 }
 
 // const tabsValue = ref(0);
@@ -227,20 +232,181 @@ const hasMore = ref(true);
 const loadMore = () => {
   setTimeout(() => {
     sum.value = sum.value + 24;
-    searchCommodity();
+    searchBox();
     infinityValue.value = false;
   }, 1000);
 };
 
-const goDetail=(id)=>{
-  router.push({
-    path:'/mysteryBoxDetail',
-    query:{
-      mystery_box_id:id
-    }
+
+
+const voiceState = ref(true);
+const voiceResult = ref("");
+const translationStart = () => {
+  iatRecorder.start()
+  voiceState.value = false;
+}
+
+const translationEnd = () => {
+  iatRecorder.stop()
+  voiceState.value = true;
+  voiceResult.value = iatRecorder.resultText
+  console.log(voiceResult.value)
+  axios.post('http://119.8.11.44:6000/api/test/gpt', {
+    words: voiceResult.value
+  }).then(response => {
+    console.log("上传完成")
+    console.log(response.data)
   })
 }
+
 </script>
 
 <style scoped>
+.type-title{
+  color: #6D6868;
+text-align: center;
+font-family: "Source Han Sans SC";
+font-size: 10px;
+font-style: normal;
+font-weight: 500;
+line-height: 16px; /* 133.333% */
+letter-spacing: 1px;
+position: absolute;
+bottom: 0;
+transform: translateY(100%);
+}
+
+.sort2-circle{
+  border-radius: 50%;
+  background-color: #F2F2F2;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  position: relative;
+
+}
+
+.sort2-circle-clicked{
+  border-radius: 50%;
+  background-color: #93B090;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.sort-tag {
+  background-color: white;
+  border: 1px solid #E6E6E6;
+  border-radius: 20px;
+  color: #969696;
+  font-family: "Source Han Sans SC";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  padding: 2px 10px;
+}
+.sort-tag-clicked {
+  background-color: #93B090;
+  color:white;
+  border-radius: 20px;
+  font-family: "Source Han Sans SC";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  padding: 2px 10px;
+  border: 1px solid #93B090;
+}
+
+.container {
+  padding: 20px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.commodity-card {
+  width: 80%;
+  margin-bottom: 20px;
+
+
+}
+
+.rate-container {
+  padding: 0 10px;
+  border-radius: 23px;
+  background: #FFF;
+  font-size: 11px;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.25);
+  color: #969696;
+  font-weight: 500;
+  text-align: center;
+  position: absolute;
+  right: 10px;
+  top: 20%
+}
+
+.rate::before {
+  content: url(../../assets/star.svg);
+  margin-right: 4px;
+}
+
+.distance {
+  color: #25522c;
+  font-size: 10px;
+  position: absolute;
+  right: 10px;
+  bottom: 10%;
+  font-weight: bolder;
+}
+
+.price-tag {
+  padding: 5px 10px 5px 10px;
+  background-color: #93B090;
+  border-top-right-radius: 10px;
+  box-shadow: 1px -1px 3.9px -1px rgba(0, 0, 0, 0.25);
+  color: #FFF;
+  text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  font-family: "Source Han Sans C";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 13px;
+  z-index: 10;
+  position: relative;
+  border: 1px solid #93B090;
+}
+
+.left-tag {
+  border-top-right-radius: 10px;
+  background: #FFF;
+  box-shadow: 3px 7px 3.9px -1px rgba(0, 0, 0, 0.25);
+  padding: 5px 10px 5px 10px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 13px;
+}
+
+.sort-bar {
+  background-color: #F8FBF7;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding:15px
+}
+
+.sort-bar2{
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 15px 0 30px 0;
+
+}
 </style>
