@@ -113,6 +113,7 @@ const pageNum = ref(0);
 const sortBy = ref(0);
 const sortOrder = ref(0);
 const loading = ref(true)
+const comType = ref(null);
 
 // const route=useRoute();
 const router = useRouter();
@@ -140,9 +141,9 @@ const typeName = {
 }
 
 const sortName = {
-  s1: '价格',
-  s2: '评分',
-  s3: '上架时间'
+  s1: 0,
+  s2: 1,
+  s3: 2
 }
 
 
@@ -178,15 +179,15 @@ const sortOptionClick = (num)=>{
   let key = 's'+num;
   if(sortOptionStatus[key]){
     sortOptionStatus[key] = false;
-    sortOrder.value = '';
+    sortBy.value = '';
     searchCommodity();
     return;
   }
-  for(let i=1;i<5;i++){
+  for(let i=1;i<3;i++){
     sortOptionStatus['s'+i] = false;
   }
   sortOptionStatus[key] = true;
-  sortOrder.value = sortName[key];
+  sortBy.value = sortName[key];
   searchCommodity();
 } 
 
@@ -197,7 +198,7 @@ const typeOptionClick = (num) => {
   let key = 't'+num;
   if(typeOptionStatus[key]){
     typeOptionStatus[key] = false;
-    sortBy.value = '';
+    comType.value = '';
     searchCommodity();
     return;
   }
@@ -205,7 +206,7 @@ const typeOptionClick = (num) => {
     typeOptionStatus['t'+i] = false;
   }
   typeOptionStatus[key] = true;
-  sortBy.value = typeName[key];
+  comType.value = typeName[key];
   searchCommodity();
 }
 
@@ -214,7 +215,7 @@ const searchCommodity = () => {
   axios.get('/api/com/searchCommodity', {
     params: {
       content: query_content.value,
-      com_type: "",
+      com_type: comType.value,
       sort_by: sortBy.value,
       sort_order: sortOrder.value,
       page_size: pageSize.value,
