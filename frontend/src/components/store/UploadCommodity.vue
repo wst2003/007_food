@@ -3,6 +3,7 @@
     <nut-form style="
     position:relative;
     width: 100vw;
+
     flex-shrink: 0;
     border-radius: 4px;
     background: #FBFCFA;">
@@ -137,7 +138,7 @@
 import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 import * as echarts from 'echarts';
-import { onMounted } from 'vue';
+import { onMounted ,reactive} from 'vue';
 // import globalData from"../../global.js"
 import axios from 'axios';
 const uploadRef = ref(null);
