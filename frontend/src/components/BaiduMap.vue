@@ -7,13 +7,12 @@
             <div class="locationpicker" >{{ areastr }}</div>
         </div>
         <!-- <img height="19" src="./assets/catuppermap.png" /> -->
-           
     </div>
     <!-- <div @click=" areaSelect ">{{ areastr }}</div> -->
     <div style="position: relative;">
         <img src="../assets/cat.svg" @click="toggleHeight" style="position:absolute;right: 0;top:0;z-index: 100;transform:  translateX(-30%) translateY(-100%);"/>
-        <div id="baidumap" :style="{ height: currentHeight}" @click="toggleHeight">
-        </div> 
+        <!-- <div id="baidumap" :style="{ height: currentHeight}" @click="toggleHeight"></div>  -->
+        <div id="baidumap" :style="{ height: currentHeight}"></div> 
     </div>
 </template>
 <script setup>
@@ -155,6 +154,21 @@ function computeDistance(){
                 //console.log('Distance:', distance, 'Duration:', duration);
                 calcList.push([distance,duration])
                 if (!distance.includes("公里")){ markedPoint.push(point);}
+                else if(distance.includes("公里")){
+                    var numberPattern = /\d+/g; // 正则表达式匹配任意数量的数字
+                    var result = str.match(numberPattern); // 匹配字符串中的数字
+                    if (result) {
+                        var number = parseInt(result[0]); // 将匹配到的数字字符串转换为整数
+                        // console.log(number); // 输出提取到的数字
+                        if (number<3){
+                            markedPoint.push(point);
+                        }
+                    } 
+                    // else {
+                    //     console.log("未找到数字");
+                    // }
+                }
+
                 var opts = {
                     width : 200,     // 信息窗口宽度
                     height: 100,     // 信息窗口高度
@@ -167,6 +181,7 @@ function computeDistance(){
                 }); 
                 // 其他处理逻辑
                 // 解决Promise
+                consolee.log("Promise 结束")
                 resolve(); 
             });
         });
@@ -177,7 +192,7 @@ function computeDistance(){
         // 在这里执行绘制多边形的逻辑，使用markedPoint数组中的点
         // 可以调用一个函数来处理这部分逻辑
         markedPoint.push(currentPoint)
-        // console.log(markedPoint)
+        console.log('需要做标记的点'+markedPoint)
         drawPolygon(markedPoint);
     })
     .catch(error => {
@@ -193,6 +208,7 @@ function afterLocation(lat,lng){
         cur_latitude:lat,
         cur_longitude:lng
     }}).then(res=>{
+        console.log('获取的所有商家')
         console.log(res.data)
         sto_ids=res.data.sto_id
         return axios.get('/api/sto/informationdetail',{
@@ -207,6 +223,8 @@ function afterLocation(lat,lng){
         res.data.forEach(ele=>{
             sto_arr.push(new sto_info(ele))
         })
+        console.log('拉取到的所有商家数组：')
+        console.log(sto_arr)
     }).then(()=>{
         computeDistance()
     })

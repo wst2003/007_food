@@ -74,7 +74,7 @@
 
 
     <!--Fixed block for shopping cart-->
-  <div style="width: 90%; height: 44px; position:fixed;bottom: 20px; margin: auto;left:0;right:0">
+  <div style="width: 90%; height: 44px; position:fixed;bottom: 70px; margin: auto;left:0;right:0">
     <div style="width: 100%; height: 44px; left: 0; top: 0; position: absolute; box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.25); border-radius: 50px" />
     <div style="width: 70%; height: 44px; left: 0; top: 0; position: absolute; background: #FDFDFD; border-top-left-radius:50px;border-bottom-left-radius:50px;display: flex;align-items: end;" >
       <div style="width: 70%; height: 29.59px; left: 5%;bottom:5px;  position: absolute;display: flex;align-items: center;">
@@ -157,8 +157,9 @@ onMounted(()=>{
 })
 
 const generateIndent=()=>{
+    console.log('当前用户ID'+sessionStorage.getItem("user_id"))
     axios.post('/api/cus/generateIndent',JSON.stringify({ 
-            cus_Id:cus_Id.value,
+            cus_Id:cus_Id,
             com_arr:indent_items.items,
             delivery_method:delivery_method.value,
             delivery_address:delivery_address.value,
@@ -172,7 +173,8 @@ const generateIndent=()=>{
           }
         })
         .then(response=>{
-            console.log('订单生成情况'+response)
+            console.log('订单生成情况：')
+            console.log(response)
         })
 }
 </script>

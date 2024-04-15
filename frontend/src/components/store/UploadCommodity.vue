@@ -3,7 +3,7 @@
     <nut-form style="
     position:relative;
     width: 100vw;
-    height: 180vh;
+
     flex-shrink: 0;
     border-radius: 4px;
     background: #FBFCFA;">
@@ -65,7 +65,7 @@
                 @click="showPriceNodePick(index)"
                 @blur="convert"
                 >
-                {{row.com_pc_time.getFullYear().toString()+'-'+(row.com_pc_time.getMonth()+1).toString()+'-'+row.com_pc_time.getDate().toString()}}
+                {{row.com_pc_time.getFullYear().toString()+'-'+row.com_pc_time.getMonth().toString()+'-'+row.com_pc_time.getDate().toString()}}
                 </nut-button>
                 <nut-input  v-model="row.com_pc_price" placeholder="请输入当前节点价格" type="number" @blur="convert"></nut-input>
             </nut-space>
@@ -99,9 +99,9 @@
     </nut-form>
 
 
-    <nut-popup v-model:visible="showType" @close="selectTypeClose">
+    <nut-popup style="border-radius: 5px;" v-model:visible="showType" @close="selectTypeClose">
         <nut-checkbox-group v-model="pickType" style="display:flex;flex-direction:column;">
-            <nut-checkbox v-for="(item,index) in categoryType" :key='index' :label=item> {{ item }} </nut-checkbox>
+            <nut-checkbox style="margin-top:1vh;margin-left:2vw;" v-for="(item,index) in categoryType" :key='index' :label=item> {{ item }} </nut-checkbox>
         </nut-checkbox-group>
     </nut-popup>
 
@@ -128,6 +128,9 @@
           @confirm="confirm_priceNode_pick"
         ></nut-date-picker>
     </nut-popup>
+    <nut-popup v-model:visible="showBottom" round position="bottom" style="justify-content: center;align-items: center;" :style="{ height: '20%' }">
+        <div style="position:absolute;top:30%;left:30%;">{{ mess }}</div>
+    </nut-popup>
 </template>
 
 <script lang="js" setup>
@@ -135,13 +138,13 @@
 import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 import * as echarts from 'echarts';
-import { onMounted } from 'vue';
+import { onMounted ,reactive} from 'vue';
 // import globalData from"../../global.js"
 import axios from 'axios';
 const uploadRef = ref(null);
 const categories=ref([])
 const router=useRouter();
-const addPicData=ref({com_id:0})
+const addPicData=ref({'com_id':'0'})
 const formData=ref({
     com_name:' ',
     com_type:0,
@@ -172,6 +175,9 @@ const showType=ref(false)
 const show_produceDate_pick=ref(false)
 const show_expirationDate_pick=ref(false)
 const show_priceNode_pick=ref(false)
+
+const showBottom=ref(false);
+const mess=ref('')
 
 const transformDateString=(date)=>{
     if(date.getMonth().toString()==0)
@@ -213,6 +219,7 @@ const confirm_expirationDate_pick=()=>{
 const confirm_priceNode_pick=()=>{
     console.log(formData.value.price_curve[temp_index.value])
     formData.value.price_curve[temp_index.value].com_pc_time=temp_node.value;
+    formData.value.price_curve[temp_index.value].com_pc_time.setMonth(formData.value.price_curve[temp_index.value].com_pc_time.getMonth()+1)
     show_priceNode_pick.value=false;
 }
 
@@ -273,7 +280,7 @@ const convert=()=>{
   for(let i=0;i<formData.value.price_curve.length;++i){
     var nowCurve=formData.value.price_curve[i];
     console.log(nowCurve.com_pc_time.getDate())
-    var date=nowCurve.com_pc_time.getFullYear().toString()+'-'+nowCurve.com_pc_time.getMonth().toString()+'-'+nowCurve.com_pc_time.getDay().toString()
+    var date=transformDateString(nowCurve.com_pc_time)
     option.xAxis.data.push(date);
     option.series[0].data.push(nowCurve.com_pc_price);
   
@@ -283,6 +290,10 @@ const convert=()=>{
 
 onMounted(()=>{
     myChart = echarts.init(document.getElementById('main'));
+    axios.get('/api/com/getCategories', {
+    }).then((res) => {
+      categoryType.value=res.data
+    })
 })
 
 const addCommodity=()=>{
@@ -317,13 +328,56 @@ const addCommodity=()=>{
           .then(response => {
             addPicData.value.com_id=response.data.com_Id
             console.log(addPicData.value.com_id)
-            uploadRef.value.submit();
+            const formDataPic = new FormData();
+            var count=0;
+            formData.value.images.forEach((file) => {
+                console.log(file.url);
+                const pic=dataURLtoFile(file.url,'pic'+count.toString()+'.jpg')
+                formDataPic.append('images', pic); // 将文件添加到FormData中
+                count++;
+            });
+            formDataPic.append('com_id',response.data.com_Id)
+            axios.post('/api/sto/uploadImage',  formDataPic, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+                })
+                .then(response => {
+                    console.log(response.data)
+                    if(response.data==='成功上传图片'){
+                        baseClick("成功上传商品")
+                        goBack()
+                    }else{
+                        baseClick("未成功上传商品！")
+                    }
+                })
           })
           .catch((error) => {
               console.log('An error occurred:', error);
           });
           
 }
+
+function dataURLtoFile(dataurl, filename) {
+    // 获取到base64编码
+    const arr = dataurl.split(',')
+    // 将base64编码转为字符串
+    const bstr = window.atob(arr[1])
+    let n = bstr.length
+    const u8arr = new Uint8Array(n) // 创建初始化为0的，包含length个元素的无符号整型数组
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new File([u8arr], filename, {
+        type: 'image/jpeg',
+    })
+}
+
+const baseClick = (message) => {
+
+    showBottom.value=true;
+    mess.value=message
+};
 </script>
 
 <style scoped>

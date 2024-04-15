@@ -99,6 +99,7 @@
     const addressInput = ref(''); 
     import {ref,onMounted} from 'vue';
     import { Checklist } from '@nutui/icons-vue';
+    const BaseUrl = "http://localhost:6000";
     const formData = ref({
         user_phone: '',
         user_password: '',
@@ -229,15 +230,15 @@
         }else if(formData.value.user_address===''){
             baseClick('请输入地址')
         }else{
-            axios.post('/api/pub/register/store',  JSON.stringify({ 
+            axios.post(BaseUrl+'/api/pub/register/store',  JSON.stringify({ 
                 user_phone:formData.value.user_phone,
                 user_password:formData.value.user_password,
                 user_address:formData.value.user_address,
                 user_gender:formData.value.user_gender,
                 sto_name:formData.value.sto_name,
                 sto_introduction:formData.value.sto_introduction,
-                sto_openingTime:formData.value.sto_openingTime,
-                sto_closingTime:formData.value.sto_closingTime,
+                sto_openingTime:transformTimeString(formData.value.sto_openingTime),
+                sto_closingTime:transformTimeString(formData.value.sto_closingTime),
                 sto_latitude:formData.value.sto_latitude,
                 sto_longitude:formData.value.sto_longitude
             }), {
@@ -248,7 +249,7 @@
             .then(response => {
                 console.log('Login submitted successfully.');
                 console.log(response.data);
-                if(response.data.msg==='success') {
+                if(response.data.msg==='Store成功注册') {
                     baseClick('注册成功！前往登录界面！')
                     /*------------------------*/
                     /*登录成功后编辑此处跳转界面*/
@@ -281,6 +282,21 @@
         showBottom.value=true;
         mess.value=message
     };
+
+    const transformTimeString=(date)=>{
+        var hours,minutes;
+        if(date.getHours()<10)
+            hours='0'+date.getHours().toString()
+        else
+            hours=date.getHours().toString()
+
+        if(date.getMinutes()<10)
+            minutes='0'+date.getMinutes().toString()
+        else
+            minutes=date.getMinutes().toString()
+        console.log('time'+ hours+':'+minutes+':00')
+        return hours+':'+minutes+':00'
+    }
 </script>
 <style scoped>
     .background{

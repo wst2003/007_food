@@ -6,8 +6,8 @@
       <div class="select-bar">
         请选择你的身份进行注册~
       </div>
-      <nut-button plain class="button-bar-1" @click="click_cus">我是卖家</nut-button>
-      <nut-button plain class="button-bar-2" @click="click_sto">我是买家</nut-button>
+      <nut-button plain class="button-bar-1" @click="click_cus">我是买家</nut-button>
+      <nut-button plain class="button-bar-2" @click="click_sto">我是卖家</nut-button>
     </div>
   </template>
   <script setup lang="js">

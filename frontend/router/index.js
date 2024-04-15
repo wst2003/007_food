@@ -24,6 +24,7 @@ import PathPlanningPage from '@/components/store/PathPlanningPage.vue';
 import StoreHomePage from "@/components/public/StoreHomePage.vue";
 import CusInfoPage from '@/components/customer/CusInfoPage.vue';
 import StoInfoPage from '@/components/public/StoInfoPage.vue';
+import TestCopo from '@/components/TestCopo.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -169,6 +170,11 @@ const router = createRouter({
             path:'/stoinfopage',
             name:'stoinfopage',
             component:StoInfoPage
+        },
+        {
+            path:'/testcopo',
+            name:'testcopo',
+            component:TestCopo
         }
     ]
 });
