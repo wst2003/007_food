@@ -8,11 +8,8 @@
         <nut-form-item label="用户地址">
           <nut-input v-model="formData.user_address" placeholder="请输入年龄" type="text" :disabled="true"/>
         </nut-form-item>
-        <nut-form-item label="联系电话">
-          <nut-input v-model="formData.user_balance" placeholder="请输入联系电话" type="text" :disabled="true"/>
-        </nut-form-item>
-        <nut-form-item label="地址">
-          <nut-input v-model="formData.user_gender" placeholder="请输入地址" type="text" :disabled="true"/>
+        <nut-form-item label="营业时间">
+          <nut-input v-model="openTime" placeholder="请输入地址" type="text" :disabled="true"/>
         </nut-form-item>
         <nut-form-item label="商店介绍">
           <nut-textarea v-model="formData.sto_introduction" placeholder="请输入备注" type="text" :disabled="true"/>
@@ -29,11 +26,11 @@ import { ref } from 'vue'
 const formData = ref({
   user_phone: '',
   user_address: '',
-  user_balance: '',
-  user_gender: '',
   sto_introduction: '',
-  user_logo:''
+  sto_openingTime:'',
+  sto_closingTime:''
 })
+const openTime=ref('')
 
 import {  useRouter } from 'vue-router';
 // import globalData from"../../global.js"
@@ -54,10 +51,11 @@ onMounted(()=>{
         .then(response=>{
             formData.value.user_phone=response.data[0].user_phone
             formData.value.user_address=response.data[0].user_address
-            formData.value.user_balance=response.data[0].user_balance
-            formData.value.user_gender=response.data[0].user_gender
             formData.value.sto_introduction=response.data[0].sto_introduction
-            formData.value.user_logo=response.data[0].user_logo
+            var sto_openingTime=new Date(response.data[0].sto_openingTime)
+            var sto_closingTime=new Date(response.data[0].sto_closingTime)
+            openTime.value=sto_openingTime.getHours().toString()+' : '+sto_openingTime.getMinutes().toString()+' - '
+            +sto_closingTime.getHours().toString()+' : '+sto_closingTime.getMinutes().toString()
         })
 })
 const quit=()=>{

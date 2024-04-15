@@ -3,7 +3,6 @@
     <nut-form style="
     position:relative;
     width: 100vw;
-    height: 180vh;
     flex-shrink: 0;
     border-radius: 4px;
     background: #FBFCFA;">
@@ -65,7 +64,7 @@
                 @click="showPriceNodePick(index)"
                 @blur="convert"
                 >
-                {{row.com_pc_time.getFullYear().toString()+'-'+(row.com_pc_time.getMonth()+1).toString()+'-'+row.com_pc_time.getDate().toString()}}
+                {{row.com_pc_time.getFullYear().toString()+'-'+row.com_pc_time.getMonth().toString()+'-'+row.com_pc_time.getDate().toString()}}
                 </nut-button>
                 <nut-input  v-model="row.com_pc_price" placeholder="请输入当前节点价格" type="number" @blur="convert"></nut-input>
             </nut-space>
@@ -219,6 +218,7 @@ const confirm_expirationDate_pick=()=>{
 const confirm_priceNode_pick=()=>{
     console.log(formData.value.price_curve[temp_index.value])
     formData.value.price_curve[temp_index.value].com_pc_time=temp_node.value;
+    formData.value.price_curve[temp_index.value].com_pc_time.setMonth(formData.value.price_curve[temp_index.value].com_pc_time.getMonth()+1)
     show_priceNode_pick.value=false;
 }
 
@@ -279,7 +279,7 @@ const convert=()=>{
   for(let i=0;i<formData.value.price_curve.length;++i){
     var nowCurve=formData.value.price_curve[i];
     console.log(nowCurve.com_pc_time.getDate())
-    var date=nowCurve.com_pc_time.getFullYear().toString()+'-'+nowCurve.com_pc_time.getMonth().toString()+'-'+nowCurve.com_pc_time.getDay().toString()
+    var date=transformDateString(nowCurve.com_pc_time)
     option.xAxis.data.push(date);
     option.series[0].data.push(nowCurve.com_pc_price);
   

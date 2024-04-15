@@ -3,7 +3,6 @@
     <nut-form style="
     position:relative;
     width: 100vw;
-    height: 323px;
     flex-shrink: 0;
     border-radius: 4px;
     background: #FBFCFA;">
@@ -177,7 +176,7 @@ const addCommodity=()=>{
             com_introduction:formData.value.introduction,
             com_left:formData.value.com_left,
             sto_ID:stoID,
-            com_type:0,
+            com_type:1,
             com_oriPrice:formData.value.com_oriPrice,
             praise_rate:1,
             com_uploadDate:com_uploadDate,
