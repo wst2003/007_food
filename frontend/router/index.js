@@ -7,7 +7,7 @@ import LoginPage from '@/components/public/LoginPage.vue';
 import SelectIdentityPage from '@/components/public/SelectIdentityPage.vue';
 import StoreDetailPage from '@/components/customer/StoreDetailPage.vue';
 import MyIndentPage from '@/components/customer/MyIndentPage.vue';
-import CustomerRegisterPage from '@/components/public/CustomerRegisterPage.vue';
+import CusRegisterPage from '@/components/public/CusRegisterPage.vue';
 import StoreRegisterPage from '@/components/public/StoreRegisterPage.vue';
 import CommentPage from '@/components/customer/CommentPage.vue';
 import IndentDetailPage from '@/components/customer/IndentDetailPage.vue';
@@ -100,7 +100,7 @@ const router = createRouter({
         {
             path:'/cusregister',
             name:'cusregister',
-            component:CustomerRegisterPage
+            component:CusRegisterPage
         },
         {
             path:'/storegister',

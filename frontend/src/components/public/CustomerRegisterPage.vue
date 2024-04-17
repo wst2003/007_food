@@ -65,6 +65,8 @@
             确认
         </nut-button>
     </div>
+
+
 </template>
 <script lang="js" setup>
     // 引入百度地图组件
@@ -75,7 +77,7 @@
     let BMap={};
     let BMAP_STATUS_SUCCESS;
     const addressInput = ref(''); 
-
+    const BaseUrl = "http://localhost:8000"
     import {ref,onMounted} from 'vue';
     import { Checklist } from '@nutui/icons-vue';
     const formData = ref({
@@ -191,7 +193,7 @@
             baseClick('请输入地址')
         }else{
             console.log(formData.value.user_address)
-            axios.post('/api/pub/register/customer',  JSON.stringify({ 
+            axios.post(BaseUrl+'/api/pub/register/customer',  JSON.stringify({ 
                 user_phone:formData.value.user_phone,
                 user_password:formData.value.user_password,
                 user_address:formData.value.user_address,

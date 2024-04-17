@@ -2,7 +2,7 @@
     <nut-config-provider :theme-vars="themeVars">
     <div class="background"></div>
     <nut-space :gutter="1" style="position:absolute;left:30%;top:10px;">
-        <div class="login-word">商家注册</div>
+        <div class="login-word">顾客注册</div>
         <div class="login-pic"></div>
     </nut-space>
     
@@ -24,8 +24,8 @@
             <nut-form-item label="请输入密码">
                 <nut-input v-model="formData.user_password" placeholder="请输入密码" type="text" />
             </nut-form-item>
-            <nut-form-item label="请输入商店名">
-                <nut-input v-model="formData.sto_name" placeholder="请输入商店名" type="text" />
+            <nut-form-item label="请输入昵称">
+                <nut-input v-model="formData.cus_nickname" placeholder="请输入昵称" type="text" />
             </nut-form-item>
             <nut-form-item label="请选择性别">
                 <nut-radio-group v-model="formData.user_gender" direction="horizontal">
@@ -36,16 +36,13 @@
             <nut-form-item label="请选择生日">
                 <nut-button @click="show = true" style="width:200px;">{{'生日：'+birth_str}}</nut-button>
             </nut-form-item>
-            <nut-form-item label="请输入店铺介绍">
-                <nut-input v-model="formData.sto_introduction" placeholder="请输入店铺介绍" type="text" />
+            <nut-form-item label="请输入支付密码">
+                <nut-input v-model="formData.cus_payPassword" placeholder="请输入支付密码" type="password" />
             </nut-form-item>
-            <nut-form-item label="请选择营业时间">
-                <nut-space :gutter="10" direction="vertical">
-                    <nut-button @click="start_show = true" style="width:170px;">{{'营业开始时间: '+formData.sto_openingTime.getHours()+'-'+formData.sto_openingTime.getMinutes()}}</nut-button>
-                    <nut-button @click="end_show = true" style="width:170px;">{{'营业结束时间: '+formData.sto_closingTime.getHours()+'-'+formData.sto_closingTime.getMinutes()}}</nut-button>
-                </nut-space>
+            <nut-form-item label="请再次输入支付密码">
+                <nut-input v-model="cus_payPassword_val" placeholder="请再次输入支付密码" type="password" />
             </nut-form-item>
-            <nut-form-item label="请选择店铺地址">
+            <nut-form-item label="请选择常用地址">
                 <nut-input type="textarea" v-model="addressInput" style="width: 100%;" placeholder="请输入地址" rows="2"></nut-input>
                 <div style="margin-top: 10px;">
                     <nut-button @click="searchLocation" color="#748865a8" type="primary">搜索</nut-button>
@@ -54,28 +51,6 @@
             </nut-form-item>
               <!-- 地址的地图显示 -->
               <div id="baiduMap" style="width:80%; height: 200px; margin-top:10px;margin-left:10%;"></div>
-              <nut-form-item label="请上传营业执照">
-                <nut-uploader
-                    style="border-radius: 30px;"
-                    size="small"
-                    multiple
-                    v-model:file-list="formData.license_img"
-                    accept="image/*"
-                    :auto-upload="false"
-                    maximum="3">
-                </nut-uploader>
-            </nut-form-item>    
-            <nut-form-item label="请上传商店照片">
-                <nut-uploader
-                    style="border-radius: 30px;"
-                    size="small"
-                    multiple
-                    v-model:file-list="formData.license_img"
-                    accept="image/*"
-                    :auto-upload="false"
-                    maximum="3">
-                </nut-uploader>
-            </nut-form-item>  
         </nut-form>
         <nut-popup v-model:visible="show" position="bottom">
             <nut-date-picker
@@ -130,21 +105,16 @@
     const addressInput = ref(''); 
     import {ref,onMounted} from 'vue';
     import { Checklist } from '@nutui/icons-vue';
-    const BaseUrl = "http://localhost:6000";
+    const BaseUrl = "http://localhost:8000";
     const formData = ref({
         user_phone: '',
         user_password: '',
         user_gender: '',
-        user_address: '',
-        sto_name: '',
-        sto_introduction:'',
-        sto_openingTime:new Date(2020, 1, 1, 15, 30),
-        sto_closingTime:new Date(2020, 1, 1, 15, 30),
-        sto_latitude:'',
-        sto_longitude:'',
+        user_address: '请输入地址',
+        cus_nickname: '',
+        cus_payPassword:'',
         logo:[],
-        license_img:[],
-        sto_img:[]
+
         });
     const birth=ref(new Date(2023,9,30))
     const birth_str=ref(birth.value.getFullYear().toString()+'-'+(birth.value.getMonth()+1).toString()+'-'+birth.value.getDate().toString())
@@ -158,6 +128,7 @@
     const phoneStatus=ref('')
     const phoneError=ref('')
     const showBottom=ref(false)
+    const cus_payPassword_val=ref('')
     const mess=ref('')
     import axios from 'axios';
     import { useRouter } from 'vue-router';
@@ -268,20 +239,18 @@
             baseClick('请输入昵称');
         }else if(formData.value.user_gender===''){
             baseClick('请选择性别');
+        }else if(formData.value.cus_payPassword!=cus_payPassword_val.value){
+            baseClick('两次输入的支付密码不一致！')
         }else if(formData.value.user_address===''){
             baseClick('请输入地址')
         }else{
-            axios.post(BaseUrl+'/api/pub/register/store',  JSON.stringify({ 
+            axios.post(BaseUrl+'/api/pub/register/customer',  JSON.stringify({ 
                 user_phone:formData.value.user_phone,
                 user_password:formData.value.user_password,
                 user_address:formData.value.user_address,
                 user_gender:formData.value.user_gender,
-                sto_name:formData.value.sto_name,
-                sto_introduction:formData.value.sto_introduction,
-                sto_openingTime:transformTimeString(formData.value.sto_openingTime),
-                sto_closingTime:transformTimeString(formData.value.sto_closingTime),
-                sto_latitude:formData.value.sto_latitude,
-                sto_longitude:formData.value.sto_longitude
+                cus_nickname:formData.value.cus_nickname,
+                cus_payPassword:formData.value.cus_payPassword
             }), {
             headers: {
                 'Content-Type': 'application/json'
@@ -290,7 +259,7 @@
             .then(response => {
                 console.log('Login submitted successfully.');
                 console.log(response.data);
-                if(response.data.msg==='Store成功注册') {
+                if(response.data.msg==='顾客成功注册') {
 
                     upLoadLogo(response.data.user_id)
                     
@@ -320,21 +289,6 @@
         mess.value=message
     };
 
-    const transformTimeString=(date)=>{
-        var hours,minutes;
-        if(date.getHours()<10)
-            hours='0'+date.getHours().toString()
-        else
-            hours=date.getHours().toString()
-
-        if(date.getMinutes()<10)
-            minutes='0'+date.getMinutes().toString()
-        else
-            minutes=date.getMinutes().toString()
-        console.log('time'+ hours+':'+minutes+':00')
-        return hours+':'+minutes+':00'
-    }
-
     function dataURLtoFile(dataurl, filename) {
         // 获取到base64编码
         const arr = dataurl.split(',')
@@ -360,56 +314,7 @@
         count_logo++;
         });
         formData_Logo.append('user_id',user_id)
-        axios.post('/api/sto/uploadLogoImage',  formData_Logo, {
-        headers: {
-        'Content-Type': 'multipart/form-data'
-        }
-        })
-        .then(response_logo => {
-        console.log(response_logo.data)
-        if(response_logo.data.msg==='success'){
-            upLoadLicense(user_id)
-        }else{
-        baseClick("未成功上传头像！")
-        }
-        })
-    }
-    function upLoadLicense(user_id){
-        const formData_license = new FormData();
-        var count_logo=0;
-        formData.value.license_img.forEach((file) => {
-        console.log(file.url);
-        const pic=dataURLtoFile(file.url,'pic'+count_logo.toString()+'.jpg')
-        formData_license.append('images', pic); // 将文件添加到FormData中
-        count_logo++;
-        });
-        formData_license.append('sto_id',user_id)
-        axios.post('/api/sto/uploadStoLicense',  formData_license, {
-        headers: {
-        'Content-Type': 'multipart/form-data'
-        }
-        })
-        .then(response_logo => {
-        console.log(response_logo.data)
-        if(response_logo.data.msg==='success'){
-            console.log(response_logo.data.msg)
-            upLoadStoImg(user_id)
-        }else{
-        baseClick("未成功上传营业执照！")
-        }
-        })
-    }
-    function upLoadStoImg(user_id){
-        const formData_sto = new FormData();
-        var count_logo=0;
-        formData.value.sto_img.forEach((file) => {
-        console.log(file.url);
-        const pic=dataURLtoFile(file.url,'pic'+count_logo.toString()+'.jpg')
-        formData_sto.append('images', pic); // 将文件添加到FormData中
-        count_logo++;
-        });
-        formData_sto.append('user_id',user_id)
-        axios.post('/api/sto/uploadLogoImage',  formData_sto, {
+        axios.post(BaseUrl+'/api/sto/uploadLogoImage',  formData_Logo, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }
@@ -425,7 +330,7 @@
                         path: '/login',
                     });
         }else{
-        baseClick("未成功上传商店图片！")
+        baseClick("未成功上传头像！")
         }
         })
     }
@@ -441,7 +346,7 @@
         background-blend-mode: darken;
         background-size: cover;
         background-position:40,center;
-        height: 170vh;
+        height: 150vh;
         width: 100vw;
         padding-top: 70px; /* 添加顶部填充以避免标题栏遮挡内容 */
         -webkit-user-drag: none;
