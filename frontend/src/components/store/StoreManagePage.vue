@@ -143,6 +143,7 @@
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { ref, reactive } from 'vue';
+import { onBeforeMount } from 'vue';
 const router = useRouter();
 const sto_info = ref({});
 const licenceFlag = ref(false)
@@ -165,7 +166,7 @@ const themeVars = ref({
 
 const curPageCommodity = ref([]);
 
-const storeID = 29;
+const storeID = sessionStorage.getItem("user_id");
 const pageInfo = {
     page_size: 100,
     page_num: 1,
@@ -186,24 +187,32 @@ const changeTabCb = (title) => {
     hasMore.value = true;
 
     if(title.title === '≤1/2'){
+        if(pageInfo.remainingProportion === 0.5)
+            return;
         pageInfo.remainingProportion = 0.5;
     }
     else if(title.title === '≤1/4'){
+        if(pageInfo.remainingProportion === 0.25)
+            return;
         pageInfo.remainingProportion = 0.25;
     }
     else if(title.title === '已售罄'){
+        if(pageInfo.remainingProportion === 0)
+            return;
         pageInfo.remainingProportion = 0;
     }
     else if(title.title === '全部'){
+        if(pageInfo.remainingProportion === 1)
+            return;
         pageInfo.remainingProportion  =1;
     }
     curPageCommodity.value = [];
-
+    pageInfo.page_num = 0;
     axios.get('/api/com/commoditylist',{
         params: {
             sto_ID: storeID,
             page_size: pageInfo.page_size,
-            page_num: pageInfo.page_num++,
+            page_num: ++pageInfo.page_num,
             com_type: pageInfo.com_type,
             remaining_proportion: pageInfo.remainingProportion
         }
@@ -241,6 +250,13 @@ const getStoreInfoData = () => {
         loadMore();
     })
 }
+
+onBeforeMount(()=>{
+    getStoreInfoData();
+getStatistics();
+});
+
+
 
 
 const change = (index) => {
@@ -303,7 +319,6 @@ const goToManagePage = ()=>{
   })
 }
 
-
 const getStatistics = ()=>{
     axios.get('/api/com/ProductStatistics',{
         params:{
@@ -313,8 +328,7 @@ const getStatistics = ()=>{
         statistics.value = res.data;
     })
 }
-    getStoreInfoData();
-    getStatistics();
+
 
 
 
