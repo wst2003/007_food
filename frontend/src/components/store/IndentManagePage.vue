@@ -125,6 +125,10 @@
                         </div>
                     </nut-collapse-item>
                 </nut-collapse>
+                <nut-space v-if="item.ind_state==2">
+                    <nut-input  style="background-color:#93B090;opacity:0.7;"></nut-input>
+                    <nut-button>确定</nut-button>
+                </nut-space>
                 <nut-divider dashed></nut-divider>
                 
             </div>
@@ -226,8 +230,6 @@ onMounted(()=>{
             indDetail.totalMoney='￥'+totalMoney.toString()
             indInfo.value.push(indDetail)
         })
-        
-        
 
         })
     })

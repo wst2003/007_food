@@ -163,6 +163,10 @@
                 <nut-step title="未收货" content="您的订单还未收货">1</nut-step>
                 <nut-step title="确认取货" content="您的订单确认取货">2</nut-step>            
             </nut-steps>
+            <nut-button type='primary' v-if="indentDetail.state==0" style="
+            margin-top:50vh;
+            margin-left:20vw;
+            ">确认收货</nut-button>
         </div>
     </nut-config-provider>
 </template>
@@ -180,7 +184,8 @@ const indentDetail=ref({
     address:'地点',
     identNumber:'期货码',
     status:'0',
-    type:"0"
+    type:"0",
+    state:''
 })
 
 const themeVars = ref({
@@ -201,6 +206,7 @@ onMounted(()=>{
         indentDetail.value.address=response.data[0].delivery_address;
         indentDetail.value.identNumber=response.data[0].ind_verificationCode;
         indentDetail.value.type=response.data[0].delivery_method
+        indentDetail.value.state=response.data[0].ind_state
         if(response.data[0].ind_state==0||response.data[0].ind_state==2)
             indentDetail.value.status=1
         else if(response.data[0].ind_state==1||response.data[0].ind_state==3)
