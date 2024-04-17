@@ -56,7 +56,10 @@ onMounted(()=>{
             formData.value.user_phone=response.data.user_phone
             formData.value.user_address=response.data.user_address
             formData.value.user_balance=response.data.user_balance
-            formData.value.user_gender=response.data.user_gender
+            if(response.data.user_gender==0)
+              formData.value.user_gender="男"
+            else
+              formData.value.user_gender="女"
             formData.value.cus_nickname=response.data.cus_nickname
             formData.value.user_logo=response.data.user_logo
         })

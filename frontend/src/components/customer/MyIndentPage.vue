@@ -1,96 +1,97 @@
 <template>
-  <nut-navbar left-show @click-back="clickBack">
-    <template #content> 我的订单 </template>
-  </nut-navbar>
-  <nut-tabs v-model="state" :animated-time="0" @click="changeType">
-    <nut-tab-pane title="全部" pane-key="1">
-      <nut-row v-for="indent in indentData" :key="indent.ind_id" >
-        <nut-cell style="background-color: #FBFCFA;">
-        <nut-row>
-          <!-- <nut-col :span="24"> -->
-          <!-- <div> -->
-            <div v-for="(commodity,index) in indent.commodity" :key="index" >
-              <span style="font-family: Source Han Sans SC;
-                font-size: 14px;
-                font-weight: 400;
-                line-height: 16px;
-                letter-spacing: 1px;
-                text-align: center;
-              ">
-                {{ commodity.com_name }}
-              </span>
+  <nut-config-provider :theme-vars="themeVars">
+    <nut-navbar left-show @click-back="clickBack">
+      <template #content> 我的订单 </template>
+    </nut-navbar>
+    <nut-tabs v-model="state" :animated-time="0" @click="changeType">
+      <nut-tab-pane title="全部" pane-key="1">
+        <nut-row v-for="indent in indentData" :key="indent.ind_id" >
+          <nut-cell style="background-color: #FBFCFA;">
+          <nut-row>
+            <!-- <nut-col :span="24"> -->
+            <!-- <div> -->
+              <div v-for="(commodity,index) in indent.commodity" :key="index" >
+                <span style="font-family: Source Han Sans SC;
+                  font-size: 14px;
+                  font-weight: 400;
+                  line-height: 16px;
+                  letter-spacing: 1px;
+                  text-align: center;
+                ">
+                  {{ commodity.com_name }}
+                </span>
 
-              <span style="font-family: Source Han Sans SC;
-                font-size: 12px;
-                font-weight: 400;
-                line-height: 16px;
-                letter-spacing: 0px;
-                text-align: left;
-                margin-left: 50px;
-              ">
-              {{ "x"+commodity.com_quantity }}
-               </span>
+                <span style="font-family: Source Han Sans SC;
+                  font-size: 12px;
+                  font-weight: 400;
+                  line-height: 16px;
+                  letter-spacing: 0px;
+                  text-align: left;
+                  margin-left: 50px;
+                ">
+                {{ "x"+commodity.com_quantity }}
+                </span>
+              </div>
+              <div>
+              {{ indent.com_position }}
             </div>
-            <div>
-            {{ indent.com_position }}
-          </div>
-          <nut-col :span="16">
-            <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
-          </nut-col>
-          <nut-col :span="8">
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail(indent.ind_id)"> 查看详情 </nut-tag>
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)" v-if="indent.ind_state=='待评价'"> 评价 </nut-tag>
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
-          </nut-col>
-          </nut-row>
-        </nut-cell>
-      </nut-row>
-    </nut-tab-pane>
+            <nut-col :span="16">
+              <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
+            </nut-col>
+            <nut-col :span="8">
+              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail(indent.ind_id)"> 查看详情 </nut-tag>
+              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)" v-if="indent.ind_state=='待评价'"> 评价 </nut-tag>
+              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
+            </nut-col>
+            </nut-row>
+          </nut-cell>
+        </nut-row>
+      </nut-tab-pane>
 
-    <nut-tab-pane title="待评价" pane-key="2">
-      <nut-row v-for="indent in indentData" :key="indent.ind_id" >
-        <nut-cell style="background-color: #FBFCFA;">
-        <nut-row>
-          <!-- <nut-col :span="24"> -->
-          <!-- <div> -->
-            <div v-for="(commodity,index) in indent.commodity" :key="index">
-              <span style="font-family: Source Han Sans SC;
-                font-size: 14px;
-                font-weight: 400;
-                line-height: 16px;
-                letter-spacing: 1px;
-                text-align: center;
-              ">
-                {{ commodity.com_name }}
-              </span>
+      <nut-tab-pane title="待评价" pane-key="2">
+        <nut-row v-for="indent in indentData" :key="indent.ind_id" >
+          <nut-cell style="background-color: #FBFCFA;">
+          <nut-row>
+            <!-- <nut-col :span="24"> -->
+            <!-- <div> -->
+              <div v-for="(commodity,index) in indent.commodity" :key="index">
+                <span style="font-family: Source Han Sans SC;
+                  font-size: 14px;
+                  font-weight: 400;
+                  line-height: 16px;
+                  letter-spacing: 1px;
+                  text-align: center;
+                ">
+                  {{ commodity.com_name }}
+                </span>
 
-              <span style="font-family: Source Han Sans SC;
-                font-size: 12px;
-                font-weight: 400;
-                line-height: 16px;
-                letter-spacing: 0px;
-                text-align: left;
-                margin-left: 50px;
-              ">
-              {{ "x"+commodity.com_quantity }}
-               </span>
+                <span style="font-family: Source Han Sans SC;
+                  font-size: 12px;
+                  font-weight: 400;
+                  line-height: 16px;
+                  letter-spacing: 0px;
+                  text-align: left;
+                  margin-left: 50px;
+                ">
+                {{ "x"+commodity.com_quantity }}
+                </span>
+              </div>
+              <div>
+              {{ indent.com_position }}
             </div>
-            <div>
-            {{ indent.com_position }}
-          </div>
-          <nut-col :span="16">
-            <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
-          </nut-col>
-          <nut-col :span="8">
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent" > 评价 </nut-tag>
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
-          </nut-col>
-          </nut-row>
-        </nut-cell>
-      </nut-row>
-    </nut-tab-pane>
-  </nut-tabs>
-
+            <nut-col :span="16">
+              <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
+            </nut-col>
+            <nut-col :span="8">
+              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent" > 评价 </nut-tag>
+              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
+            </nut-col>
+            </nut-row>
+          </nut-cell>
+        </nut-row>
+      </nut-tab-pane>
+    </nut-tabs>
+  </nut-config-provider>
 </template>
 
 
@@ -105,6 +106,12 @@ const router=useRouter();
 // import globalData from"../../global.js"
 // import {stat} from "@babel/core/lib/gensync-utils/fs";
 const cus_ID=sessionStorage.getItem("user_id");
+
+const themeVars = ref({
+    primaryColor: '#99af93',
+    categoryListLeftBgColor: '#f9fbf7'
+});
+
 const indentData=ref([
 {
   ind_id:"1",
