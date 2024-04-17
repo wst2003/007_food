@@ -60,21 +60,63 @@
     </div>
   </nut-cell>
 
+  <div style="font-family: Source Han Sans SC;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 12px;
+      letter-spacing: 0px;
+      margin: 20px 20px  10px 20px;
+    ">
+    {{ "更多推荐" }}
+  </div>
+
   <!-- Auto recommendation block -->
   <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore">
-    <div v-for="(item) in recommendationList" :key=item.com_ID>
-      <div class="rcmd-block"
-        :style="{ backgroundImage: 'url(https://007-food.obs.cn-east-3.myhuaweicloud.com/' + item.commodityImage + ')' }">
-        <div class="info-tag">
-          <div>
-            {{ item.com_name }}
-          </div>
-          <div style="font-size: 14px;color: #808080;">
-            <span>{{ item.com_position + " " }}</span>
-            <span style="padding-left: 20px;">{{ item.com_dist + "km" }}</span>
-          </div>
-        </div>
-      </div>
+      <div v-for="(item, index) in recommendationList" :key="index" style="display: flex;" >
+            <div class="commodity-card"
+              @click="showDetail(com_ID, com_position, com_dist, com_price, com_name, com_left)">
+              <div style="height: 150px;position: relative;">
+                <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 0 0 0;" />
+                <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">
+                  <div style="background-color: white;">
+                    <div class="price-tag">
+                      {{ '¥' + item.com_oriPrice }}
+                    </div>
+                  </div>
+                  <div class="left-tag">
+                    <span style="color:#969696;font-size: 10px;">剩余</span>
+                    <span style="font-size: 13px;color: #93B090;font-weight: 700;margin: 0 2px 0 2px;">{{ item.com_left
+                      }}</span>
+                    <span style="color:#969696;font-size: 10px;">件</span>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="background-color:#e9f2e7;border-radius: 0 0 0 20px;display: flex;justify-content: center;flex-direction: column;padding-left: 10px;position: relative;padding:10px">
+                <div style="font-size: 14.5px;width:70%;">
+                  {{ item.com_name }}
+                </div>
+                <div
+                  style="font-size: 11px;color:#808080;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 80%;">
+                  {{ item.sto_name }}
+                </div>
+                <div class="rate-container">
+                  <div class="rate">
+                    {{ item.praise_rate }}
+                  </div>
+                </div>
+                <div class="distance">
+                  {{ item.com_dist + 'km' }}
+                </div>
+              </div>
+            </div>
+            <div style="background-color: #808080;width: 20%;margin-bottom: 20px;border-radius: 0 20px 20px 0;background: #93B090;box-shadow: -3px 0px 4px 0px rgba(0, 0, 0, 0.25);z-index: 10;
+            display: flex;flex-direction: column;align-items: center;justify-content: center;">
+              <div v-for="(item2, index2) in item.contain_images" :key='index1 + "_" +index2'>
+                <img :src="item2.com_image"  style="border-radius: 50%;width:50px;height: 50px;border: 3px solid #FFF;box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);"  />
+              </div>
+            </div>
+
     </div>
   </nut-infinite-loading>
 

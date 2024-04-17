@@ -74,19 +74,57 @@
   <div id="main" style="width:auto;height: 300px;"></div>
 
   <!-- Auto recommendation block -->
+  <div style="font-family: Source Han Sans SC;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 12px;
+      letter-spacing: 0px;
+      margin: 20px 20px  10px 20px;
+    ">
+    {{ "更多推荐" }}
+  </div>
   <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore">
+    <div style="padding: 0 20px;">
     <div v-for="(item) in recommendationList" :key=item.com_ID>
-      <div class="rcmd-block" :style="{backgroundImage: 'url(https://007-food.obs.cn-east-3.myhuaweicloud.com/' + item.commodityImage + ')'}" >
-        <div class="info-tag">
-          <div>
-            {{ item.com_name }}
+      <div class="commodity-card"
+              @click="showDetail(com_ID, com_position, com_dist, com_price, com_name, com_left)">
+              <div style="height: 150px;position: relative;">
+                <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 20px 0 0;" />
+                <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">
+                  <div style="background-color: white;">
+                    <div class="price-tag">
+                      {{ '¥' + item.com_price }}
+                    </div>
+                  </div>
+                  <div class="left-tag">
+                    <span style="color:#969696;font-size: 10px;">剩余</span>
+                    <span style="font-size: 13px;color: #93B090;font-weight: 700;margin: 0 2px 0 2px;">{{ item.com_left
+                      }}</span>
+                    <span style="color:#969696;font-size: 10px;">件</span>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="background-color:#e9f2e7;border-radius: 0 0 20px 20px;display: flex;justify-content: center;flex-direction: column;padding-left: 10px;position: relative;padding:10px">
+                <div style="font-size: 14.5px;width:70%;">
+                  {{ item.com_name }}
+                </div>
+                <div
+                  style="font-size: 11px;color:#808080;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 80%;">
+                  {{ item.com_position }}
+                </div>
+                <div class="rate-container">
+                  <div class="rate">
+                    {{ item.praise_rate }}
+                  </div>
+                </div>
+                <div class="distance">
+                  {{ item.com_dist + 'km' }}
+                </div>
+              </div>
+
+            </div>
           </div>
-          <div style="font-size: 14px;color: #808080;">
-            <span>{{ item.com_position+"     " }}</span>
-            <span style="padding-left: 20px;">{{ item.com_dist+"km" }}</span>
-          </div>
-        </div>
-      </div>
     </div>
   </nut-infinite-loading>
 
@@ -196,6 +234,9 @@ const loadMore = () => {
         page_num: ++recommendationInfo.page_num
       }
     }).then((res) => {
+      for(let i=0;i<res.data.length;i++){
+        res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
+      }
       recommendationList.value = recommendationList.value.concat(res.data);
       ifLoading.value = false;
       if (res.data.length < recommendationInfo.page_size)
@@ -251,6 +292,9 @@ onMounted(() => {
       page_num: ++recommendationInfo.page_num
     }
   }).then((res) => {
+    for(let i=0;i<res.data.length;i++){
+        res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
+      }
     recommendationList.value = recommendationList.value.concat(res.data);
     if (res.data.length < recommendationInfo.page_size)
       hasMore.value = false;
@@ -283,7 +327,7 @@ const EnterIndentConfirmPage = () => {
 }
 </script>
 
-<style>
+<style scoped>
 .info-tag{
   background-color: #eaf3e8;
   border-radius:  0 0 20px 20px;
@@ -329,5 +373,66 @@ const EnterIndentConfirmPage = () => {
   width: 20px;
   height: 30px;
   background-color: rgba(0, 0, 0, 0.2);
+}
+
+.commodity-card {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.price-tag {
+  padding: 5px 10px 5px 10px;
+  background-color: #93B090;
+  border-top-right-radius: 10px;
+  box-shadow: 1px -1px 3.9px -1px rgba(0, 0, 0, 0.25);
+  color: #FFF;
+  text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  font-family: "Source Han Sans C";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 13px;
+  z-index: 10;
+  position: relative;
+  border: 1px solid #93B090;
+}
+
+.left-tag {
+  border-top-right-radius: 10px;
+  background: #FFF;
+  box-shadow: 3px 7px 3.9px -1px rgba(0, 0, 0, 0.25);
+  padding: 5px 10px 5px 10px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 13px;
+}
+
+.rate-container {
+  padding: 0 10px;
+  border-radius: 23px;
+  background: #FFF;
+  font-size: 11px;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.25);
+  color: #969696;
+  font-weight: 500;
+  text-align: center;
+  position: absolute;
+  right: 10px;
+  top: 20%
+}
+
+.distance {
+  color: #25522c;
+  font-size: 13px;
+  position: absolute;
+  right: 15px;
+  bottom: 10%;
+  font-weight: bolder;
+}
+
+.rate::before {
+  content: url(../../assets/star.svg);
+  margin-right: 4px;
 }
 </style>

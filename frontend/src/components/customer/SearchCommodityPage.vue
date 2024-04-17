@@ -355,7 +355,7 @@ transform: translateY(100%);
 }
 
 .rate-container {
-  width: 18%;
+  
   border-radius: 23px;
   background: #FFF;
   font-size: 11px;

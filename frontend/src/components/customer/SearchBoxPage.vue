@@ -94,7 +94,6 @@ const pageSize = ref(6);
 const pageNum = ref(0);         
 const sortBy = ref(0);
 const loading = ref(true)
-const comType = ref(null);
 
 // const route=useRoute();
 const router = useRouter();
@@ -103,22 +102,6 @@ const sortOptionStatus = reactive({
   s1: false,
   s2: false,
 })
-
-const typeOptionStatus = reactive({
-  t1: false,
-  t2: false,
-  t3: false,
-  t4: false,
-  t5: false
-})
-
-const typeName = {
-  t1: '零食',
-  t2: '饮品',
-  t3: '肉类',
-  t4: '水果',
-  t5: '便当'
-}
 
 const sortName = {
   s1: 0,
@@ -170,24 +153,6 @@ const sortOptionClick = (num)=>{
   searchBox();
 } 
 
-
-const typeOptionClick = (num) => {
-  pageNum.value=0;
-  commodityList.value = [];
-  let key = 't'+num;
-  if(typeOptionStatus[key]){
-    typeOptionStatus[key] = false;
-    comType.value = '';
-    searchBox();
-    return;
-  }
-  for(let i=1;i<6;i++){
-    typeOptionStatus['t'+i] = false;
-  }
-  typeOptionStatus[key] = true;
-  comType.value = typeName[key];
-  searchBox();
-}
 
 const searchBox = () => {
   pageNum.value++;
