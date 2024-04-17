@@ -21,32 +21,32 @@
                   {{ commodity.com_name }}
                 </span>
 
-                <span style="font-family: Source Han Sans SC;
-                  font-size: 12px;
-                  font-weight: 400;
-                  line-height: 16px;
-                  letter-spacing: 0px;
-                  text-align: left;
-                  margin-left: 50px;
-                ">
-                {{ "x"+commodity.com_quantity }}
-                </span>
-              </div>
-              <div>
-              {{ indent.com_position }}
+              <span style="font-family: Source Han Sans SC;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 16px;
+                letter-spacing: 0px;
+                text-align: left;
+                margin-left: 50px;
+              ">
+              {{ "x"+commodity.com_quantity }}
+               </span>
             </div>
-            <nut-col :span="16">
-              <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
-            </nut-col>
-            <nut-col :span="8">
-              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail(indent.ind_id)"> 查看详情 </nut-tag>
-              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)" v-if="indent.ind_state=='待评价'"> 评价 </nut-tag>
-              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
-            </nut-col>
-            </nut-row>
-          </nut-cell>
-        </nut-row>
-      </nut-tab-pane>
+            <div>
+            {{ indent.com_position }}
+          </div>
+          <nut-col :span="16">
+            <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
+          </nut-col>
+          <nut-col :span="8">
+            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail(indent.ind_id)"> 查看详情 </nut-tag>
+            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)" v-if="indent.ind_state=='待评价'"> 评价 </nut-tag>
+            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent()"> 再来一单 </nut-tag>  
+          </nut-col>
+          </nut-row>
+        </nut-cell>
+      </nut-row>
+    </nut-tab-pane>
 
       <nut-tab-pane title="待评价" pane-key="2">
         <nut-row v-for="indent in indentData" :key="indent.ind_id" >

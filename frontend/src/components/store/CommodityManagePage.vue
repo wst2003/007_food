@@ -204,11 +204,11 @@ import {onMounted, ref} from "vue";
 import { Search2 } from '@nutui/icons-vue'
 import axios from "axios";
 import {useRoute, useRouter} from "vue-router";
-const sto_id=29;
+const sto_id=sessionStorage.getItem('user_id');
 const onClickBack = () => {
   router.go(-1);
 }
-const categoryList=ref(["全部","卤味","水果", "熟食", "生鲜", "零食","饮料"])
+const categoryList=ref(["全部","便当","水果","肉类","零食","饮品"])
 const route=useRoute();
 const router=useRouter();
 // const tab=ref("面包");

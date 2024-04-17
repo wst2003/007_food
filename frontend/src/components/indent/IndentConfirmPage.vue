@@ -58,7 +58,7 @@
                     <div class="item-info">
                     <div>{{ item.com_name }}</div>
                     <div class="price">¥{{ item.commodity_money }}</div>
-                    <div class="distance">1.2km from delivery</div>
+                    <div class="distance">距此地{{ item.distance }}</div>
                 </div>
             </div>
             <!-- <div class="buttons">
@@ -67,11 +67,11 @@
                 <button type="button">Arriving in 10 mins</button>
             </div> -->
         </div>
-        
-
         </nut-cell>
     </div>
-
+    <div v-if="promptShow" style="font-size: large;margin-left: 35vw;margin-top: 30px;font-weight: bold; color: #93B090;"> 
+        {{ promptStr }} 
+    </div>
 
     <!--Fixed block for shopping cart-->
   <div style="width: 90%; height: 44px; position:fixed;bottom: 70px; margin: auto;left:0;right:0">
@@ -97,11 +97,15 @@ import { onMounted, reactive,ref,computed} from 'vue';
 import globalData from"../../global.js"
 import axios from 'axios';
 import { StarFillN } from '@nutui/icons-vue';
-
+// import { showToast } from '@nutui/nutui's
+// import { useRouter } from 'vue-router';
+// const router=useRouter();
 const ind_note=ref("") //TODO: note block
 const delivery_method=ref(0)
 const delivery_address=globalData.userPosition.address 
 const cus_Id=sessionStorage.getItem("user_id")//TODO: confirmity
+const promptShow=ref(false)
+const promptStr=ref("")
 
 function toggleMethod(){
     if(delivery_method.value==0)delivery_method.value=1;
@@ -109,14 +113,27 @@ function toggleMethod(){
 }
 
 function indent_item(response_obj){
-    this.com_id=response_obj.com_ID
+    if("com_ID" in response_obj){
+        console.log('一个常规商品')
+        // regular commodity
+        this.com_id=response_obj.com_ID
+        this.image="https://007-food.obs.cn-east-3.myhuaweicloud.com/"+response_obj.commodityImage[0].com_image
+    }
+    else{
+        console.log('一个盲盒商品')
+        // mystery commodity
+        this.com_id=response_obj.mystery_box_ID
+        this.image="https://007-food.obs.cn-east-3.myhuaweicloud.com/"+response_obj.contain_images[0].com_image
+    }
     this.com_name=response_obj.com_name
     this.com_type=response_obj.com_type
+    this.sto_id=response_obj.sto_ID
+    this.distance="1.2公里"
+    this.duration="10分钟"
     console.log(response_obj.com_ID)
     console.log(globalData.shoppingCart.getItemById(response_obj.com_ID))
     this.ind_quantity=globalData.shoppingCart.getItemById(response_obj.com_ID).quantity
     this.commodity_money=globalData.shoppingCart.getItemById(response_obj.com_ID).price
-    this.image="https://007-food.obs.cn-east-3.myhuaweicloud.com/"+response_obj.commodityImage[0].com_image
     
 }
 
@@ -138,31 +155,92 @@ const indent_items=reactive({
             total+=ele.price
         })
         return total
+    },
+    clear(){
+        this.items=[]
+    },
+    afterRouting(dis,dur,sto_id){
+        this.items.forEach(ele=>{
+            if(ele.sto_id==sto_id){
+                ele.distance=dis
+                ele.duration=dur
+            }
+        })
     }
 })
 
+
 onMounted(()=>{
+    console.log("当前购物车：")
+    console.log(globalData.shoppingCart.items)
     for(let i=0;i<globalData.shoppingCart.items.length;++i){
+        // 对于购物车中的每个商品，分别调用接口 
+        // For every single commodity in shopping cart, invoke api individually
+        let tmp_sto_id=0;
         axios.get('/api/com/commoditydetail',{
-        params:{
-            com_ID:globalData.shoppingCart.items[i].id
-        }
+            params:{
+                com_ID:globalData.shoppingCart.items[i].id
+            }
         })
         .then(response=>{
+            console.log("拉取商品详情返回：")
+            console.log(response.data)
             
-            indent_items.items.push(new indent_item(response.data))
+            if(response.data.com_ID!=-1){
+                // 若返回ID不为-1，说明是常规商品
+                // If the ID returned is not -1, it means it's a regular commodity
+                indent_items.items.push(new indent_item(response.data))
+                tmp_sto_id=response.data.sto_ID
+            }
+            return axios.get("/api/mys/getmysterybox",{
+                params:{
+                    mystery_box_ID:globalData.shoppingCart.items[i].id
+                }
+            })
+        }).then(response=>{
+            console.log("拉取盲盒详情返回：")
+            console.log(response.data)
+            if(response.data.com_ID!=-1){
+                // 若返回ID不为-1，说明是盲盒商品
+                // If the ID returned is not -1, it means it's a mystery commodity
+                indent_items.items.push(new indent_item(response.data[0]))
+                tmp_sto_id=response.data[0].sto_ID
+            }
             console.log(indent_items.items)
+
+            // 拉取商家详细信息，用于获取配送/自取距离
+            return axios.get('api/sto/informationdetail',{
+                    params:{
+                        sto_ID:response.data[0].sto_ID
+                    }
+                })
+        }).then(res=>{
+            console.log("地图组件:")
+            console.log(globalData.mapObj.map)
+            globalData.mapObj.walkingRoute(globalData.userPosition.latitude,
+                globalData.userPosition.longitude,
+                res.data[0].sto_latitude,
+                res.data[0].sto_longtitude,
+                (dis,dur)=>{
+                    indent_items.afterRouting(dis,dur,tmp_sto_id)
+                    console.log('调用百度云函数成功'+indent_items)
+                    console.log(indent_items)
+                }
+            );
+        }).catch(err=>{
+            console.log(err)
         })
     }
 })
 
 const generateIndent=()=>{
     console.log('当前用户ID'+sessionStorage.getItem("user_id"))
+    console.log(delivery_address)
     axios.post('/api/cus/generateIndent',JSON.stringify({ 
             cus_Id:cus_Id,
             com_arr:indent_items.items,
             delivery_method:delivery_method.value,
-            delivery_address:delivery_address.value,
+            delivery_address:delivery_address,
             delivery_altitude:globalData.userPosition.latitude,
             delivery_longitude:globalData.userPosition.longitude, 
             ind_notes:ind_note.value,
@@ -175,6 +253,12 @@ const generateIndent=()=>{
         .then(response=>{
             console.log('订单生成情况：')
             console.log(response)
+            promptStr.value=response.data
+            promptShow.value=true
+ 
+            globalData.shoppingCart.clear()
+            indent_items.clear()
+            // 清空购物车、页面数据
         })
 }
 </script>

@@ -224,13 +224,18 @@ const changeTabCb = (title) => {
     
 }
 
-
+import qs from 'qs'
 const getStoreInfoData = () => {
+    console.log(storeID)
     axios.get('/api/sto/informationdetail', {
         params: {
-            sto_ID: storeID    // TODO: modify to real ID
+            sto_ID: [storeID]    // TODO: modify to real ID
+        },
+        paramsSerializer: params => {
+            return qs.stringify(params, { indices: false })
         }
     }).then(res => {
+        console.log(res.data[0])
         sto_info.value = res.data[0];
         for (const item of sto_info.value.storeLicense) {
             licenceImage.value.push({ src: 'https://007-food.obs.cn-east-3.myhuaweicloud.com/' + item.sto_license })

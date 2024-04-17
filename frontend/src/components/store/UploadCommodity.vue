@@ -138,7 +138,7 @@
 import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 import * as echarts from 'echarts';
-import { onMounted} from 'vue';
+import { onMounted } from 'vue';
 // import globalData from"../../global.js"
 import axios from 'axios';
 const uploadRef = ref(null);

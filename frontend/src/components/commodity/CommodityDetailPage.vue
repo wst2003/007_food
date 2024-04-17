@@ -169,7 +169,8 @@ import axios from 'axios';
 const buying_quantity = ref(0);// quantity in shopping cart
 // Whenever quantity is modified, synchronize with shopping cart
 watch(buying_quantity, () => {
-  globalData.shoppingCart.modify(route.query.id, buying_quantity.value, buying_quantity.value * route.query.price)
+  globalData.shoppingCart.modify(route.query.id, Number(buying_quantity.value), buying_quantity.value * route.query.price)
+  console.log(globalData.shoppingCart.items)
 })
 
 var option = {
@@ -271,7 +272,9 @@ onMounted(() => {
   console.log(route.query);
   myChart = echarts.init(document.getElementById('main'));
   // myChart.setOption(option);
-
+  buying_quantity.value=globalData.shoppingCart.getItemById(route.query.id).quantity
+  console.log('购物车中的对象：'+globalData.shoppingCart.getItemById(route.query.id))
+  console.log(globalData.shoppingCart.items)
   axios.get('api/com/commoditydetail', {
     params: {
       com_ID: route.query.id    // TODO: replace with router's params

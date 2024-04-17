@@ -49,6 +49,10 @@ function rezoom(replacestr){
             if(point){
                 map.centerAndZoom(point, 16);
                 map.addOverlay(new BMapGL.Marker(point, {title: replacestr}))
+                // 将坐标与地址设置到全局变量
+                globalData.userPosition.setCoordination(point.lat,point.lng)
+                globalData.userPosition.address= replacestr;
+
             }else{
                 alert('您选择的地址没有解析到结果！');
             }
@@ -127,6 +131,8 @@ function initalizatin(lat,lng){
     //map.addControl(new BaiduMap.LocationControl());// 添加定位控件
     var mk = new BaiduMap.Marker(point);
     map.addOverlay(mk);
+    var circle = new BMapGL.Circle(point,1000,{strokeColor:"red", strokeWeight:2, strokeOpacity:0.5,fillColor:"blue",fillOpacity:0.5}); //创建圆
+    map.addOverlay(circle);
     map.panTo(point);
     currentPoint  = point; // 百度BD09坐标
 
@@ -138,6 +144,7 @@ function initalizatin(lat,lng){
         globalData.userPosition.address= addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber;
         //arr.shift()
         areastr.value=addComp.province + " | " + addComp.city + " | " + addComp.district
+        console.log('全局变量用户地址设置成功：'+globalData.userPosition.address)
     })
 }
 

@@ -56,7 +56,11 @@ const shoppingCart=reactive({
         return total
     },
     getItemById(id){
-        var item={}
+        var item={
+            id:0,
+            quantity:0,
+            price:0
+        }
         this.items.forEach((element)=>{
             if(element.id==id){
                 item=element

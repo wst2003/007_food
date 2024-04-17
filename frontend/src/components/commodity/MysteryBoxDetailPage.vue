@@ -161,7 +161,8 @@ import axios from 'axios';
 const buying_quantity = ref(0);// quantity in shopping cart
 // Whenever quantity is modified, synchronize with shopping cart
 watch(buying_quantity, () => {
-  globalData.shoppingCart.modify(mysteryBoxInfo.value.mystery_box_ID, buying_quantity.value, buying_quantity.value * mysteryBoxInfo.value.com_oriPrice)
+  globalData.shoppingCart.modify(mysteryBoxInfo.value.mystery_box_ID, Number(buying_quantity.value), buying_quantity.value * mysteryBoxInfo.value.com_oriPrice)
+  console.log(globalData.shoppingCart.items)
 })
 
 const router = useRouter();
@@ -217,6 +218,8 @@ onMounted(() => {
     const images = mysteryBoxInfo.value.contain_images;
     for (let i = 0; i < images.length; ++i)
       list.value.push("https://007-food.obs.cn-east-3.myhuaweicloud.com/" + images[i].com_image);
+  }).then(()=>{
+    buying_quantity.value=globalData.shoppingCart.getItemById(mysteryBoxInfo.value.mystery_box_ID).quantity
   })
 
   axios.get('api/mys/getmysterybox', {
