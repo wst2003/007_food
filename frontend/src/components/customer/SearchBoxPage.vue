@@ -44,7 +44,7 @@
                 </div>
                 <div
                   style="font-size: 11px;color:#808080;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 80%;">
-                  {{ item.com_position }}
+                  {{ item.sto_name }}
                 </div>
                 <div class="rate-container">
                   <div class="rate">
