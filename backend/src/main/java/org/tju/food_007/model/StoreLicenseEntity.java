@@ -8,11 +8,9 @@ import java.util.Objects;
 @Table(name = "storeLicense", schema = "food_007", catalog = "")
 @IdClass(StoreLicenseEntityPK.class)
 public class StoreLicenseEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "sto_ID")
     private int stoId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Basic
     @Column(name = "sto_license")

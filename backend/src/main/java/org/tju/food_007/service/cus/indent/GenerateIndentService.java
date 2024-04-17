@@ -3,14 +3,17 @@ package org.tju.food_007.service.cus.indent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tju.food_007.dto.cus.indent.ChangeIndStateRequestDTO;
 import org.tju.food_007.dto.cus.indent.GenerateIndentRequestDTO;
 import org.tju.food_007.dto.cus.indent.IndentCommodity;
 import org.tju.food_007.dto.cus.mapper.GenerateIndentComRequstMapper;
 import org.tju.food_007.dto.cus.mapper.GenerateIndentRequestMapper;
 import org.tju.food_007.model.IndentCommodityEntity;
 import org.tju.food_007.model.IndentEntity;
+import org.tju.food_007.model.UserEntity;
 import org.tju.food_007.repository.cus.indent.GenerateIndentComRepository;
 import org.tju.food_007.repository.cus.indent.GenerateIndentRepository;
+import org.tju.food_007.repository.sto.UserUploadLogoImageUserRepository;
 
 /**
  * @author WGY
@@ -27,19 +30,34 @@ public class GenerateIndentService {
     GenerateIndentRepository generateIndentRepository;
     @Autowired
     GenerateIndentComRepository generateIndentComRepository;
+    @Autowired
+    UserUploadLogoImageUserRepository userUploadLogoImageUserRepository;
     private final GenerateIndentComRequstMapper generateIndentComRequstMapper=GenerateIndentComRequstMapper.INSTANCE;
     private final GenerateIndentRequestMapper generateIndentRequestMapper=GenerateIndentRequestMapper.INSTANCE;
 
     public static String generateVerificationCode() {
         return UUID.randomUUID().toString().replace("-", "");
     }
+
     @Transactional
     public String GenerateIndent(GenerateIndentRequestDTO requestDTO){
+        UserEntity targetUser=userUploadLogoImageUserRepository.findByUserId(Integer.valueOf(requestDTO.getCus_Id()));
+        String telephoneNumber=String.valueOf(targetUser.getUserPhone().subSequence(7,11));
+        String teleCode=telephoneNumber+"-"+String.valueOf(targetUser.getUserPhone().subSequence(0,4));
         IndentEntity newIndent=generateIndentRequestMapper.dtoToEntity(requestDTO);
-        newIndent.setIndVerificationCode(generateVerificationCode());
+        newIndent.setIndVerificationCode(teleCode);
         newIndent.setFoodQualityScore(BigDecimal.valueOf(5.0));
         newIndent.setServiceQualityScore(BigDecimal.valueOf(5.0));
         newIndent.setPricePerformanceRatio(BigDecimal.valueOf(5.0));
+        if(newIndent.getDeliveryMethod()==0){
+            newIndent.setIndState(2);
+        }
+        else if(newIndent.getDeliveryMethod()==1){
+            newIndent.setIndState(0);
+        }
+        else {
+            System.out.println("出现了问题");
+        }
         IndentEntity inserted_ind=generateIndentRepository.save(newIndent);
         for (IndentCommodity com : requestDTO.getCom_arr()) {
             IndentCommodityEntity newCom= generateIndentComRequstMapper.dtoToEntity(com);
@@ -54,4 +72,11 @@ public class GenerateIndentService {
         return "成功生成订单";
     }
 
+    @Transactional
+    public void ChangeIndentState(ChangeIndStateRequestDTO requestDTO){
+        IndentEntity aimed_ind=generateIndentRepository.findByIndId(requestDTO.getInd_id());
+        aimed_ind.setIndState(requestDTO.getInd_state());
+        generateIndentRepository.save(aimed_ind);
+        return;
+    }
 }

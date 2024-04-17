@@ -8,12 +8,10 @@ import java.util.Objects;
 public class StoreImageEntityPK implements Serializable {
     @Column(name = "sto_ID")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int stoId;
     @Column(name = "sto_image")
     @Basic
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String stoImage;
 
     public int getStoId() {
