@@ -40,8 +40,8 @@ public class UserRegistrationController {
     }
 
     @RequestMapping(value = "/store", method = RequestMethod.POST)
-    public ResponseEntity<StoreRegistrationResponseDTO> StoRegister (@RequestBody StoreRegistrationRequestDTO request) {
-        StoreRegistrationResponseDTO response=storeRegistrationService.StoreRegister(request);
+    public ResponseEntity<CustomRegistrationResponseDTO> StoRegister (@RequestBody StoreRegistrationRequestDTO request) {
+        CustomRegistrationResponseDTO response=storeRegistrationService.StoreRegister(request);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

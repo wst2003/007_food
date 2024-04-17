@@ -32,10 +32,10 @@ public class StoreRegistrationService {
     private final StoreRegistrationRequestMapper  storeRegistrationRequestMapper =
             StoreRegistrationRequestMapper.INSTANCE;
     @Transactional
-    public StoreRegistrationResponseDTO StoreRegister(StoreRegistrationRequestDTO request) {
+    public CustomRegistrationResponseDTO StoreRegister(StoreRegistrationRequestDTO request) {
         UserEntity newUser = storeRegistrationRequestMapper.requestToUserEntity(request);
         StoreEntity newSto = storeRegistrationRequestMapper.requestToStoEntity(request);
-        StoreRegistrationResponseDTO response=new StoreRegistrationResponseDTO();
+        CustomRegistrationResponseDTO response=new CustomRegistrationResponseDTO();
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -67,6 +67,8 @@ public class StoreRegistrationService {
             newSto.setStoState(1);
             StoreEntity tempSto= storeRegistrationRepository.save(newSto);
             response.setMsg("Store成功注册");
+            response.setUser_type(1);
+            response.setUser_id(temp.getUserId());
         }
         return response;
     }
