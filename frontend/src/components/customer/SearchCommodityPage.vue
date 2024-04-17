@@ -42,8 +42,8 @@
       <nut-config-provider :theme-vars="themeVars">
         <div class="container">
           <div v-for="(item, index) in commodityList" :key="index" style="width: 45%;">
-            <div class="commodity-card"
-              @click="showDetail(com_ID, com_position, com_dist, com_price, com_name, com_left)">
+            <div class="commodity-card" 
+              @click="showDetail(item.com_ID, item.com_position, item.com_dist, item.com_price, item.com_name, item.com_left)">
               <div style="height: 150px;position: relative;">
                 <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 20px 0 0;" />
                 <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">

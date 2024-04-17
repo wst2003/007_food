@@ -20,9 +20,9 @@
         <div class="container">
           <div v-for="(item, index) in commodityList" :key="index" style="display: flex;" >
             <div class="commodity-card"
-              @click="showDetail(com_ID, com_position, com_dist, com_price, com_name, com_left)">
+              @click="showDetail(item.mystery_box_ID)">
               <div style="height: 150px;position: relative;">
-                <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 0 0 0;" />
+                <img :src="item.contain_images[0].com_image" style="width:100%;height: 150px;border-radius: 20px 0 0 0;" />
                 <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">
                   <div style="background-color: white;">
                     <div class="price-tag">
@@ -120,17 +120,12 @@ const commodityData = ref([]);
 
 const commodityList = ref([]);
 
-const showDetail = (id, position, distance, price, name, left) => {
-  console.log(name)
+const showDetail = (id) => {
+  console.log("!!!")
   router.push({
-    path: '/commodityDetail',
+    path: '/mysteryBoxDetail',
     query: {
-      id: id,
-      position: position,
-      distance: distance,
-      price: price,
-      name: name,
-      left: left
+      mystery_box_id:id
     }
   })
 }
@@ -173,6 +168,7 @@ const searchBox = () => {
         }
       }
       commodityList.value = commodityList.value.concat(response.data);
+      console.log(commodityList.value)
       loading.value = false;
       if (response.data.length < pageSize.value) {
         hasMore.value = false;

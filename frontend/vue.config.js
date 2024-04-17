@@ -1,9 +1,9 @@
 const { defineConfig } = require('@vue/cli-service')
 const Components = require('unplugin-vue-components/webpack')
 const NutUIResolver = require('@nutui/auto-import-resolver')
-const {plugins} = require("eslint-plugin-vue/lib/configs/base");
+const { plugins } = require("eslint-plugin-vue/lib/configs/base");
 
-const BaseUrl = "http://localhost:8000"
+const BaseUrl = "http://localhost:6000"
 // const BaseUrl = "http://100.80.74.33:6000"
 
 // const BaseUrl = "http://127.0.0.1:4523/m1/4090306-0-default/api"
@@ -30,16 +30,16 @@ module.exports = defineConfig({
         options: { inline: true, name: 'workerName.[hash].js' }
       }
     })
-    const plugin=[
-          // 开启 unplugin 插件，自动引入 NutUI 组件
-          Components({
-            resolvers: [NutUIResolver()],
-          })
-        ];
+    const plugin = [
+      // 开启 unplugin 插件，自动引入 NutUI 组件
+      Components({
+        resolvers: [NutUIResolver()],
+      })
+    ];
     config.plugins.push(...plugin);
-    config["externals"]={
-          'BaiduMap': "BMapGL"
-        }
+    config["externals"] = {
+      'BaiduMap': "BMapGL"
+    }
   },
   devServer: {
     client: { //加上这个就好了

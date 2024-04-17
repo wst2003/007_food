@@ -87,7 +87,7 @@
     <div style="padding: 0 20px;">
     <div v-for="(item) in recommendationList" :key=item.com_ID>
       <div class="commodity-card"
-              @click="showDetail(com_ID, com_position, com_dist, com_price, com_name, com_left)">
+              @click="showDetail(item.com_ID, item.com_position,0, item.com_price, item.com_name, item.com_left)">
               <div style="height: 150px;position: relative;">
                 <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 20px 0 0;" />
                 <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">
@@ -189,6 +189,7 @@ var option = {
     {
       data: [820, 932, 901, 934, 1290, 1330, 1320],
       type: 'line',
+      step: 'end',
       areaStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
           { offset: 0, color: "#93B090" },
@@ -269,6 +270,7 @@ const convert = (response) => {
 }
 
 onMounted(() => {
+  console.log("use")
   console.log(route.query);
   myChart = echarts.init(document.getElementById('main'));
   // myChart.setOption(option);
@@ -327,6 +329,56 @@ const EnterIndentConfirmPage = () => {
     })
   }
 
+}
+
+const showDetail = (id, position, distance, price, name, left) => {
+  console.log(name)
+  router.push({
+    path: '/commodityDetail',
+    query: {
+      id: id,
+      position: position,
+      distance: distance,
+      price: price,
+      name: name,
+      left: left
+    }
+  })
+
+  console.log("use")
+  console.log(route.query);
+  myChart = echarts.init(document.getElementById('main'));
+  // myChart.setOption(option);
+  buying_quantity.value=globalData.shoppingCart.getItemById(route.query.id).quantity
+  console.log('购物车中的对象：'+globalData.shoppingCart.getItemById(route.query.id))
+  console.log(globalData.shoppingCart.items)
+  axios.get('api/com/commoditydetail', {
+    params: {
+      com_ID: route.query.id    // TODO: replace with router's params
+    }
+  })
+      .then(response => {
+        console.log(response.data);
+        convert(response.data);
+      })
+
+  axios.get('api/com/searchCommodity', {
+    params: {
+      content: "",
+      com_type: "",
+      sort_by: 1,
+      sort_order: 0,
+      page_size: recommendationInfo.page_size,
+      page_num: ++recommendationInfo.page_num
+    }
+  }).then((res) => {
+    for(let i=0;i<res.data.length;i++){
+      res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
+    }
+    recommendationList.value = recommendationList.value.concat(res.data);
+    if (res.data.length < recommendationInfo.page_size)
+      hasMore.value = false;
+  })
 }
 </script>
 

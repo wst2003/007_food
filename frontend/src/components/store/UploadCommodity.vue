@@ -255,6 +255,7 @@ var option = {
     {
       data: [820, 932, 901, 934, 1290, 1330, 1320],
       type: 'line',
+
       areaStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 { offset: 0, color: "#93B090" },  

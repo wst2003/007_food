@@ -74,9 +74,9 @@
   <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore">
       <div v-for="(item, index) in recommendationList" :key="index" style="display: flex;" >
             <div class="commodity-card"
-              @click="showDetail(com_ID, com_position, com_dist, com_price, com_name, com_left)">
+              @click="showDetail(item.mystery_box_ID)">
               <div style="height: 150px;position: relative;">
-                <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 0 0 0;" />
+                <img :src="'https://007-food.obs.cn-east-3.myhuaweicloud.com/'+item.contain_images[0].com_image" style="width:100%;height: 150px;border-radius: 20px 0 0 0;" />
                 <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">
                   <div style="background-color: white;">
                     <div class="price-tag">
@@ -105,15 +105,15 @@
                     {{ item.praise_rate }}
                   </div>
                 </div>
-                <div class="distance">
-                  {{ item.com_dist + 'km' }}
-                </div>
+<!--                <div class="distance">-->
+<!--                  {{ item.com_dist + 'km' }}-->
+<!--                </div>-->
               </div>
             </div>
             <div style="background-color: #808080;width: 20%;margin-bottom: 20px;border-radius: 0 20px 20px 0;background: #93B090;box-shadow: -3px 0px 4px 0px rgba(0, 0, 0, 0.25);z-index: 10;
             display: flex;flex-direction: column;align-items: center;justify-content: center;">
               <div v-for="(item2, index2) in item.contain_images" :key='index1 + "_" +index2'>
-                <img :src="item2.com_image"  style="border-radius: 50%;width:50px;height: 50px;border: 3px solid #FFF;box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);"  />
+                <img :src="'https://007-food.obs.cn-east-3.myhuaweicloud.com/'+item2.com_image"  style="border-radius: 50%;width:50px;height: 50px;border: 3px solid #FFF;box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);"  />
               </div>
             </div>
 
@@ -214,10 +214,11 @@ onMounted(() => {
       mystery_box_ID: route.query.mystery_box_id,   // TODO: modify mystery_box_ID
     }
   }).then(response => {
+    console.log(response.data[0])
     mysteryBoxInfo.value = response.data[0];
     const images = mysteryBoxInfo.value.contain_images;
     for (let i = 0; i < images.length; ++i)
-      list.value.push("https://007-food.obs.cn-east-3.myhuaweicloud.com/" + images[i].com_image);
+      list.value.push("https://007-food.obs.cn-east-3.myhuaweicloud.com/" + images[i].com_image)
   }).then(()=>{
     buying_quantity.value=globalData.shoppingCart.getItemById(mysteryBoxInfo.value.mystery_box_ID).quantity
   })
@@ -257,6 +258,23 @@ const EnterIndentConfirmPage = () => {
     })
   }
 
+}
+
+const showDetail = (id) => {
+  axios.get('api/mys/getmysterybox', {
+    params: {
+      mystery_box_ID: id,   // TODO: modify mystery_box_ID
+    }
+  }).then(response => {
+    console.log(response.data[0])
+    mysteryBoxInfo.value = response.data[0];
+    const images = mysteryBoxInfo.value.contain_images;
+    list.value=[]
+    for (let i = 0; i < images.length; ++i)
+      list.value.push("https://007-food.obs.cn-east-3.myhuaweicloud.com/" + images[i].com_image)
+  }).then(()=>{
+    buying_quantity.value=globalData.shoppingCart.getItemById(mysteryBoxInfo.value.mystery_box_ID).quantity
+  })
 }
 </script>
 

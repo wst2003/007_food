@@ -120,26 +120,26 @@
               <nut-input-number v-model="commodity.left" style="position:absolute;margin-top: 1%;margin-left: 3%" @add="onLeftChange(commodity.id,parseInt(commodity.left)+1)" @reduce="onLeftChange(commodity.id,parseInt(commodity.left)+1)" :min="0"/>
               <nut-button shape="square" type="primary" size="mini" style="position: absolute;margin-left: 30%" @click="onClear(commodity.id)">全部下架</nut-button>
             </div>
-            <div>
-                  <span style="
-                    font-family: 'Source Han Sans CN';
-                    font-style: normal;
-                    font-weight: 500;
-                    font-size: 10px;
-                    line-height: 24px;
-                    color: #646464;
-                    ">
-                      {{"价格调整"}}
-                  </span>
-              <nut-input-number v-model="commodity.price" style="position:absolute;margin-top: 1%;margin-left: 7.7%" @blur="onPriceChange(commodity.id,parseFloat(commodity.price))" decimal-places="2" disabled>
-                <template #left-icon>
-                  {{}}
-                </template>
-                <template #right-icon>
-                  {{}}
-                </template>
-              </nut-input-number>
-            </div>
+<!--            <div>-->
+<!--                  <span style="-->
+<!--                    font-family: 'Source Han Sans CN';-->
+<!--                    font-style: normal;-->
+<!--                    font-weight: 500;-->
+<!--                    font-size: 10px;-->
+<!--                    line-height: 24px;-->
+<!--                    color: #646464;-->
+<!--                    ">-->
+<!--                      {{"价格调整"}}-->
+<!--                  </span>-->
+<!--              <nut-input-number v-model="commodity.price" style="position:absolute;margin-top: 1%;margin-left: 7.7%" @blur="onPriceChange(commodity.id,parseFloat(commodity.price))" decimal-places="2" disabled>-->
+<!--                <template #left-icon>-->
+<!--                  {{}}-->
+<!--                </template>-->
+<!--                <template #right-icon>-->
+<!--                  {{}}-->
+<!--                </template>-->
+<!--              </nut-input-number>-->
+<!--            </div>-->
           </div>
           <div v-else>
             <div style="
@@ -187,9 +187,9 @@
                   </span>
             </div>
 
-            <div>
-              <nut-button shape="square" type="primary" size="mini" style="position: absolute;margin-left: 0%" @click="onClear(commodity.id)">重新上架</nut-button>
-            </div>
+<!--            <div>-->
+<!--              <nut-button shape="square" type="primary" size="mini" style="position: absolute;margin-left: 0%" @click="onClear(commodity.id)">重新上架</nut-button>-->
+<!--            </div>-->
 
           </div>
         </nut-col>
@@ -343,14 +343,28 @@ const search=()=>{
 
 const onLeftChange=(com_id,com_left)=>{
   console.log(com_id,com_left);
+  axios.post('/api/com/editCommodity',{
+    "com_ID": com_id,
+    "com_left": com_left,
+    "off_shelf": false
+  }).then(response=>{
+    console.log(response.data)
+  })
 }
 
-const onPriceChange=(com_id,com_price)=>{
-  console.log(com_id,com_price);
-}
+// const onPriceChange=(com_id,com_price)=>{
+//   console.log(com_id,com_price);
+// }
 
 const onClear=(com_id)=>{
-  console.log(com_id)
+  axios.post('/api/com/editCommodity',{
+    "com_ID": com_id,
+    "com_left": 0,
+    "off_shelf": true
+  }).then(response=>{
+    console.log(response.data)
+    search();
+  })
 }
 
 onMounted(()=>{

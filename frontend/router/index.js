@@ -35,6 +35,9 @@ const router = createRouter({
         {
             path: '/home',
             name: 'home',
+            // meta:{
+            //     keepAlive:true
+            // },
             component: HomePage,
             children: [
                 {
