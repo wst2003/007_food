@@ -36,11 +36,11 @@
 </template>
 <script setup lang="js">
 import { onMounted } from 'vue';
-// import axios from 'axios';
+import axios from 'axios';
 import { ref } from 'vue';
 import { Checklist } from '@nutui/icons-vue';
 import { useRouter } from 'vue-router';
-// import globalData from"../../global.js"
+import globalData from"../../global.js"
 const phoneNumber = ref('');
 const codeNumber = ref('')
 const size = ref(0);
@@ -69,67 +69,62 @@ const validatePhone = () => {
 };
 
 const login = () => {
-    console.log("gu")
-    router.push({
-        path: '/searchCommodity',
-    });
+    if(phoneStatus.value=='error'){
+        baseClick(phoneError.value);
+    }else{
+      axios.post('/api/pub/login',  JSON.stringify({ 
+        user_phone:phoneNumber.value,
+        user_password:codeNumber.value
+      }), {
+      headers: {
+          'Content-Type': 'application/json'
+      }
+      })
+      .then(response => {
+          console.log('Login submitted successfully.');
+          console.log(response.data);
 
+          if(response.data.msg==='登录成功') {
+            /*------------------------*/
+            /*登录成功后编辑此处跳转界面*/
+            /*------------------------*/
+            localStorage.setItem("user_phone",phoneNumber.value );
+            sessionStorage.setItem("user_id",response.data.user_id);
+            globalData.userInfo.user_id= response.data.user_id ;
+            console.log(globalData.userInfo.user_id)
+            // console.log(globalData.userInfo.user_id)
+            if (response.data.user_type==1){
+              sessionStorage.removeItem("user_type");
+              sessionStorage.setItem("user_type", response.data.user_type);
+              router.push({
+                    path: '/storemanage',
+              });
+            }
+            else if (response.data.user_type==0){
+              sessionStorage.removeItem("user_type");
+              sessionStorage.setItem("user_type", response.data.user_type);
+              router.push({
+                    path: '/home',
+                    // path:'cusinfopage'
+              });
+            }
+        } else{
+            baseClick(response.data.msg);
+            console.log(response.data.msg);
+          }
+      })
+      .catch((error) => {
+          console.log('An error occurred:', error);
+      });
+  }
+}
+
+
+const baseClick = (message) => {
+
+    showBottom.value=true;
+    mess.value=message
 };
-//     if(phoneStatus.value=='error'){
-//         baseClick(phoneError.value);
-//     }else{
-//       axios.post('/api/pub/login',  JSON.stringify({ 
-//         user_phone:phoneNumber.value,
-//         user_password:codeNumber.value
-//       }), {
-//       headers: {
-//           'Content-Type': 'application/json'
-//       }
-//       })
-//       .then(response => {
-//           console.log('Login submitted successfully.');
-//           console.log(response.data);
-
-//           if(response.data.msg==='登录成功') {
-//             /*------------------------*/
-//             /*登录成功后编辑此处跳转界面*/
-//             /*------------------------*/
-//             localStorage.setItem("user_phone",phoneNumber.value );
-//             sessionStorage.setItem("user_id",response.data.user_id);
-//             globalData.userInfo.user_id= response.data.user_id ;
-//             console.log(globalData.userInfo.user_id)
-//             // console.log(globalData.userInfo.user_id)
-//             if (response.data.user_type==1){
-//               sessionStorage.removeItem("user_type");
-//               sessionStorage.setItem("user_type", response.data.user_type);
-//               router.push({
-//                     path: '/storemanage',
-//               });
-//             }
-//             else if (response.data.user_type==0){
-//               sessionStorage.removeItem("user_type");
-//               sessionStorage.setItem("user_type", response.data.user_type);
-//               router.push({
-//                     path: '/home',
-//                     // path:'cusinfopage'
-//               });
-//             }
-//         } else{
-//             baseClick(response.data.msg);
-//             console.log(response.data.msg);
-//           }
-//       })
-//       .catch((error) => {
-//           console.log('An error occurred:', error);
-//       });
-//   }
-
-
-// const baseClick = (message) => {
-
-//     showBottom.value=true;
-//     mess.value=message
-// };
 
 const register = () => {
     router.push({
