@@ -123,7 +123,7 @@
             text-align: center;">
             {{indentDetail.identNumber}}</div>
     </nut-space>
-    <div style="
+    <div v-if="indentDetail.type===0" style="
     position:relative;
     margin-top:2vh;
     width: 100vw;
@@ -138,12 +138,29 @@
         top:5%;
         left:20vw;
         width:100vw;">
-            <nut-step title="未收货" content="您的订单还未收货">0</nut-step>
-            <nut-step title="待取货" content="您的订单待取货">2</nut-step>
-            <nut-step title="确认取货" content="您的订单确认取货">1</nut-step>            
+            <nut-step title="待取货" content="您的订单待取货">2</nut-step>    
             <nut-step title="已核销" content="您的订单已核销">3</nut-step>
-            <nut-step title="待评价" content="您的订单待评价">5</nut-step>
+            <nut-step title="超期未取" content="您的订单待评价">4</nut-step>
 
+          </nut-steps>
+    </div>
+    <div v-else style="
+    position:relative;
+    margin-top:2vh;
+    width: 100vw;
+    height: 447px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #FBFCFA;
+    box-shadow: 0px 0px 7.1px 0px rgba(0, 0, 0, 0.10);">
+        <nut-steps direction="vertical" :current="indentDetail.status" 
+        style="
+        position:absolute;
+        top:5%;
+        left:20vw;
+        width:100vw;">
+            <nut-step title="未收货" content="您的订单还未收货">1</nut-step>
+            <nut-step title="确认取货" content="您的订单确认取货">2</nut-step>            
           </nut-steps>
     </div>
 </template>
@@ -160,7 +177,8 @@ const indentDetail=ref({
     time:'时间',
     address:'地点',
     identNumber:'期货码',
-    status:'0'
+    status:'0',
+    type:"0"
 })
 const goBack=()=>{
   router.go(-1);
@@ -175,9 +193,15 @@ onMounted(()=>{
         indentDetail.value.time=response.data[0].ind_creationTime;
         indentDetail.value.address=response.data[0].delivery_address;
         indentDetail.value.identNumber=response.data[0].ind_verificationCode;
-        indentDetail.value.status=response.data[0].ind_state
+        indentDetail.value.type=response.data[0].delivery_method
+        if(response.data[0].ind_state==0||response.data[0].ind_state==2)
+            indentDetail.value.status=1
+        else if(response.data[0].ind_state==1||response.data[0].ind_state==3)
+            indentDetail.value.status=2
+        else
+            indentDetail.value.status=3
     })
-    console.log("111"+indentDetail.value.status)
+    console.log("ind type: "+indentDetail.value.status)
 })
 </script>
 

@@ -1,10 +1,7 @@
 <template>
-<nut-navbar title="临期商品上传" left-show @click-back="goBack"></nut-navbar>
+<nut-navbar title="我的订单" left-show @click-back="goBack"></nut-navbar>
 <nut-config-provider :theme-vars="themeVars">
-<nut-tabs v-model="value" align="left">
-    <nut-tab-pane title="订单" pane-key="1" style="
-    background: #F7F7F7;">
-        <nut-cell title="请选择订单状态" :desc="reflectStatusToString(status_val)" @click="show = true" style="margin-top:-2vh;"></nut-cell>
+        <nut-cell title="请选择订单状态" :desc="reflectStatusToString(status_val)" @click="show = true" style="margin-top:2vh;"></nut-cell>
         <nut-radio-group v-model="sendOrTake" direction="horizontal">
             <nut-radio label="0" shape="button">自取订单</nut-radio>
             <nut-radio label="1" shape="button">配送订单</nut-radio>
@@ -76,6 +73,7 @@
                             {{ item.cus_name }}
                         </div>
                         <div style="
+                        margin-left:10vw;
                         color: #969696;
                         font-family: 'Source Han Sans CN';
                         font-size: 10px;
@@ -131,17 +129,15 @@
                 
             </div>
         </div>
-    </nut-tab-pane>
-    <nut-tab-pane title="售后" pane-key="2"> 售后 </nut-tab-pane>
-</nut-tabs>
 </nut-config-provider>
 
 <nut-popup v-model:visible="show" position="bottom">
-    <nut-picker v-model="status_val" :columns="columns" title="请选择城市" @confirm="show=false" @cancel="show = false" />
+    <nut-picker v-model="status_val" :columns="columns" title="请选择订单状态" @confirm="show=false" @cancel="show = false" />
 </nut-popup>
 </template>
 
 <script setup>
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
@@ -152,7 +148,6 @@ const show=ref(false)
 // const indList=ref([])
 const indInfo=ref([])
 const sendOrTake=ref('0')
-const value = ref('1');
 const goBack=()=>{
         router.go(-1);
     }
@@ -193,100 +188,51 @@ const reflectStatusToString=(val)=>{
 }
 
 onMounted(()=>{
-//     axios.get('/api/sto/getIndentList',{
-//     params:{
-//         sto_id:parseInt(globalData.userInfo.user_id),
-//     }
-//   }).then(response=>{
-//     indList.value=response.data
-//     axios.get('/api/cus/getIndById',{
-//     params:{
-//         ind_id:indList.value,
-//     }
-//   }).then(response=>{
-//     indInfo.value=response.data
-    
-
-//   })
-//   })
-indInfo.value=[
-  {
-    
-    "ind_ID": 0,
-    "cus_ID": 0,
-    "ind_money": 0,
-    "ind_creationTime": "2019-08-24T14:15:22Z",
-    "ind_verificationCode": "1191",
-    "ind_notes": "string",
-    "ind_state": 0,
-    "food_quality_score": 0,
-    "service_quality_score": 0,
-    "price_performance_ratio": 0,
-    "delivery_method": 0,
-    "delivery_address": "string",
-    "delivery_altitude": 0,
-    "delivery_longitude": 0,
-    "commodities": [
-      {
-        "com_ID": 0,
-        "ind_quantity": 0,
-        "commodity_money": 10,
-        "rating_type": 0,
-        "com_name": "饼干"
-      },
-      {
-        "com_ID": 1,
-        "ind_quantity": 0,
-        "commodity_money": 20,
-        "rating_type": 0,
-        "com_name": "月饼"
-      }
-    ],
-    "com_position": "string"
-  },
-  {
-    
-    "ind_ID": 0,
-    "cus_ID": 0,
-    "ind_money": 0,
-    "ind_creationTime": "2019-08-24T14:15:22Z",
-    "ind_verificationCode": "1190",
-    "ind_notes": "string",
-    "ind_state": 0,
-    "food_quality_score": 0,
-    "service_quality_score": 0,
-    "price_performance_ratio": 0,
-    "delivery_method": 1,
-    "delivery_address": "string",
-    "delivery_altitude": 0,
-    "delivery_longitude": 0,
-    "commodities": [
-      {
-        "com_ID": 0,
-        "ind_quantity": 0,
-        "commodity_money": 0,
-        "rating_type": 0,
-        "com_name": "string"
-      }
-    ],
-    "com_position": "string"
-  }
-]
-indInfo.value.forEach(element => {
-    element.cus_name="Mark";
-    element.cus_phone='18392932921';
-    var cusTotalBuy=''
-    var totalNum=0
-    var totalMoney=0
-    element.commodities.forEach(com=>{
-        cusTotalBuy+=com.com_name+','
-        totalNum++;
-        totalMoney+=com.commodity_money;
+    axios.get('/api/sto/getIndentList',{
+    params:{
+        sto_id:parseInt(sessionStorage.getItem("user_id")),
     }
-    )   
-    element.cusTotalBuy=cusTotalBuy+'共'+totalNum.toString()+'件';
-    element.totalMoney='￥'+totalMoney.toString()
-});
+  }).then(response=>{
+    console.log(response.data)
+    var indList=response.data.map(num => Number(num));
+    axios.get('/api/cus/getIndById', {
+      params: {
+        ind_id: decodeURIComponent(indList)
+      }
+    }).then(res => {
+        res.data.forEach(indDetail=>{
+        axios.get('/api/cus/getInfo',{
+            params: {
+                cus_id:indDetail.cus_id
+            }
+        }, {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+        })
+        .then(re=>{
+            indDetail.cus_name=re.data.cus_nickname;
+            indDetail.cus_phone=re.data.user_phone;
+            var cusTotalBuy=''
+            var totalNum=0
+            var totalMoney=0
+            indDetail.commodities.forEach(com=>{
+                cusTotalBuy+=com.com_name+','
+                totalNum++;
+                totalMoney+=com.commodity_money;
+            }
+            )   
+            indDetail.cusTotalBuy=cusTotalBuy+'共'+totalNum.toString()+'件';
+            indDetail.totalMoney='￥'+totalMoney.toString()
+            indInfo.value.push(indDetail)
+        })
+        
+        
+
+        })
+    })
+
+})
 })
 function pathPlanClick(){
     router.push({
