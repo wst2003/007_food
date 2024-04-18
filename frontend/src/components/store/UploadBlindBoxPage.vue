@@ -137,12 +137,10 @@ const goBack=()=>{
     }
 
 const transformDateString=(date)=>{
-    if(date.getMonth().toString()==0)
-    return date.getFullYear().toString()+'-12-'+date.getDate().toString()
-    else if(date.getMonth().toString()<10)
-    return date.getFullYear().toString()+'-0'+date.getMonth().toString()+'-'+date.getDate().toString()
+    if(date.getMonth().toString()<9)
+    return date.getFullYear().toString()+'-0'+(date.getMonth()+1).toString()+'-'+date.getDate().toString()
     else
-    return date.getFullYear().toString()+'-'+date.getMonth().toString()+'-'+date.getDate().toString()
+    return date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString()
 }
 const showType=ref(false)
 const show_produceDate_pick=ref(false)
@@ -164,7 +162,7 @@ const selectTypeClose=()=>{
 
 const confirm_produceDate_pick=()=>{
     let pickDay=formData.value.com_uploadDate
-    pickProduceDate.value=pickDay.getFullYear().toString()+'-'+(pickDay.getMonth()+1).toString()+'-'+pickDay.getDate().toString()
+    pickProduceDate.value=transformDateString(pickDay)
     show_produceDate_pick.value=false
 }
 

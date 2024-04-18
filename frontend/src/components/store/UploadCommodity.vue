@@ -65,7 +65,7 @@
                 @click="showPriceNodePick(index)"
                 @blur="convert"
                 >
-                {{row.com_pc_time.getFullYear().toString()+'-'+row.com_pc_time.getMonth().toString()+'-'+row.com_pc_time.getDate().toString()}}
+                {{transformDateString(row.com_pc_time)}}
                 </nut-button>
                 <nut-input  v-model="row.com_pc_price" placeholder="请输入当前节点价格" type="number" @blur="convert"></nut-input>
             </nut-space>
@@ -180,12 +180,10 @@ const showBottom=ref(false);
 const mess=ref('')
 
 const transformDateString=(date)=>{
-    if(date.getMonth().toString()==0)
-    return date.getFullYear().toString()+'-12-'+date.getDate().toString()
-    else if(date.getMonth().toString()<10)
-    return date.getFullYear().toString()+'-0'+date.getMonth().toString()+'-'+date.getDate().toString()
+    if(date.getMonth().toString()<9)
+    return date.getFullYear().toString()+'-0'+(date.getMonth()+1).toString()+'-'+date.getDate().toString()
     else
-    return date.getFullYear().toString()+'-'+date.getMonth().toString()+'-'+date.getDate().toString()
+    return date.getFullYear().toString()+'-'+(date.getMonth()+1).toString()+'-'+date.getDate().toString()
 }
 const selectTypeClose=()=>{
     console.log(pickType.value)
@@ -204,22 +202,23 @@ const selectTypeClose=()=>{
 
 const confirm_produceDate_pick=()=>{
     let pickDay=formData.value.com_producedDate
-    pickDay.setMonth(pickDay.getMonth()+1)
     pickProduceDate.value=transformDateString(pickDay)
+    formData.value.com_producedDate=pickDay
+    console.log(formData.value.com_producedDate.getMonth())
     show_produceDate_pick.value=false
 }
 
 const confirm_expirationDate_pick=()=>{
     let pickDay=formData.value.com_expirationDate
-    pickDay.setMonth(pickDay.getMonth()+1)
     pickexpirationDate.value=transformDateString(pickDay)
+    formData.value.com_expirationDate=pickDay
+    console.log(formData.value.com_expirationDate.getMonth())
     show_expirationDate_pick.value=false
 }
 
 const confirm_priceNode_pick=()=>{
     console.log(formData.value.price_curve[temp_index.value])
     formData.value.price_curve[temp_index.value].com_pc_time=temp_node.value;
-    formData.value.price_curve[temp_index.value].com_pc_time.setMonth(formData.value.price_curve[temp_index.value].com_pc_time.getMonth()+1)
     show_priceNode_pick.value=false;
 }
 
@@ -299,6 +298,8 @@ onMounted(()=>{
 
 const addCommodity=()=>{
     var stoID=sessionStorage.getItem("user_id")
+    console.log(formData.value.com_expirationDate.getMonth())
+    console.log(formData.value.com_producedDate.getMonth())
     var com_expirationDate=transformDateString(formData.value.com_expirationDate)
     var com_producedDate=transformDateString(formData.value.com_producedDate)
     var price_curve=[]
@@ -306,8 +307,11 @@ const addCommodity=()=>{
         var nowCurve=formData.value.price_curve[i];
         var date=transformDateString(nowCurve.com_pc_time)+' 00:00:00'
         price_curve.push({com_pc_time:date,com_pc_price:nowCurve.com_pc_price});
+        console.log("date:"+date)
     }
-    
+    console.log(stoID)
+    console.log(com_expirationDate)
+    console.log(com_producedDate)
     console.log(categories.value)
     axios.post('/api/sto/uploadRegularCommodity',  JSON.stringify({ 
             com_name:formData.value.com_name,
