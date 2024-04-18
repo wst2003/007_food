@@ -6,6 +6,10 @@ const app = createApp(App)
 import { Toast } from '@nutui/nutui'
 app.use(Toast)
 app.use(router).mount('#app')
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', 'http://119.8.11.44:8081');
+//     next();
+// });
 
 window.addEventListener('unhandledrejection', event => {
     // 阻止默认的处理方式（即将错误信息输出到控制台）

@@ -267,11 +267,25 @@ const translationStart = () => {
   voiceState.value = false;
 }
 
-const translationEnd = () => {
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const translationEnd = async () => {
   iatRecorder.stop()
   voiceState.value = true;
+  while (iatRecorder.resultText === "")
+    await sleep(1000)
   voiceResult.value = iatRecorder.resultText
-  console.log("111"+voiceResult.value)
+  console.log("111" + voiceResult.value)
+  if(voiceResult.value.length>1)
+    axios.post('/gpt/api/test/gpt', {
+      words: voiceResult.value
+    }).then(response => {
+      console.log(voiceResult.value)
+      console.log("上传完成")
+      console.log(response.data)
+    })
   // axios.post('http://119.8.11.44:8081/api/test/gpt', {
   //   words: voiceResult.value
   // }).then(response => {

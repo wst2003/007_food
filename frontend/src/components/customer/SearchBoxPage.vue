@@ -212,12 +212,12 @@ const translationEnd = () => {
   voiceState.value = true;
   voiceResult.value = iatRecorder.resultText
   console.log(voiceResult.value)
-  axios.post('http://119.8.11.44:6000/api/test/gpt', {
-    words: voiceResult.value
-  }).then(response => {
-    console.log("上传完成")
-    console.log(response.data)
-  })
+  // axios.post('http://119.8.11.44:6000/api/test/gpt', {
+  //   words: voiceResult.value
+  // }).then(response => {
+  //   console.log("上传完成")
+  //   console.log(response.data)
+  // })
 }
 
 </script>

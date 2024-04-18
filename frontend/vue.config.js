@@ -49,7 +49,16 @@ module.exports = defineConfig({
       '/api': {
         target: BaseUrl,
         changeOrigin: true,
-      }
+      },
+      "/gpt": {
+        target: "http://119.8.11.44:8081",
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          "^/gpt": "",
+        },
+      },
+
     }
   }
 })

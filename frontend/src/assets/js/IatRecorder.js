@@ -1,4 +1,3 @@
-import axios from "axios";
 
 const APPID = '50e60955'
 const API_SECRET = 'ZjQ2ZjU3OGI2MWZkNzg4YTA4Y2M1NDJh'
@@ -290,14 +289,7 @@ const IatRecorder = class  {
           str = str + ws[i].cw[0].w
         }
         console.log("识别的结果为：",str)
-        if(str.length>1)
-          axios.post('http://119.8.11.44:8081/api/test/gpt', {
-            words: str
-          }).then(response => {
-            console.log(str)
-            console.log("上传完成")
-            console.log(response.data)
-          })
+
         // 开启wpgs会有此字段(前提：在控制台开通动态修正功能)
         // 取值为 "apd"时表示该片结果是追加到前面的最终结果；取值为"rpl" 时表示替换前面的部分结果，替换范围为rg字段
         if (data.pgs) {
