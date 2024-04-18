@@ -130,7 +130,7 @@ onMounted(()=>{
   indentData.value.pop();
   searchIndent(state.value);
 })
-const indState=["未收货","确认收货","待取货","已核销","过期未取","待评价"]
+const indState=["未收货","确认收货","待取货","已核销","过期未取","已评价"]
 const convert=(data)=>{
   for(let i=0;i<data.length;++i){
     var now=data[i];
