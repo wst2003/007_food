@@ -51,9 +51,9 @@
       </nut-row>
       <nut-row style="display: flex;align-items: center;">
         <Clock style="margin-right: 15px;"/>
-        {{ mysteryBoxInfo.sto_openingTime + " - " + mysteryBoxInfo.sto_closingTime }}
+        {{ timePeriod }}
       </nut-row>
-      <nut-row style="display: flex;align-items: center;">
+      <nut-row style="display: flex;align-items: start;">
         <Ask style="margin-right: 15px;"/>
         {{ mysteryBoxInfo.com_introduction }}
       </nut-row>
@@ -69,9 +69,9 @@
     ">
     {{ "更多推荐" }}
   </div>
-
   <!-- Auto recommendation block -->
   <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore">
+    <div style="display: flex; flex-direction: column;padding: 20px">
       <div v-for="(item, index) in recommendationList" :key="index" style="display: flex;" >
             <div class="commodity-card"
               @click="showDetail(item.mystery_box_ID)">
@@ -105,9 +105,9 @@
                     {{ item.praise_rate }}
                   </div>
                 </div>
-<!--                <div class="distance">-->
-<!--                  {{ item.com_dist + 'km' }}-->
-<!--                </div>-->
+               <div class="distance">
+                 {{ item.com_dist + 'km' }}
+                </div>
               </div>
             </div>
             <div style="background-color: #808080;width: 20%;margin-bottom: 20px;border-radius: 0 20px 20px 0;background: #93B090;box-shadow: -3px 0px 4px 0px rgba(0, 0, 0, 0.25);z-index: 10;
@@ -118,6 +118,7 @@
             </div>
 
     </div>
+  </div>
   </nut-infinite-loading>
 
   <!--Fixed block for shopping cart-->
@@ -161,13 +162,14 @@ import axios from 'axios';
 const buying_quantity = ref(0);// quantity in shopping cart
 // Whenever quantity is modified, synchronize with shopping cart
 watch(buying_quantity, () => {
-  globalData.shoppingCart.modify(mysteryBoxInfo.value.mystery_box_ID, Number(buying_quantity.value), buying_quantity.value * mysteryBoxInfo.value.com_oriPrice)
+  globalData.shoppingCart.modify(mysteryBoxInfo.value.mystery_box_ID, Number(buying_quantity.value), Number((buying_quantity.value * mysteryBoxInfo.value.com_oriPrice).toFixed(2)))
   console.log(globalData.shoppingCart.items)
 })
 
 const router = useRouter();
 const route=useRoute();
 const hasMore = ref(true);
+const timePeriod = ref("");
 
 const recommendationInfo = {
   page_num: 0,
@@ -208,13 +210,13 @@ const loadMore = () => {
 }
 
 onMounted(() => {
-
+  console.log("dfsf")
   axios.get('api/mys/getmysterybox', {
     params: {
       mystery_box_ID: route.query.mystery_box_id,   // TODO: modify mystery_box_ID
     }
   }).then(response => {
-    console.log(response.data[0])
+    // timePeriod.value = response.sto_openingTime.split(':')[0]+':'+response.sto_openingTime.split(':')[1] + " - " + response.sto_closingTime.split(':')[0]+':'+response.sto_closingTime.split(':')[1];
     mysteryBoxInfo.value = response.data[0];
     const images = mysteryBoxInfo.value.contain_images;
     for (let i = 0; i < images.length; ++i)
@@ -325,4 +327,66 @@ const showDetail = (id) => {
   height: 30px;
   background-color: rgba(0, 0, 0, 0.2);
 }
+
+.commodity-card {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.left-tag {
+  border-top-right-radius: 10px;
+  background: #FFF;
+  box-shadow: 3px 7px 3.9px -1px rgba(0, 0, 0, 0.25);
+  padding: 5px 10px 5px 10px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 13px;
+}
+
+.price-tag {
+  padding: 5px 10px 5px 10px;
+  background-color: #93B090;
+  border-top-right-radius: 10px;
+  box-shadow: 1px -1px 3.9px -1px rgba(0, 0, 0, 0.25);
+  color: #FFF;
+  text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  font-family: "Source Han Sans C";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 13px;
+  z-index: 10;
+  position: relative;
+  border: 1px solid #93B090;
+}
+
+.distance {
+  color: #25522c;
+  font-size: 13px;
+  position: absolute;
+  right: 15px;
+  bottom: 10%;
+  font-weight: bolder;
+}
+
+.rate-container {
+  padding: 0 10px;
+  border-radius: 23px;
+  background: #FFF;
+  font-size: 11px;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.25);
+  color: #969696;
+  font-weight: 500;
+  text-align: center;
+  position: absolute;
+  right: 10px;
+  top: 20%
+}
+
+.rate::before {
+  content: url(../../assets/star.svg);
+  margin-right: 4px;
+}
+
 </style>

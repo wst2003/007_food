@@ -121,7 +121,6 @@ const commodityData = ref([]);
 const commodityList = ref([]);
 
 const showDetail = (id) => {
-  console.log("!!!")
   router.push({
     path: '/mysteryBoxDetail',
     query: {

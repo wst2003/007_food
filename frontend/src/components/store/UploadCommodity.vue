@@ -254,21 +254,21 @@ var option = {
     {
       data: [820, 932, 901, 934, 1290, 1330, 1320],
       type: 'line',
-
+      step: 'end',
       areaStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: "#93B090" },  
-                { offset: 1, color: "#FBFCFA" },
-              ]),
+          { offset: 0, color: "#93B090" },
+          { offset: 1, color: "#FBFCFA" },
+        ]),
       },
       itemStyle: {
-            normal: {
-                color: '#93B090', // 点的颜色
-                lineStyle: {
-                    color: '#93B090' // 线的颜色
-                }
-            }
+        normal: {
+          color: '#93B090', // 点的颜色
+          lineStyle: {
+            color: '#93B090' // 线的颜色
+          }
         }
+      }
     }
   ]
 };
