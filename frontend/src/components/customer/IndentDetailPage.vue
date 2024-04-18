@@ -166,8 +166,12 @@
             <nut-button type='primary' v-if="indentDetail.state==0" style="
             margin-top:50vh;
             margin-left:20vw;
-            ">确认收货</nut-button>
+            "
+            @click="confirmReceive()">确认收货</nut-button>
         </div>
+        <nut-popup v-model:visible="showBottom" round position="bottom" style="justify-content: center;align-items: center;" :style="{ height: '20%' }" @close="goBack">
+            <div style="position:absolute;top:30%;left:30%;">{{ mess }}</div>
+        </nut-popup>
     </nut-config-provider>
 </template>
 
@@ -191,7 +195,9 @@ const indentDetail=ref({
 const themeVars = ref({
     primaryColor: '#99af93',
 });
+const showBottom=ref(false)
 
+const mess=ref('')
 const goBack=()=>{
   router.go(-1);
 }
@@ -216,6 +222,30 @@ onMounted(()=>{
     })
     console.log("ind type: "+indentDetail.value.status)
 })
+
+const confirmReceive=()=>{
+    axios.post('/api/cus/changeIndentState',  JSON.stringify({ 
+            ind_id:route.query.ind_id,
+            ind_state:1
+            }), {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            })
+            .then(response => {
+                console.log(response.data.msg);
+                baseClick("商品已确认收货")
+            })    
+            .catch((error) => {
+                console.log('An error occurred:', error);
+            });
+    }
+
+const baseClick = (message) => {
+
+showBottom.value=true;
+mess.value=message
+};
 </script>
 
 <style scoped>

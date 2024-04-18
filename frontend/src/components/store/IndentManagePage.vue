@@ -14,7 +14,7 @@
         v-for="(item,index) in indInfo" :key="index">
             <div style="margin-left:2vw;margin-top:2vh;" v-if="item.delivery_method.toString()===sendOrTake && item.ind_state==status_val">
                 <div style="margin-top:2vh;">
-                    <nut-space>
+                    <nut-space v-if="item.ind_state!=2" >
                         <div style="
                         color: #323232;
                         font-family: 'Source Han Sans CN';
@@ -126,8 +126,9 @@
                     </nut-collapse-item>
                 </nut-collapse>
                 <nut-space v-if="item.ind_state==2">
-                    <nut-input  style="background-color:#93B090;opacity:0.7;"></nut-input>
-                    <nut-button>确定</nut-button>
+                    <div>核销码： </div>
+                    <nut-input v-model="verCode" style="background-color:#93B090;opacity:0.7;"></nut-input>
+                    <nut-button @click="confirmVer(item.ind_verificationCode,item.ind_id)">确定</nut-button>
                 </nut-space>
                 <nut-divider dashed></nut-divider>
                 
@@ -137,6 +138,9 @@
 
 <nut-popup v-model:visible="show" position="bottom">
     <nut-picker v-model="status_val" :columns="columns" title="请选择订单状态" @confirm="show=false" @cancel="show = false" />
+</nut-popup>
+<nut-popup v-model:visible="showBottom" round position="bottom" style="justify-content: center;align-items: center;" :style="{ height: '20%' }">
+    <div style="position:absolute;top:30%;left:30%;">{{ mess }}</div>
 </nut-popup>
 </template>
 
@@ -149,9 +153,13 @@ import { onMounted } from 'vue';
 // import axios from 'axios';
 const router=useRouter();
 const show=ref(false)
+const verCode=ref('')
 // const indList=ref([])
 const indInfo=ref([])
 const sendOrTake=ref('0')
+const showBottom=ref(false)
+
+const mess=ref('')
 const goBack=()=>{
         router.go(-1);
     }
@@ -241,6 +249,32 @@ function pathPlanClick(){
         path:'/pathPlanningPage'
     })
 }
+
+const confirmVer=(ind_verificationCode,ind_id)=>{
+    if(verCode.value===ind_verificationCode){
+        axios.post('/api/cus/changeIndentState',  JSON.stringify({ 
+            ind_id:ind_id,
+            ind_state:3
+            }), {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            })
+            .then(response => {
+                console.log(response.data.msg);
+                baseClick("商品已成功核销")
+            })    
+            .catch((error) => {
+                console.log('An error occurred:', error);
+            });
+    }
+}
+
+const baseClick = (message) => {
+
+showBottom.value=true;
+mess.value=message
+};
 </script>
 
 <style scoped>

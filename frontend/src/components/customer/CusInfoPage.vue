@@ -32,7 +32,8 @@
 import axios from 'axios';
 import { onMounted } from 'vue';
 import { ref } from 'vue'
-const imageURL = "https://food-bank.obs.cn-east-3.myhuaweicloud.com/"
+const imageURL = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"
+
 const formData = ref({
   user_phone: '',
   user_address: '',

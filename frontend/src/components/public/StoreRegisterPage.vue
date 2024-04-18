@@ -70,7 +70,7 @@
                     style="border-radius: 30px;"
                     size="small"
                     multiple
-                    v-model:file-list="formData.license_img"
+                    v-model:file-list="formData.sto_img"
                     accept="image/*"
                     :auto-upload="false"
                     maximum="3">
@@ -130,7 +130,7 @@
     const addressInput = ref(''); 
     import {ref,onMounted} from 'vue';
     import { Checklist } from '@nutui/icons-vue';
-    const BaseUrl = "http://localhost:6000";
+    const BaseUrl = "http://localhost:8000";
     const formData = ref({
         user_phone: '',
         user_password: '',
@@ -360,7 +360,7 @@
         count_logo++;
         });
         formData_Logo.append('user_id',user_id)
-        axios.post('/api/sto/uploadLogoImage',  formData_Logo, {
+        axios.post(BaseUrl+'/api/sto/uploadLogoImage',  formData_Logo, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }
@@ -384,7 +384,7 @@
         count_logo++;
         });
         formData_license.append('sto_id',user_id)
-        axios.post('/api/sto/uploadStoLicense',  formData_license, {
+        axios.post(BaseUrl+'/api/sto/uploadStoLicense',  formData_license, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }
@@ -400,6 +400,7 @@
         })
     }
     function upLoadStoImg(user_id){
+        console.log(user_id)
         const formData_sto = new FormData();
         var count_logo=0;
         formData.value.sto_img.forEach((file) => {
@@ -408,8 +409,8 @@
         formData_sto.append('images', pic); // 将文件添加到FormData中
         count_logo++;
         });
-        formData_sto.append('user_id',user_id)
-        axios.post('/api/sto/uploadLogoImage',  formData_sto, {
+        formData_sto.append('sto_id',user_id)
+        axios.post(BaseUrl+'/api/sto/uploadStoImage',  formData_sto, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }
