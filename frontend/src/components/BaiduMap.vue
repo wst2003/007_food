@@ -154,7 +154,18 @@ function computeDistance(){
         var sto_point=new BaiduMap.Point(element.sto_longitude,element.sto_latitude); 
         var mk = new BaiduMap.Marker(sto_point);
         mkList.push(mk);
+        // 添加信息窗口
+        var opts={
+            width:250,
+            height:80,
+            title:element.sto_name,
+            message:element.sto_name
+        }
         map.addOverlay(mk);
+        mk.addEventListener("click",()=>{
+            var infoWindow = new BMapGL.InfoWindow(element.sto_introduction,opts);
+            map.openInfoWindow(infoWindow,sto_point);
+        })
 
         var promise = new Promise((resolve, reject) => {
             globalData.mapObj.walkingRoute(currentPoint.lat,currentPoint.lng,sto_point.lat,sto_point.lng,false, (distance, duration) => {

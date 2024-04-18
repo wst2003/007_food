@@ -181,7 +181,7 @@ const columns = ref([
   { text: '待取货', value: 2 },
   { text: '已核销', value: 3},
   { text: '超期未取', value: 4},
-  { text: '待评价', value: 5}
+  { text: '已评价', value: 5}
 ]);
 
 const reflectStatusToString=(val)=>{
