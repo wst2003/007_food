@@ -14,6 +14,7 @@ import org.tju.food_007.dto.com.GetCommodityListRequestDTO;
 import org.tju.food_007.service.com.CommodityInfomationService;
 
 import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -60,6 +61,17 @@ public class CommodityInformationController {
     {
         CommodityStatisticsDTO response = commodityInfomationService.getCommodityStatistics(sto_id);
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/commoditydetailbyarray",method = RequestMethod.GET)
+    public ResponseEntity<List<CommodityDetailDTO>> getCommodityInfoByArray
+            (@RequestParam Integer[] com_ID){
+        List<CommodityDetailDTO> response =new ArrayList<>();
+        for(Integer id : com_ID){
+            CommodityDetailDTO tempDTO = commodityInfomationService.getCommodityDetail(id);
+            response.add(tempDTO);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
