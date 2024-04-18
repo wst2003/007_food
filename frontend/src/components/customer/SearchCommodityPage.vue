@@ -237,7 +237,7 @@ const searchCommodity = () => {
 searchCommodity();
 
 const userSearch = () => {
-  commodityData.value = [];
+  commodityList.value = [];
   pageNum.value = 0;
   hasMore.value = true;
   searchCommodity();
@@ -274,17 +274,47 @@ function sleep(ms) {
 const translationEnd = async () => {
   iatRecorder.stop()
   voiceState.value = true;
+  // iatRecorder.resultText="评分大于90分的商品"
   while (iatRecorder.resultText === "")
     await sleep(1000)
   voiceResult.value = iatRecorder.resultText
   console.log("111" + voiceResult.value)
+
+
+
   if(voiceResult.value.length>1)
-    axios.post('/gpt/api/test/gpt', {
+    axios.post('http://119.8.11.44:8081/api/test/gpt', {
       words: voiceResult.value
     }).then(response => {
       console.log(voiceResult.value)
       console.log("上传完成")
-      console.log(response.data)
+      console.log(JSON.stringify(response.data.com_ids.join(',')))
+      axios.get('/api/com/commoditydetailbyarray',{
+        params:{
+          com_ID:response.data.com_ids.join(',')
+          // com_ID:112
+        }
+      }).then(response=>{
+        console.log(response.data)
+        commodityData.value = [];
+        commodityList.value=[];
+        pageNum.value = 0;
+        hasMore.value = false;
+
+        for(let i=0;i<response.data.length;i++){
+          if(response.data[i].com_ID===-1)
+              continue;
+          response.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+response.data[i].commodityImage[0].com_image;
+          response.data[i].com_price=response.data[i].com_oriPrice
+          commodityList.value.push(response.data[i])
+        }
+        // commodityList.value = commodityList.value.concat(response.data);
+        console.log(commodityList.value)
+        loading.value = false;
+        if (response.data.length < pageSize.value) {
+          hasMore.value = false;
+        }
+      })
     })
   // axios.post('http://119.8.11.44:8081/api/test/gpt', {
   //   words: voiceResult.value

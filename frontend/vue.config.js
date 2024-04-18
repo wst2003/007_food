@@ -42,6 +42,7 @@ module.exports = defineConfig({
     }
   },
   devServer: {
+    port:5501,
     client: { //加上这个就好了
       overlay: false,
     },
