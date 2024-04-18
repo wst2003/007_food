@@ -10,6 +10,8 @@ import org.tju.food_007.dto.com.mysterybox.mapper.GetMysteryboxResponseMapper;
 import org.tju.food_007.model.*;
 import org.tju.food_007.repository.com.mysterybox.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -55,6 +57,27 @@ public class GetMysteryboxDetailService {
             GetMysteryboxResponseDTO dto = getMysteryboxResponseMapper.entityToResponse(
                     mysteryBox,commodity,store,user,imageDTOS.toArray(new GetMysteryboxResponseDTO.ImageDTO[0]));
             response.add(dto);
+
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            for(GetMysteryboxResponseDTO res : response){
+                String opentime = res.getSto_openingTime();
+                String closetime = res.getSto_closingTime();
+
+                // 解析时间字符串
+                LocalDateTime openDateTime = LocalDateTime.parse(opentime, inputFormatter);
+                LocalDateTime closeDateTime = LocalDateTime.parse(closetime, inputFormatter);
+
+                // 格式化为所需的字符串形式
+                String formattedOpenTime = openDateTime.format(outputFormatter);
+                String formattedCloseTime = closeDateTime.format(outputFormatter);
+
+                // 更新对象的时间属性
+                res.setSto_openingTime(formattedOpenTime);
+                res.setSto_closingTime(formattedCloseTime);
+
+            }
+
             return response;
         }
 
@@ -125,6 +148,26 @@ public class GetMysteryboxDetailService {
 
         }
 
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        for(GetMysteryboxResponseDTO res : response){
+            String opentime = res.getSto_openingTime();
+            String closetime = res.getSto_closingTime();
+
+            // 解析时间字符串
+            LocalDateTime openDateTime = LocalDateTime.parse(opentime, inputFormatter);
+            LocalDateTime closeDateTime = LocalDateTime.parse(closetime, inputFormatter);
+
+            // 格式化为所需的字符串形式
+            String formattedOpenTime = openDateTime.format(outputFormatter);
+            String formattedCloseTime = closeDateTime.format(outputFormatter);
+
+            // 更新对象的时间属性
+            res.setSto_openingTime(formattedOpenTime);
+            res.setSto_closingTime(formattedCloseTime);
+
+        }
+
         //裁剪
         if(request.getPage_size()!=null &&request.getPage_num()!=null){
             int page_size = request.getPage_size();
@@ -141,6 +184,8 @@ public class GetMysteryboxDetailService {
 
             return response.subList(beg, end);
         }
+
+
         return response;
 
     }
