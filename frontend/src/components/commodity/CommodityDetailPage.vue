@@ -1,6 +1,6 @@
 <template>
   <nut-navbar :title="route.query.name" left-show @click-back="goBackPage">
-    <template #left>
+    <template>
       <div>Back</div>
     </template>
   </nut-navbar>
@@ -85,7 +85,7 @@
   </div>
   <nut-infinite-loading v-model="ifLoading" :has-more="hasMore" @load-more="loadMore">
     <div style="padding: 0 20px;">
-    <div v-for="(item) in recommendationList" :key=item.com_ID>
+    <div v-for="(item) in recommendationList" :key=item.com_ID >
       <div class="commodity-card"
               @click="showDetail(item.com_ID, item.com_position,0, item.com_price, item.com_name, item.com_left)">
               <div style="height: 150px;position: relative;">
@@ -306,6 +306,8 @@ onMounted(() => {
   })
 })
 
+
+
 const timePeriod = ref("");
 
 
@@ -332,18 +334,6 @@ const EnterIndentConfirmPage = () => {
 }
 
 const showDetail = (id, position, distance, price, name, left) => {
-  console.log(name)
-  // router.push({
-  //   path: '/commodityDetail',
-  //   query: {
-  //     id: id,
-  //     position: position,
-  //     distance: distance,
-  //     price: price,
-  //     name: name,
-  //     left: left
-  //   }
-  // })
 
   route.query.id=id;
   route.query.position=position;
@@ -351,13 +341,12 @@ const showDetail = (id, position, distance, price, name, left) => {
   route.query.price=price;
   route.query.name=name;
   route.query.left=left;
-  console.log("use")
-  console.log(route.query);
+
+
   myChart = echarts.init(document.getElementById('main'));
   // myChart.setOption(option);
   buying_quantity.value=globalData.shoppingCart.getItemById(route.query.id).quantity
-  console.log('购物车中的对象：'+globalData.shoppingCart.getItemById(route.query.id))
-  console.log(globalData.shoppingCart.items)
+
   axios.get('api/com/commoditydetail', {
     params: {
       com_ID: route.query.id    // TODO: replace with router's params
@@ -379,12 +368,13 @@ const showDetail = (id, position, distance, price, name, left) => {
       page_num: ++recommendationInfo.page_num
     }
   }).then((res) => {
-    for(let i=0;i<res.data.length;i++){
-      res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
-    }
-    recommendationList.value = res.data;
-    if (res.data.length < recommendationInfo.page_size)
-      hasMore.value = false;
+      for(let i=0;i<res.data.length;i++){
+        res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
+      }
+      recommendationList.value = recommendationList.value.concat(res.data);
+      ifLoading.value = false;
+      if (res.data.length < recommendationInfo.page_size)
+        hasMore.value = false;
   })
 }
 </script>
