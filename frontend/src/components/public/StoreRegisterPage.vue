@@ -130,7 +130,7 @@
     const addressInput = ref(''); 
     import {ref,onMounted} from 'vue';
     import { Checklist } from '@nutui/icons-vue';
-    const BaseUrl = "http://localhost:8000";
+    const BaseUrl = "http://100.80.74.33:8000"
     const formData = ref({
         user_phone: '',
         user_password: '',
