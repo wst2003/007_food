@@ -2,11 +2,14 @@ package org.tju.food_007.service.sto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tju.food_007.dto.com.mysterybox.GetMysteryboxResponseDTO;
 import org.tju.food_007.dto.sto.StoinformationdetailResponseDTO;
 import org.tju.food_007.dto.sto.mapper.StoinformationdetailMapper;
 import org.tju.food_007.model.*;
 import org.tju.food_007.repository.sto.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -57,7 +60,22 @@ public class StoinformationdetailService {
         response = stoinformationdetailMapper.entityToResponse
                 (user.orElseThrow(),store.orElseThrow(),storeCategoriesEntities,storeImageEntities,storeLicenseEntities);
 
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String opentime = response.getSto_openingTime();
+        String closetime = response.getSto_closingTime();
 
+        // 解析时间字符串
+        LocalDateTime openDateTime = LocalDateTime.parse(opentime, inputFormatter);
+        LocalDateTime closeDateTime = LocalDateTime.parse(closetime, inputFormatter);
+
+        // 格式化为所需的字符串形式
+        String formattedOpenTime = openDateTime.format(outputFormatter);
+        String formattedCloseTime = closeDateTime.format(outputFormatter);
+
+        // 更新对象的时间属性
+        response.setSto_openingTime(formattedOpenTime);
+        response.setSto_closingTime(formattedCloseTime);
 
         return response;
 
