@@ -83,8 +83,8 @@
               <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
             </nut-col>
             <nut-col :span="8">
-              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent" > 评价 </nut-tag>
-              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
+<!--              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent" > 评价 </nut-tag>-->
+              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent(indent.sto_id)"> 再来一单 </nut-tag>
             </nut-col>
             </nut-row>
           </nut-cell>
