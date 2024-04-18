@@ -363,6 +363,7 @@ const onClear=(com_id)=>{
     "off_shelf": true
   }).then(response=>{
     console.log(response.data)
+    clear();
     search();
   })
 }

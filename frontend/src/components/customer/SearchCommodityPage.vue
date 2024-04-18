@@ -42,7 +42,7 @@
       <nut-config-provider :theme-vars="themeVars">
         <div class="container">
           <div v-for="(item, index) in commodityList" :key="index" style="width: 45%;">
-            <div class="commodity-card" 
+            <div class="commodity-card"
               @click="showDetail(item.com_ID, item.com_position, item.com_dist, item.com_price, item.com_name, item.com_left)">
               <div style="height: 150px;position: relative;">
                 <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 20px 0 0;" />
@@ -109,7 +109,7 @@ const iatRecorder = new IatRecorder('en_us', 'mandarin', '5f27b6a9')
 
 // import VoiceInput from "@/components/VoiceInput.vue";
 const pageSize = ref(6);
-const pageNum = ref(0);         
+const pageNum = ref(0);
 const sortBy = ref(0);
 const sortOrder = ref(0);
 const loading = ref(true)
@@ -189,7 +189,7 @@ const sortOptionClick = (num)=>{
   sortOptionStatus[key] = true;
   sortBy.value = sortName[key];
   searchCommodity();
-} 
+}
 
 
 const typeOptionClick = (num) => {
@@ -234,7 +234,6 @@ const searchCommodity = () => {
     })
 }
 
-
 searchCommodity();
 
 const userSearch = () => {
@@ -260,8 +259,11 @@ const loadMore = () => {
 
 const voiceState = ref(true);
 const voiceResult = ref("");
+import { showToast } from '@nutui/nutui'
+import '@nutui/nutui/dist/packages/toast/style/css';
 const translationStart = () => {
   iatRecorder.start()
+  showToast.warn("再次点击图标停止")
   voiceState.value = false;
 }
 
@@ -269,13 +271,14 @@ const translationEnd = () => {
   iatRecorder.stop()
   voiceState.value = true;
   voiceResult.value = iatRecorder.resultText
-  console.log(voiceResult.value)
-  axios.post('http://119.8.11.44:6000/api/test/gpt', {
-    words: voiceResult.value
-  }).then(response => {
-    console.log("上传完成")
-    console.log(response.data)
-  })
+  console.log("111"+voiceResult.value)
+  // axios.post('http://119.8.11.44:8081/api/test/gpt', {
+  //   words: voiceResult.value
+  // }).then(response => {
+  //   console.log(voiceResult.value)
+  //   console.log("上传完成")
+  //   console.log(response.data)
+  // })
 }
 
 </script>
@@ -355,7 +358,7 @@ transform: translateY(100%);
 }
 
 .rate-container {
-  
+
   border-radius: 23px;
   background: #FFF;
   font-size: 11px;

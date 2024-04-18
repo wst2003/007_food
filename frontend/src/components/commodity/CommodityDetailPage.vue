@@ -251,7 +251,7 @@ const loadMore = () => {
 const convert = (response) => {
   sto_ID.value=response.sto_ID;
   console.log(sto_ID.value)
-  timePeriod.value = response.sto_openingTime + " - " + response.sto_closingTime;
+  timePeriod.value = response.sto_openingTime.split(':')[0]+':'+response.sto_openingTime.split(':')[1] + " - " + response.sto_closingTime.split(':')[0]+':'+response.sto_closingTime.split(':')[1];
 
   option.xAxis.data = [];
   option.series[0].data = [];
@@ -333,18 +333,24 @@ const EnterIndentConfirmPage = () => {
 
 const showDetail = (id, position, distance, price, name, left) => {
   console.log(name)
-  router.push({
-    path: '/commodityDetail',
-    query: {
-      id: id,
-      position: position,
-      distance: distance,
-      price: price,
-      name: name,
-      left: left
-    }
-  })
+  // router.push({
+  //   path: '/commodityDetail',
+  //   query: {
+  //     id: id,
+  //     position: position,
+  //     distance: distance,
+  //     price: price,
+  //     name: name,
+  //     left: left
+  //   }
+  // })
 
+  route.query.id=id;
+  route.query.position=position;
+  route.query.distance=distance;
+  route.query.price=price;
+  route.query.name=name;
+  route.query.left=left;
   console.log("use")
   console.log(route.query);
   myChart = echarts.init(document.getElementById('main'));
@@ -362,6 +368,7 @@ const showDetail = (id, position, distance, price, name, left) => {
         convert(response.data);
       })
 
+  recommendationInfo.page_num=0;
   axios.get('api/com/searchCommodity', {
     params: {
       content: "",
@@ -375,7 +382,7 @@ const showDetail = (id, position, distance, price, name, left) => {
     for(let i=0;i<res.data.length;i++){
       res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
     }
-    recommendationList.value = recommendationList.value.concat(res.data);
+    recommendationList.value = res.data;
     if (res.data.length < recommendationInfo.page_size)
       hasMore.value = false;
   })

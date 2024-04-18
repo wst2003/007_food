@@ -40,7 +40,7 @@
           </nut-col>
           <nut-col :span="8">
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="goDetail(indent.ind_id)"> 查看详情 </nut-tag>
-            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)" v-if="indent.ind_state=='待评价'"> 评价 </nut-tag>
+            <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent(indent.ind_id)" v-if="indent.ind_state==='确认收货'"> 评价 </nut-tag>
             <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent(indent.sto_id)"> 再来一单 </nut-tag>
           </nut-col>
           </nut-row>
@@ -48,7 +48,7 @@
       </nut-row>
     </nut-tab-pane>
 
-      <nut-tab-pane title="待评价" pane-key="2">
+      <nut-tab-pane title="已评价" pane-key="2">
         <nut-row v-for="indent in indentData" :key="indent.ind_id" >
           <nut-cell style="background-color: #FBFCFA;">
           <nut-row>

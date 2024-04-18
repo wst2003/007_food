@@ -3,6 +3,8 @@ import App from './App.vue'
 import '@nutui/touch-emulator'
 import router from '../router/index.js'; // 导入路由实例
 const app = createApp(App)
+import { Toast } from '@nutui/nutui'
+app.use(Toast)
 app.use(router).mount('#app')
 
 window.addEventListener('unhandledrejection', event => {
