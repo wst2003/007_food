@@ -83,8 +83,8 @@
               <nut-tag color="#EBF5EA" style="color: black;" round> {{ indent.ind_state }} </nut-tag>
             </nut-col>
             <nut-col :span="8">
-              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent" > 评价 </nut-tag>
-              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent"> 再来一单 </nut-tag>  
+<!--              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="gradeIndent" > 评价 </nut-tag>-->
+              <nut-tag color="#EBF5EA" style="color: black;" round plain @click="newIndent(indent.sto_id)"> 再来一单 </nut-tag>
             </nut-col>
             </nut-row>
           </nut-cell>
@@ -130,7 +130,7 @@ onMounted(()=>{
   indentData.value.pop();
   searchIndent(state.value);
 })
-const indState=["未收货","确认收货","待取货","已核销","过期未取","待评价"]
+const indState=["未收货","确认收货","待取货","已核销","过期未取","已评价"]
 const convert=(data)=>{
   for(let i=0;i<data.length;++i){
     var now=data[i];
