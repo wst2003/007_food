@@ -169,7 +169,7 @@ import axios from 'axios';
 const buying_quantity = ref(0);// quantity in shopping cart
 // Whenever quantity is modified, synchronize with shopping cart
 watch(buying_quantity, () => {
-  globalData.shoppingCart.modify(route.query.id, Number(buying_quantity.value), buying_quantity.value * route.query.price)
+  globalData.shoppingCart.modify(route.query.id, Number(buying_quantity.value), Number((buying_quantity.value * route.query.price).toFixed(2)))
   console.log(globalData.shoppingCart.items)
 })
 

@@ -9,6 +9,7 @@ function item(id,quantity,price){
 // shopping cart
 const shoppingCart=reactive({
     items:[],
+    distribution_fee:0, // 配送费
     push(id,quantity,price){
         var item_new=new item(id,quantity,price)
         this.items.push(item_new)
@@ -53,7 +54,7 @@ const shoppingCart=reactive({
         this.items.forEach((element)=>{
             total+=element.price
         })
-        return total
+        return total+this.distribution_fee
     },
     getItemById(id){
         var item={
@@ -64,10 +65,12 @@ const shoppingCart=reactive({
         this.items.forEach((element)=>{
             if(element.id==id){
                 item=element
-          
             }
         })
         return item
+    },
+    modifyDistributionFee(fee){
+        this.distribution_fee=fee
     }
 })
 // user position object
