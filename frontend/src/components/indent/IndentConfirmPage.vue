@@ -33,7 +33,7 @@
                     <div style="display:flex;margin-top: 4%;margin-left:5% ;">
                         <StarFillN color="white" />
                         <div style="color:black;font-family: 'Source Han Sans SC';font-weight:1000;margin-left: 5%;letter-spacing: 0.36">碳排放 </div>
-                        <div style="color:white;position: absolute;right:5%">+0.68kg</div>
+                        <div style="color:white;position: absolute;right:5%">+{{ 0.68*globalData.shoppingCart.items.length }}kg</div>
                     </div>
                     <div style="margin-left: 10%;margin-top: 3%;">
                         <nut-tag round plain color="#E9E9E9" text-color="#999999"> 30min  ></nut-tag>
@@ -108,8 +108,14 @@ const promptShow=ref(false)
 const promptStr=ref("")
 
 function toggleMethod(){
-    if(delivery_method.value==0)delivery_method.value=1;
-    else delivery_method.value=0;
+    if(delivery_method.value==0){
+        delivery_method.value=1;
+        globalData.shoppingCart.modifyDistributionFee(2)
+    }
+    else {
+        delivery_method.value=0;
+        globalData.shoppingCart.modifyDistributionFee(0)
+    }
 }
 
 function indent_item(response_obj){
@@ -130,10 +136,10 @@ function indent_item(response_obj){
     this.sto_id=response_obj.sto_ID
     this.distance="1.2公里"
     this.duration="10分钟"
-    console.log(response_obj.com_ID)
-    console.log(globalData.shoppingCart.getItemById(response_obj.com_ID))
-    this.ind_quantity=globalData.shoppingCart.getItemById(response_obj.com_ID).quantity
-    this.commodity_money=globalData.shoppingCart.getItemById(response_obj.com_ID).price
+    // console.log(response_obj.com_ID)
+    console.log(globalData.shoppingCart.getItemById(this.com_id))
+    this.ind_quantity=globalData.shoppingCart.getItemById(this.com_id).quantity
+    this.commodity_money=globalData.shoppingCart.getItemById(this.com_id).price
     
 }
 
@@ -168,8 +174,6 @@ const indent_items=reactive({
         })
     }
 })
-
-
 onMounted(()=>{
     console.log("当前购物车：")
     console.log(globalData.shoppingCart.items)
@@ -200,7 +204,7 @@ onMounted(()=>{
         }).then(response=>{
             console.log("拉取盲盒详情返回：")
             console.log(response.data)
-            if(response.data.com_ID!=-1){
+            if(response.data[0].mystery_box_ID!=0){
                 // 若返回ID不为-1，说明是盲盒商品
                 // If the ID returned is not -1, it means it's a mystery commodity
                 indent_items.items.push(new indent_item(response.data[0]))

@@ -15,7 +15,7 @@
     <script setup>
     import {ref } from 'vue';
     import axios from 'axios';
-    const BaseUrl = "http://100.80.74.33:8000"
+    // const BaseUrl = "http://100.80.74.33:8000"
     const images=ref([])
     const submit=()=>{
         const formData = new FormData();
@@ -27,7 +27,7 @@
         count++;
     });
         formData.append('com_id',102)
-        axios.post(BaseUrl+'/api/sto/uploadImage',  formData, {
+        axios.post('/api/sto/uploadImage',  formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
         }

@@ -73,9 +73,16 @@
         v-model="commentData.comment" 
         limit-show :max-length="200" :rows="5" />
     </div>
+    <nut-cell style="position:absolute;left:10%;width:305px;">
+        <nut-checkbox v-model="recommend">推荐该商品
+            <template #checkedIcon>
+                <Checklist color="green" />
+            </template>
+        </nut-checkbox>
+    </nut-cell>
     <nut-button style="
     position:fixed;
-    margin-top:5vh;
+    margin-top:8vh;
     margin-left:60vw;
     width: 118px;
     height: 44px;
@@ -94,6 +101,7 @@
 
 <script lang="js" setup>
     import axios from 'axios';
+    import { Checklist } from '@nutui/icons-vue';
     import {  useRouter,useRoute } from 'vue-router';
     //import axios from 'axios';
     import { ref } from 'vue';
@@ -111,6 +119,7 @@
     const goBack=()=>{
         router.go(-1);
     }
+    const recommend=ref(true)
     const submitComment=()=>{
         console.log({
           cus_id:sessionStorage.getItem("user_id"),
@@ -121,6 +130,10 @@
           cmt_content:commentData.value.comment,
           rating_type:commentData.value.rating_type
         })
+        if(recommend.value)
+            commentData.value.rating_type=1
+        else
+            commentData.value.rating_type=0
         axios.post('/api/cus/rating',JSON.stringify({ 
             cus_id:sessionStorage.getItem("user_id"),
             ind_id:String(route.query.ind_id),

@@ -75,7 +75,7 @@ const login = () => {
     if(phoneStatus.value=='error'){
         baseClick(phoneError.value);
     }else{
-      axios.post(BaseUrl+'/api/pub/login',  JSON.stringify({ 
+      axios.post('/api/pub/login',  JSON.stringify({ 
         user_phone:phoneNumber.value,
         user_password:codeNumber.value
       }), {
