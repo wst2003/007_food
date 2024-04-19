@@ -53,6 +53,7 @@ public class GenerateIndentService {
         generateIndentRepository.save(aimed_ind);
         return;
     }
+
     @Transactional
     public String GenerateIndent(GenerateIndentRequestDTO requestDTO){
         UserEntity targetUser=userUploadLogoImageUserRepository.findByUserId(Integer.valueOf(requestDTO.getCus_Id()));

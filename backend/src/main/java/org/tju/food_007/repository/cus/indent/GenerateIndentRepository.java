@@ -15,6 +15,5 @@ import java.util.List;
 public interface GenerateIndentRepository extends JpaRepository<IndentEntity, Integer> {
     ArrayList<IndentEntity> findByIndIdIn(List<Integer> indIds);
     IndentEntity findByIndId(Integer indId);
-    @NotNull
     ArrayList<IndentEntity> findAll();
 }
