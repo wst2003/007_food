@@ -158,6 +158,7 @@ import {useRoute, useRouter} from 'vue-router';
 
 import globalData from "../../global.js"
 import axios from 'axios';
+const BaseUrl = "http://localhost:8000"
 
 const buying_quantity = ref(0);// quantity in shopping cart
 // Whenever quantity is modified, synchronize with shopping cart
@@ -190,7 +191,7 @@ const swiperRef = ref();
 const loadMore = () => {
 
   setTimeout(() => {
-    axios.get('api/com/searchCommodity', {
+    axios.get(BaseUrl+'api/com/searchCommodity', {
       params: {
         content: "",
         com_type: "",
@@ -211,7 +212,7 @@ const loadMore = () => {
 
 onMounted(() => {
   console.log("dfsf")
-  axios.get('api/mys/getmysterybox', {
+  axios.get(BaseUrl+'api/mys/getmysterybox', {
     params: {
       mystery_box_ID: route.query.mystery_box_id,   // TODO: modify mystery_box_ID
     }
@@ -225,7 +226,7 @@ onMounted(() => {
     buying_quantity.value=globalData.shoppingCart.getItemById(mysteryBoxInfo.value.mystery_box_ID).quantity
   })
 
-  axios.get('api/mys/getmysterybox', {
+  axios.get(BaseUrl+'api/mys/getmysterybox', {
     params: {
       page_size: recommendationInfo.page_size,
       page_num: ++recommendationInfo.page_num
@@ -263,7 +264,7 @@ const EnterIndentConfirmPage = () => {
 }
 
 const showDetail = (id) => {
-  axios.get('api/mys/getmysterybox', {
+  axios.get(BaseUrl+'api/mys/getmysterybox', {
     params: {
       mystery_box_ID: id,   // TODO: modify mystery_box_ID
     }

@@ -180,6 +180,7 @@ import axios from 'axios'
 import {onMounted, ref} from 'vue';
 import { Clock ,Locationg3,Edit} from '@nutui/icons-vue';
 import {  useRouter,useRoute } from 'vue-router';
+const BaseUrl = "http://localhost:8000"
 const router=useRouter();
 const route=useRoute();
 const commodity_name=ref('商品名称')
@@ -203,7 +204,7 @@ const goBack=()=>{
 }
 onMounted(()=>{
     console.log( route.query.ind_id)
-    axios.get('/api/cus/getIndById', {
+    axios.get(BaseUrl+'/api/cus/getIndById', {
       params: {
         ind_id: route.query.ind_id,
       }
@@ -224,7 +225,7 @@ onMounted(()=>{
 })
 
 const confirmReceive=()=>{
-    axios.post('/api/cus/changeIndentState',  JSON.stringify({ 
+    axios.post(BaseUrl+'/api/cus/changeIndentState',  JSON.stringify({ 
             ind_id:route.query.ind_id,
             ind_state:1
             }), {

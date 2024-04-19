@@ -105,6 +105,7 @@
     import {  useRouter,useRoute } from 'vue-router';
     //import axios from 'axios';
     import { ref } from 'vue';
+    const BaseUrl = "http://localhost:8000"
     // import globalData from"../../global.js"
     const router=useRouter();
     const route=useRoute();
@@ -134,7 +135,7 @@
             commentData.value.rating_type=1
         else
             commentData.value.rating_type=0
-        axios.post('/api/cus/rating',JSON.stringify({ 
+        axios.post(BaseUrl+'/api/cus/rating',JSON.stringify({ 
             cus_id:sessionStorage.getItem("user_id"),
             ind_id:String(route.query.ind_id),
             food_quality_score:commentData.value.food_quality,

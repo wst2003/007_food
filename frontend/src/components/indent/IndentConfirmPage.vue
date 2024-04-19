@@ -96,6 +96,7 @@ import { onMounted, reactive,ref,computed} from 'vue';
 // import { useRoute,useRouter } from 'vue-router';
 import globalData from"../../global.js"
 import axios from 'axios';
+const BaseUrl = "http://localhost:8000"
 import { StarFillN } from '@nutui/icons-vue';
 // import { showToast } from '@nutui/nutui's
 // import { useRouter } from 'vue-router';
@@ -181,7 +182,7 @@ onMounted(()=>{
         // 对于购物车中的每个商品，分别调用接口 
         // For every single commodity in shopping cart, invoke api individually
         let tmp_sto_id=0;
-        axios.get('/api/com/commoditydetail',{
+        axios.get(BaseUrl+'/api/com/commoditydetail',{
             params:{
                 com_ID:globalData.shoppingCart.items[i].id
             }
@@ -196,7 +197,7 @@ onMounted(()=>{
                 indent_items.items.push(new indent_item(response.data))
                 tmp_sto_id=response.data.sto_ID
             }
-            return axios.get("/api/mys/getmysterybox",{
+            return axios.get(BaseUrl+"/api/mys/getmysterybox",{
                 params:{
                     mystery_box_ID:globalData.shoppingCart.items[i].id
                 }
@@ -213,7 +214,7 @@ onMounted(()=>{
             console.log(indent_items.items)
 
             // 拉取商家详细信息，用于获取配送/自取距离
-            return axios.get('api/sto/informationdetail',{
+            return axios.get(BaseUrl+'api/sto/informationdetail',{
                     params:{
                         sto_ID:response.data[0].sto_ID
                     }
@@ -240,7 +241,7 @@ onMounted(()=>{
 const generateIndent=()=>{
     console.log('当前用户ID'+sessionStorage.getItem("user_id"))
     console.log(delivery_address)
-    axios.post('/api/cus/generateIndent',JSON.stringify({ 
+    axios.post(BaseUrl+'/api/cus/generateIndent',JSON.stringify({ 
             cus_Id:cus_Id,
             com_arr:indent_items.items,
             delivery_method:delivery_method.value,

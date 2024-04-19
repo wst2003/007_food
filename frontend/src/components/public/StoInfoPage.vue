@@ -26,6 +26,7 @@
 </template>
 <script lang="js" setup>
 import axios from 'axios';
+const BaseUrl = "http://localhost:8000"
 import { onMounted } from 'vue';
 import { ref } from 'vue'
 const formData = ref({
@@ -50,7 +51,7 @@ const goBack=()=>{
   router.go(-1);
 }
 onMounted(()=>{
-  axios.get('/api/sto/informationdetail',{
+  axios.get(BaseUrl+'/api/sto/informationdetail',{
       params: {
         sto_ID:sessionStorage.getItem("user_id")
       }
@@ -70,7 +71,7 @@ onMounted(()=>{
         })
 })
 const quit=()=>{
-  axios.post('/api/pub/login/quit',  JSON.stringify({ 
+  axios.post(BaseUrl+'/api/pub/login/quit',  JSON.stringify({ 
               user_id:sessionStorage.getItem("user_id")
             }), {
             headers: {

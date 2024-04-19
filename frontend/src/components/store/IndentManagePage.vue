@@ -147,6 +147,7 @@
 
 <script setup>
 import axios from 'axios';
+const BaseUrl = "http://localhost:8000"
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
@@ -203,20 +204,20 @@ const reflectStatusToString=(val)=>{
 }
 
 onMounted(()=>{
-    axios.get('/api/sto/getIndentList',{
+    axios.get(BaseUrl+'/api/sto/getIndentList',{
     params:{
         sto_id:parseInt(sessionStorage.getItem("user_id")),
     }
   }).then(response=>{
     console.log(response.data)
     var indList=response.data.map(num => Number(num));
-    axios.get('/api/cus/getIndById', {
+    axios.get(BaseUrl+'/api/cus/getIndById', {
       params: {
         ind_id: decodeURIComponent(indList)
       }
     }).then(res => {
         res.data.forEach(indDetail=>{
-        axios.get('/api/cus/getInfo',{
+        axios.get(BaseUrl+'/api/cus/getInfo',{
             params: {
                 cus_id:indDetail.cus_id
             }
@@ -256,7 +257,7 @@ function pathPlanClick(){
 
 const confirmVer=(input_vercode,ind_verificationCode,ind_id)=>{
     if(input_vercode===ind_verificationCode){
-        axios.post('/api/cus/changeIndentState',  JSON.stringify({ 
+        axios.post(BaseUrl+'/api/cus/changeIndentState',  JSON.stringify({ 
             ind_id:ind_id,
             ind_state:3
             }), {

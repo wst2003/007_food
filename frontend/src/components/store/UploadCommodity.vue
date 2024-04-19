@@ -141,6 +141,7 @@ import * as echarts from 'echarts';
 import { onMounted } from 'vue';
 // import globalData from"../../global.js"
 import axios from 'axios';
+const BaseUrl = "http://localhost:8000"
 const uploadRef = ref(null);
 const categories=ref([])
 const router=useRouter();
@@ -290,7 +291,7 @@ const convert=()=>{
 
 onMounted(()=>{
     myChart = echarts.init(document.getElementById('main'));
-    axios.get('/api/com/getCategories', {
+    axios.get(BaseUrl+'/api/com/getCategories', {
     }).then((res) => {
       categoryType.value=res.data
     })
@@ -313,7 +314,7 @@ const addCommodity=()=>{
     console.log(com_expirationDate)
     console.log(com_producedDate)
     console.log(categories.value)
-    axios.post('/api/sto/uploadRegularCommodity',  JSON.stringify({ 
+    axios.post(BaseUrl+'/api/sto/uploadRegularCommodity',  JSON.stringify({ 
             com_name:formData.value.com_name,
             com_introduction:formData.value.introduction,
             com_left:formData.value.com_left,
@@ -342,7 +343,7 @@ const addCommodity=()=>{
                 count++;
             });
             formDataPic.append('com_id',response.data.com_Id)
-            axios.post('/api/sto/uploadImage',  formDataPic, {
+            axios.post(BaseUrl+'/api/sto/uploadImage',  formDataPic, {
             headers: {
                 'Content-Type': 'multipart/form-data'
                 }

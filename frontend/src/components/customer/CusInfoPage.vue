@@ -33,7 +33,7 @@ import axios from 'axios';
 import { onMounted } from 'vue';
 import { ref } from 'vue'
 const imageURL = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"
-
+const BaseUrl = "http://localhost:8000"
 const formData = ref({
   user_phone: '',
   user_address: '',
@@ -55,7 +55,7 @@ const goBack=()=>{
   router.go(-1);
 }
 onMounted(()=>{
-  axios.get('/api/cus/getInfo',{
+  axios.get(BaseUrl+'/api/cus/getInfo',{
       params: {
         cus_id:sessionStorage.getItem("user_id")
       }
@@ -77,7 +77,7 @@ onMounted(()=>{
         })
 })
 const quit=()=>{
-  axios.post('/api/pub/login/quit',  JSON.stringify({ 
+  axios.post(BaseUrl+'/api/pub/login/quit',  JSON.stringify({ 
               user_id:sessionStorage.getItem("user_id")
             }), {
             headers: {

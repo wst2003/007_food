@@ -39,6 +39,7 @@ import { onMounted ,reactive,ref} from 'vue';
 import qs from 'qs';
 import BaiduMap from 'BaiduMap'
 import axios from 'axios';
+const BaseUrl = "http://localhost:8000"
 import globalData from '../../global.js'
 import { useRouter } from 'vue-router';
 const router=useRouter();
@@ -139,7 +140,7 @@ function afterLocation(lat,lng){
     initalization(lat,lng) // 初始化地图与位置信息
     var ind_ids=[]
     console.log('SessionStorage中的id '+sessionStorage.getItem("user_id"))
-    axios.get('/api/sto/getIndentList', {
+    axios.get(BaseUrl+'/api/sto/getIndentList', {
         params: {
             // sto_id: 29,
             sto_id: sessionStorage.getItem("user_id"), //To be replaced 
@@ -150,7 +151,7 @@ function afterLocation(lat,lng){
         console.log(res.data)
         ind_ids=res.data
 
-        return axios.get('/api/cus/getIndById',{
+        return axios.get(BaseUrl+'/api/cus/getIndById',{
             params: {
                 ind_id: ind_ids,
                 // ind_id: [1,2,3,4,5],
@@ -177,7 +178,7 @@ function afterLocation(lat,lng){
         });
         console.log('今日需配送的订单:')
         console.log(destinations)
-        return axios.get('/api/sto/informationdetail',{
+        return axios.get(BaseUrl+'/api/sto/informationdetail',{
             params: {
                 // sto_ID: 29,
               sto_ID: sessionStorage.getItem("user_id"), //To be replaced 

@@ -61,5 +61,6 @@ module.exports = defineConfig({
       },
 
     }
-  }
+  },
+  parallel:false
 })

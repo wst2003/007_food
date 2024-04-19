@@ -133,6 +133,7 @@
     const mess=ref('')
     import axios from 'axios';
     import { useRouter } from 'vue-router';
+    const BaseUrl = "http://localhost:8000"
     const router = useRouter();
     
     const themeVars = ref({
@@ -245,7 +246,7 @@
         }else if(formData.value.user_address===''){
             baseClick('请输入地址')
         }else{
-            axios.post('/api/pub/register/customer',  JSON.stringify({ 
+            axios.post(BaseUrl+'/api/pub/register/customer',  JSON.stringify({ 
                 user_phone:formData.value.user_phone,
                 user_password:formData.value.user_password,
                 user_address:formData.value.user_address,
@@ -315,7 +316,7 @@
         count_logo++;
         });
         formData_Logo.append('user_id',user_id)
-        axios.post('/api/sto/uploadLogoImage',  formData_Logo, {
+        axios.post(BaseUrl+'/api/sto/uploadLogoImage',  formData_Logo, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }

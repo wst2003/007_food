@@ -103,6 +103,7 @@
     const mess=ref('')
     const cus_payPassword_val=ref('')
     import axios from 'axios';
+    const BaseUrl = "http://localhost:8000"
     import { useRouter } from 'vue-router';
     const router = useRouter();
     
@@ -193,7 +194,7 @@
             baseClick('请输入地址')
         }else{
             console.log(formData.value.user_address)
-            axios.post('/api/pub/register/customer',  JSON.stringify({ 
+            axios.post(BaseUrl+'/api/pub/register/customer',  JSON.stringify({ 
                 user_phone:formData.value.user_phone,
                 user_password:formData.value.user_password,
                 user_address:formData.value.user_address,

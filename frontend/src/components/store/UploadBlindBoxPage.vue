@@ -98,6 +98,7 @@ import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 // import globalData from"../../global.js"
 import axios from 'axios';
+const BaseUrl = "http://localhost:8000"
 import { onMounted } from 'vue';
 const router=useRouter();
 const formData=ref({
@@ -126,7 +127,7 @@ const showBottom=ref(false);
 const mess=ref('')
 
 onMounted(()=>{
-    axios.get('/api/com/getCategories', {
+    axios.get(BaseUrl+'/api/com/getCategories', {
     }).then((res) => {
       categoryType.value=res.data
     })
@@ -169,7 +170,7 @@ const confirm_produceDate_pick=()=>{
 const addCommodity=()=>{
     var stoID=sessionStorage.getItem("user_id")
     var com_uploadDate=transformDateString(formData.value.com_uploadDate)
-    axios.post('/api/sto/uploadMysteryBox',  JSON.stringify({ 
+    axios.post(BaseUrl+'/api/sto/uploadMysteryBox',  JSON.stringify({ 
             com_name:formData.value.com_name,
             com_introduction:formData.value.introduction,
             com_left:formData.value.com_left,
@@ -199,7 +200,7 @@ const addCommodity=()=>{
                 count++;
             });
             formDataPic.append('com_id',response.data.com_ID)
-            axios.post('/api/sto/uploadImage',  formDataPic, {
+            axios.post(BaseUrl+'/api/sto/uploadImage',  formDataPic, {
             headers: {
                 'Content-Type': 'multipart/form-data'
                 }

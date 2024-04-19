@@ -204,6 +204,7 @@ import {onMounted, ref} from "vue";
 import { Search2 } from '@nutui/icons-vue'
 import axios from "axios";
 import {useRoute, useRouter} from "vue-router";
+const BaseUrl = "http://localhost:8000"
 const sto_id=sessionStorage.getItem('user_id');
 const onClickBack = () => {
   router.go(-1);
@@ -311,7 +312,7 @@ const search=()=>{
   if(nowType==="全部")
     nowType=null;
   pageNum.value++;
-  axios.get('/api/com/searchCommodity',{
+  axios.get(BaseUrl+'/api/com/searchCommodity',{
     params:{
       content:query.value,
       com_type:nowType,
@@ -343,7 +344,7 @@ const search=()=>{
 
 const onLeftChange=(com_id,com_left)=>{
   console.log(com_id,com_left);
-  axios.post('/api/com/editCommodity',{
+  axios.post(BaseUrl+'/api/com/editCommodity',{
     "com_ID": com_id,
     "com_left": com_left,
     "off_shelf": false
@@ -357,7 +358,7 @@ const onLeftChange=(com_id,com_left)=>{
 // }
 
 const onClear=(com_id)=>{
-  axios.post('/api/com/editCommodity',{
+  axios.post(BaseUrl+'/api/com/editCommodity',{
     "com_ID": com_id,
     "com_left": 0,
     "off_shelf": true

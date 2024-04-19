@@ -160,6 +160,7 @@
     const showBottom=ref(false)
     const mess=ref('')
     import axios from 'axios';
+    const BaseUrl = "http://localhost:8000"
     import { useRouter } from 'vue-router';
     const router = useRouter();
     
@@ -271,7 +272,7 @@
         }else if(formData.value.user_address===''){
             baseClick('请输入地址')
         }else{
-            axios.post('/api/pub/register/store',  JSON.stringify({ 
+            axios.post(BaseUrl+'/api/pub/register/store',  JSON.stringify({ 
                 user_phone:formData.value.user_phone,
                 user_password:formData.value.user_password,
                 user_address:formData.value.user_address,
@@ -360,7 +361,7 @@
         count_logo++;
         });
         formData_Logo.append('user_id',user_id)
-        axios.post('/api/sto/uploadLogoImage',  formData_Logo, {
+        axios.post(BaseUrl+'/api/sto/uploadLogoImage',  formData_Logo, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }
@@ -384,7 +385,7 @@
         count_logo++;
         });
         formData_license.append('sto_id',user_id)
-        axios.post('/api/sto/uploadStoLicense',  formData_license, {
+        axios.post(BaseUrl+'/api/sto/uploadStoLicense',  formData_license, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }
@@ -410,7 +411,7 @@
         count_logo++;
         });
         formData_sto.append('sto_id',user_id)
-        axios.post('/api/sto/uploadStoImage',  formData_sto, {
+        axios.post(BaseUrl+'/api/sto/uploadStoImage',  formData_sto, {
         headers: {
         'Content-Type': 'multipart/form-data'
         }

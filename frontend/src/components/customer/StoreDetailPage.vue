@@ -86,6 +86,7 @@
 import { useRouter,useRoute } from 'vue-router';
 import storeBackground from '../../assets/store-background.png'
 import axios from 'axios';
+const BaseUrl = "http://localhost:8000"
 import {ref, reactive, onMounted} from 'vue';
 const router = useRouter();
 const route=useRoute();
@@ -131,7 +132,7 @@ const onClick = () => {
 
 const changeTabCb = () => {
   if (tabValue.value == '1' && commentList.value.length === 0) {
-    axios.get('/api/cus/getComment', {
+    axios.get(BaseUrl+'/api/cus/getComment', {
       params: {
         sto_ID: route.query.sto_id,   // TODO: modify to real ID
         page_num: commentInfo.page_num,
@@ -146,7 +147,7 @@ const changeTabCb = () => {
 
 const getStoreInfoData = () => {
   console.log(route.query.sto_id)
-  axios.get('/api/sto/informationdetail', {
+  axios.get(BaseUrl+'/api/sto/informationdetail', {
     params: {
       sto_ID: route.query.sto_id    // TODO: modify to real ID
     }
@@ -159,7 +160,7 @@ const getStoreInfoData = () => {
     loading.value = false;
   })
 
-  axios.get('/api/sto/stocategories', {
+  axios.get(BaseUrl+'/api/sto/stocategories', {
     params: {
       sto_ID: route.query.sto_id
     }
@@ -179,7 +180,7 @@ const showLicence = () => {
 const change = (index) => {
   pageInfo.com_type = categoryData.category[index].catName;
   pageInfo.page_num = 1;
-  axios.get('/api/com/commoditylist', {
+  axios.get(BaseUrl+'/api/com/commoditylist', {
     params: {
       sto_ID: route.query.sto_id,
       page_size: pageInfo.page_size,
@@ -192,7 +193,7 @@ const change = (index) => {
 };
 
 const loadMore = () => {
-  axios.get('/api/com/commoditylist', {
+  axios.get(BaseUrl+'/api/com/commoditylist', {
     params: {
       sto_ID: route.query.sto_id,
       page_size: pageInfo.page_size,
@@ -205,7 +206,7 @@ const loadMore = () => {
 }
 
 const cmtLoadMore = () => {
-  axios.get('/api/cus/getComment', {
+  axios.get(BaseUrl+'/api/cus/getComment', {
     params: {
       sto_ID: route.query.sto_id,
       page_num: commentInfo.page_num,

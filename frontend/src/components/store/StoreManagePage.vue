@@ -142,6 +142,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+const BaseUrl = "http://localhost:8000"
 import { ref, reactive } from 'vue';
 import { onBeforeMount } from 'vue';
 const router = useRouter();
@@ -208,7 +209,7 @@ const changeTabCb = (title) => {
     }
     curPageCommodity.value = [];
     pageInfo.page_num = 0;
-    axios.get('/api/com/commoditylist',{
+    axios.get(BaseUrl+'/api/com/commoditylist',{
         params: {
             sto_ID: storeID,
             page_size: pageInfo.page_size,
@@ -227,7 +228,7 @@ const changeTabCb = (title) => {
 import qs from 'qs'
 const getStoreInfoData = () => {
     console.log(storeID)
-    axios.get('/api/sto/informationdetail', {
+    axios.get(BaseUrl+'/api/sto/informationdetail', {
         params: {
             sto_ID: [storeID]    // TODO: modify to real ID
         },
@@ -243,7 +244,7 @@ const getStoreInfoData = () => {
         loading.value = false;
     })
 
-    axios.get('/api/sto/stocategories', {
+    axios.get(BaseUrl+'/api/sto/stocategories', {
         params: {
             sto_ID: storeID
         }
@@ -269,7 +270,7 @@ const change = (index) => {
     hasMore.value = true;
     pageInfo.com_type = categoryData.category[index].catName;
     pageInfo.page_num = 1;
-    axios.get('/api/com/commoditylist', {
+    axios.get(BaseUrl+'/api/com/commoditylist', {
         params: {
             sto_ID: storeID,
             page_size: pageInfo.page_size,
@@ -286,7 +287,7 @@ const change = (index) => {
 
 const loadMore = () => {
     setTimeout(() => {
-        axios.get('/api/com/commoditylist', {
+        axios.get(BaseUrl+'/api/com/commoditylist', {
             params: {
                 sto_ID: storeID,
                 page_size: pageInfo.page_size,
@@ -325,7 +326,7 @@ const goToManagePage = ()=>{
 }
 
 const getStatistics = ()=>{
-    axios.get('/api/com/ProductStatistics',{
+    axios.get(BaseUrl+'/api/com/ProductStatistics',{
         params:{
             sto_id: storeID
         }

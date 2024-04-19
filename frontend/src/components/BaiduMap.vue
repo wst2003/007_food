@@ -217,11 +217,11 @@ function computeDistance(){
         console.error('Error:', error);
     });
 } 
-
+const BaseUrl = "http://localhost:8000"
 function afterLocation(lat,lng){
     initalizatin(lat,lng)
     var sto_ids=[]
-    axios.get('/api/pub/map',{
+    axios.get(BaseUrl+'/api/pub/map',{
     params:{
         cur_latitude:lat,
         cur_longitude:lng

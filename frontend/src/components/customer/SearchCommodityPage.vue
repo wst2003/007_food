@@ -105,6 +105,7 @@ import axios from "axios";
 import BaiduMap from '../BaiduMap.vue'
 import IatRecorder from '@/assets/js/IatRecorder.js'
 import { reactive } from "vue";
+const BaseUrl = "http://localhost:8000"
 const iatRecorder = new IatRecorder('en_us', 'mandarin', '5f27b6a9')
 
 // import VoiceInput from "@/components/VoiceInput.vue";
@@ -212,7 +213,7 @@ const typeOptionClick = (num) => {
 
 const searchCommodity = () => {
   pageNum.value++;
-  axios.get('/api/com/searchCommodity', {
+  axios.get(BaseUrl+'/api/com/searchCommodity', {
     params: {
       content: query_content.value,
       com_type: comType.value,
@@ -283,13 +284,16 @@ const translationEnd = async () => {
 
 
   if(voiceResult.value.length>1)
-    axios.post('http://119.8.11.44:8081/api/test/gpt', {
+    axios.post(
+  // 'http://119.8.11.44:8081/api/test/gpt', 
+  'http://localhost:8081/api/test/gpt', 
+  {
       words: voiceResult.value
     }).then(response => {
       console.log(voiceResult.value)
       console.log("上传完成")
       console.log(JSON.stringify(response.data.com_ids.join(',')))
-      axios.get('/api/com/commoditydetailbyarray',{
+      axios.get(BaseUrl+'/api/com/commoditydetailbyarray',{
         params:{
           com_ID:response.data.com_ids.join(',')
           // com_ID:112

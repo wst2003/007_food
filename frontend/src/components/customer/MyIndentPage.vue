@@ -99,6 +99,7 @@
 import axios from 'axios';
 import {onMounted, ref} from 'vue';
 import {  useRouter } from 'vue-router';
+const BaseUrl = "http://localhost:8000"
 const state = ref('1');
 const router=useRouter();
 // const route=useRoute();
@@ -166,7 +167,7 @@ const convert=(data)=>{
 
 const searchIndent=(state)=>{
   console.log(state.toString())
-  axios.get('/api/cus/getInd',{
+  axios.get(BaseUrl+'/api/cus/getInd',{
     params:{
       cus_ID:parseInt(cus_ID),
       state:(state.paneKey=='1'||state=='1'?null:5)

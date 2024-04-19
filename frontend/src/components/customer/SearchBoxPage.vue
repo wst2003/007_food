@@ -87,6 +87,7 @@ import axios from "axios";
 import BaiduMap from '../BaiduMap.vue'
 import IatRecorder from '@/assets/js/IatRecorder.js'
 import { reactive } from "vue";
+const BaseUrl = "http://localhost:8000"
 const iatRecorder = new IatRecorder('en_us', 'mandarin', '5f27b6a9')
 
 // import VoiceInput from "@/components/VoiceInput.vue";
@@ -151,7 +152,7 @@ const sortOptionClick = (num)=>{
 const searchBox = () => {
   pageNum.value++;
   console.log(sortBy.value)
-  axios.get('/api/mys/getmysterybox', {
+  axios.get(BaseUrl+'/api/mys/getmysterybox', {
     params: {
       sort_by: sortBy.value,
       page_size: pageSize.value,
