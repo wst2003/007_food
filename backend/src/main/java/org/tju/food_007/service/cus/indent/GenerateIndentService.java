@@ -8,11 +8,14 @@ import org.tju.food_007.dto.cus.indent.GenerateIndentRequestDTO;
 import org.tju.food_007.dto.cus.indent.IndentCommodity;
 import org.tju.food_007.dto.cus.mapper.GenerateIndentComRequstMapper;
 import org.tju.food_007.dto.cus.mapper.GenerateIndentRequestMapper;
+import org.tju.food_007.model.CommodityEntity;
 import org.tju.food_007.model.IndentCommodityEntity;
 import org.tju.food_007.model.IndentEntity;
 import org.tju.food_007.model.UserEntity;
+import org.tju.food_007.repository.com.CommodityDetailRepository;
 import org.tju.food_007.repository.cus.indent.GenerateIndentComRepository;
 import org.tju.food_007.repository.cus.indent.GenerateIndentRepository;
+import org.tju.food_007.repository.pub.login.UserLoginRepository;
 import org.tju.food_007.repository.sto.UserUploadLogoImageUserRepository;
 
 /**
@@ -20,6 +23,7 @@ import org.tju.food_007.repository.sto.UserUploadLogoImageUserRepository;
  * @create 2024-03-17-16:00
  */
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.UUID;
 
 
@@ -31,19 +35,29 @@ public class GenerateIndentService {
     @Autowired
     GenerateIndentComRepository generateIndentComRepository;
     @Autowired
+    UserLoginRepository userLoginRepository;
+    @Autowired
     UserUploadLogoImageUserRepository userUploadLogoImageUserRepository;
+    @Autowired
+    CommodityDetailRepository commodityDetailRepository;
     private final GenerateIndentComRequstMapper generateIndentComRequstMapper=GenerateIndentComRequstMapper.INSTANCE;
     private final GenerateIndentRequestMapper generateIndentRequestMapper=GenerateIndentRequestMapper.INSTANCE;
 
     public static String generateVerificationCode() {
         return UUID.randomUUID().toString().replace("-", "");
     }
-
+    @Transactional
+    public void ChangeIndentState(ChangeIndStateRequestDTO requestDTO){
+        IndentEntity aimed_ind=generateIndentRepository.findByIndId(requestDTO.getInd_id());
+        aimed_ind.setIndState(requestDTO.getInd_state());
+        generateIndentRepository.save(aimed_ind);
+        return;
+    }
     @Transactional
     public String GenerateIndent(GenerateIndentRequestDTO requestDTO){
         UserEntity targetUser=userUploadLogoImageUserRepository.findByUserId(Integer.valueOf(requestDTO.getCus_Id()));
         String telephoneNumber=String.valueOf(targetUser.getUserPhone().subSequence(7,11));
-        String teleCode=telephoneNumber+"-"+String.valueOf(targetUser.getUserPhone().subSequence(0,4));
+        String teleCode=telephoneNumber+"-"+String.valueOf(generateVerificationCode().subSequence(0,4));
         IndentEntity newIndent=generateIndentRequestMapper.dtoToEntity(requestDTO);
         newIndent.setIndVerificationCode(teleCode);
         newIndent.setFoodQualityScore(BigDecimal.valueOf(5.0));
@@ -58,6 +72,8 @@ public class GenerateIndentService {
         else {
             System.out.println("出现了问题");
         }
+        CommodityEntity aimed_com=commodityDetailRepository.findByComId(Integer.valueOf(requestDTO.getCom_arr().getFirst().getCom_id()));
+        newIndent.setStoId(aimed_com.getStoId());
         IndentEntity inserted_ind=generateIndentRepository.save(newIndent);
         for (IndentCommodity com : requestDTO.getCom_arr()) {
             IndentCommodityEntity newCom= generateIndentComRequstMapper.dtoToEntity(com);
@@ -73,10 +89,26 @@ public class GenerateIndentService {
     }
 
     @Transactional
-    public void ChangeIndentState(ChangeIndStateRequestDTO requestDTO){
-        IndentEntity aimed_ind=generateIndentRepository.findByIndId(requestDTO.getInd_id());
-        aimed_ind.setIndState(requestDTO.getInd_state());
-        generateIndentRepository.save(aimed_ind);
-        return;
+    public String ModifyCode(){
+        ArrayList<IndentEntity> indents=generateIndentRepository.findAll();
+        for(IndentEntity ind : indents){
+            UserEntity user=userLoginRepository.findByUserId(ind.getCusId());
+            String telephoneNumber=String.valueOf(user.getUserPhone().subSequence(7,11));
+            String teleCode=telephoneNumber+"-"+String.valueOf(generateVerificationCode().subSequence(0,4));
+            ind.setIndVerificationCode(teleCode);
+            generateIndentRepository.save(ind);
+        }
+        return "success";
+    }
+
+    @Transactional
+    public String ModifyStoID(){
+        ArrayList<IndentEntity> indents=generateIndentRepository.findAll();
+        for(IndentEntity ind : indents){
+            ArrayList<IndentCommodityEntity> list= generateIndentComRepository.findByIndId(ind.getIndId());
+            CommodityEntity com= commodityDetailRepository.findByComId(list.getFirst().getComId());
+            ind.setStoId(com.getStoId());
+        }
+        return "success";
     }
 }

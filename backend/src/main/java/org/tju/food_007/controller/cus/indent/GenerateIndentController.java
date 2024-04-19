@@ -31,9 +31,13 @@ public class GenerateIndentController {
     @RequestMapping(value = "/changeIndentState",method = RequestMethod.POST)
     public ResponseEntity<NormalResponseDTO>ChangeIndentState(@RequestBody ChangeIndStateRequestDTO requestDTO){
         generateIndentService.ChangeIndentState(requestDTO);
+        //generateIndentService.ModifyStoID();
         NormalResponseDTO responseDTO=new NormalResponseDTO();
         responseDTO.setMsg("success");
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
+
+
 
 }

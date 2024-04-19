@@ -49,15 +49,24 @@ public class IndentRatingService {
             com.setRatingType(requestDTO.getRating_type());
             generateIndentComRepository.save(com);
         }
-
-        CommentEntity newCmt=new CommentEntity();
-        newCmt.setCmtFather(0);
-        LocalDateTime nowTime = LocalDateTime.now();
-        newCmt.setCmtTime(Timestamp.valueOf(nowTime));
-        newCmt.setCmtContent(requestDTO.getCmt_content());
-        newCmt.setIndId(Integer.parseInt(requestDTO.getInd_id()));
-        newCmt.setUserId(Integer.parseInt(requestDTO.getCus_id()));
-        indentCommentRopsitory.save(newCmt);
+        CommentEntity cmt=indentCommentRopsitory.findByIndId(Integer.parseInt(requestDTO.getInd_id()));
+        if(cmt !=null){
+            System.out.println("已经存在评论");
+            cmt.setCmtContent(requestDTO.getCmt_content());
+            LocalDateTime nowTime = LocalDateTime.now();
+            cmt.setCmtTime(Timestamp.valueOf(nowTime));
+        }
+        else {
+            System.out.println("第一次评论，有点紧张");
+            CommentEntity newCmt = new CommentEntity();
+            newCmt.setCmtFather(0);
+            LocalDateTime nowTime = LocalDateTime.now();
+            newCmt.setCmtTime(Timestamp.valueOf(nowTime));
+            newCmt.setCmtContent(requestDTO.getCmt_content());
+            newCmt.setIndId(Integer.parseInt(requestDTO.getInd_id()));
+            newCmt.setUserId(Integer.parseInt(requestDTO.getCus_id()));
+            indentCommentRopsitory.save(newCmt);
+        }
         return "成功评论评分";
     }
 }

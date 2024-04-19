@@ -11,4 +11,6 @@ import org.tju.food_007.model.UserEntity;
 public interface UserLoginRepository extends JpaRepository<UserEntity,Integer> {
     UserEntity findByUserPhone(String user_phone);
 
+    UserEntity findByUserId(Integer user_id);
+
 }

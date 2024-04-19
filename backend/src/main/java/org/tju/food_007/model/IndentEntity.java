@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /**
  * @author WGY
- * @create 2024-04-01-18:26
+ * @create 2024-04-19-10:55
  */
 @Entity
 @Table(name = "indent", schema = "food_007", catalog = "")
@@ -56,6 +56,9 @@ public class IndentEntity {
     @Basic
     @Column(name = "delivery_longitude")
     private BigDecimal deliveryLongitude;
+    @Basic
+    @Column(name = "sto_ID")
+    private Integer stoId;
 
     public Integer getIndId() {
         return indId;
@@ -169,16 +172,24 @@ public class IndentEntity {
         this.deliveryLongitude = deliveryLongitude;
     }
 
+    public Integer getStoId() {
+        return stoId;
+    }
+
+    public void setStoId(Integer stoId) {
+        this.stoId = stoId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         IndentEntity that = (IndentEntity) o;
-        return Objects.equals(indId, that.indId) && Objects.equals(cusId, that.cusId) && Objects.equals(indMoney, that.indMoney) && Objects.equals(indCreationTime, that.indCreationTime) && Objects.equals(indVerificationCode, that.indVerificationCode) && Objects.equals(indNotes, that.indNotes) && Objects.equals(indState, that.indState) && Objects.equals(foodQualityScore, that.foodQualityScore) && Objects.equals(serviceQualityScore, that.serviceQualityScore) && Objects.equals(pricePerformanceRatio, that.pricePerformanceRatio) && Objects.equals(deliveryMethod, that.deliveryMethod) && Objects.equals(deliveryAddress, that.deliveryAddress) && Objects.equals(deliveryAltitude, that.deliveryAltitude) && Objects.equals(deliveryLongitude, that.deliveryLongitude);
+        return Objects.equals(indId, that.indId) && Objects.equals(cusId, that.cusId) && Objects.equals(indMoney, that.indMoney) && Objects.equals(indCreationTime, that.indCreationTime) && Objects.equals(indVerificationCode, that.indVerificationCode) && Objects.equals(indNotes, that.indNotes) && Objects.equals(indState, that.indState) && Objects.equals(foodQualityScore, that.foodQualityScore) && Objects.equals(serviceQualityScore, that.serviceQualityScore) && Objects.equals(pricePerformanceRatio, that.pricePerformanceRatio) && Objects.equals(deliveryMethod, that.deliveryMethod) && Objects.equals(deliveryAddress, that.deliveryAddress) && Objects.equals(deliveryAltitude, that.deliveryAltitude) && Objects.equals(deliveryLongitude, that.deliveryLongitude) && Objects.equals(stoId, that.stoId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(indId, cusId, indMoney, indCreationTime, indVerificationCode, indNotes, indState, foodQualityScore, serviceQualityScore, pricePerformanceRatio, deliveryMethod, deliveryAddress, deliveryAltitude, deliveryLongitude);
+        return Objects.hash(indId, cusId, indMoney, indCreationTime, indVerificationCode, indNotes, indState, foodQualityScore, serviceQualityScore, pricePerformanceRatio, deliveryMethod, deliveryAddress, deliveryAltitude, deliveryLongitude, stoId);
     }
 }

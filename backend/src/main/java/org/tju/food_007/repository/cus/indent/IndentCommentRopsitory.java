@@ -8,4 +8,5 @@ import org.tju.food_007.model.CommentEntity;
  * @create 2024-03-17-20:45
  */
 public interface IndentCommentRopsitory extends JpaRepository<CommentEntity,Integer> {
+    CommentEntity findByIndId(Integer ind_id);
 }

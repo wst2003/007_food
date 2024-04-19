@@ -85,4 +85,6 @@ public interface CommodityDetailRepository extends JpaRepository<CommodityEntity
             " LEFT JOIN  regular_commodity rc ON c.COM_ID = rc.REGULAR_COM_ID " +
             " WHERE c.STO_ID = :sto_id AND c.COM_TYPE = 0 ",nativeQuery = true)
     public List<Object[]> getCommodityStatistics(@Param("sto_id") int sto_id);
+
+    public CommodityEntity findByComId(Integer com_ID);
 }

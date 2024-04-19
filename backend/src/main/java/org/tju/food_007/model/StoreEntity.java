@@ -2,15 +2,21 @@ package org.tju.food_007.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.Objects;
 
+/**
+ * @author WGY
+ * @create 2024-04-19-11:20
+ */
 @Entity
 @Table(name = "store", schema = "food_007", catalog = "")
 public class StoreEntity {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "sto_ID")
-    private int stoId;
+    private Integer stoId;
     @Basic
     @Column(name = "sto_name")
     private String stoName;
@@ -19,7 +25,7 @@ public class StoreEntity {
     private String stoIntroduction;
     @Basic
     @Column(name = "sto_state")
-    private int stoState;
+    private Integer stoState;
     @Basic
     @Column(name = "sto_openingTime")
     private Time stoOpeningTime;
@@ -34,16 +40,16 @@ public class StoreEntity {
     private String stoLongitude;
     @Basic
     @Column(name = "sto_rating")
-    private Integer stoRating;
+    private BigDecimal stoRating;
     @Basic
     @Column(name = "sto_logo")
     private String stoLogo;
 
-    public int getStoId() {
+    public Integer getStoId() {
         return stoId;
     }
 
-    public void setStoId(int stoId) {
+    public void setStoId(Integer stoId) {
         this.stoId = stoId;
     }
 
@@ -63,11 +69,11 @@ public class StoreEntity {
         this.stoIntroduction = stoIntroduction;
     }
 
-    public int getStoState() {
+    public Integer getStoState() {
         return stoState;
     }
 
-    public void setStoState(int stoState) {
+    public void setStoState(Integer stoState) {
         this.stoState = stoState;
     }
 
@@ -103,11 +109,11 @@ public class StoreEntity {
         this.stoLongitude = stoLongitude;
     }
 
-    public Integer getStoRating() {
+    public BigDecimal getStoRating() {
         return stoRating;
     }
 
-    public void setStoRating(Integer stoRating) {
+    public void setStoRating(BigDecimal stoRating) {
         this.stoRating = stoRating;
     }
 
@@ -124,7 +130,7 @@ public class StoreEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StoreEntity that = (StoreEntity) o;
-        return stoId == that.stoId && stoState == that.stoState && Objects.equals(stoName, that.stoName) && Objects.equals(stoIntroduction, that.stoIntroduction) && Objects.equals(stoOpeningTime, that.stoOpeningTime) && Objects.equals(stoClosingTime, that.stoClosingTime) && Objects.equals(stoLatitude, that.stoLatitude) && Objects.equals(stoLongitude, that.stoLongitude) && Objects.equals(stoRating, that.stoRating) && Objects.equals(stoLogo, that.stoLogo);
+        return Objects.equals(stoId, that.stoId) && Objects.equals(stoName, that.stoName) && Objects.equals(stoIntroduction, that.stoIntroduction) && Objects.equals(stoState, that.stoState) && Objects.equals(stoOpeningTime, that.stoOpeningTime) && Objects.equals(stoClosingTime, that.stoClosingTime) && Objects.equals(stoLatitude, that.stoLatitude) && Objects.equals(stoLongitude, that.stoLongitude) && Objects.equals(stoRating, that.stoRating) && Objects.equals(stoLogo, that.stoLogo);
     }
 
     @Override
