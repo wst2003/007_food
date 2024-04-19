@@ -32,7 +32,7 @@
                 limit-show :max-length="200" :rows="5" />
             </div>
         </nut-form-item>
-        <nut-form-item label="盲盒上架日期日期">
+        <nut-form-item label="盲盒上架日期">
             <nut-button @click="show_produceDate_pick = true">{{pickProduceDate}}</nut-button>
         </nut-form-item>
         <nut-form-item label="盲盒图片">
@@ -52,13 +52,13 @@
         <nut-form-item label="盲盒价格">
             <nut-input v-model="formData.com_oriPrice" placeholder="请输入盲盒价格" type="number" />
         </nut-form-item>
-        <nut-form-item label="盲盒最高价格">
+        <nut-form-item label="盲盒包括商品的最高价格">
             <nut-input v-model="formData.highest_price" placeholder="请输入盲盒最高价格" type="number" />
         </nut-form-item>
-        <nut-form-item label="盲盒最低价格">
+        <nut-form-item label="盲盒包括商品的最低价格">
             <nut-input v-model="formData.lowest_price" placeholder="请输入盲盒最低价格" type="number" />
         </nut-form-item>
-        <nut-form-item label="盲盒包含的商品数量">
+        <nut-form-item label="盲盒包含的商品种类数量">
             <nut-input-number v-model="formData.category_count" />
         </nut-form-item>
         <nut-button style="

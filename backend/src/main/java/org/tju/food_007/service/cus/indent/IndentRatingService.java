@@ -42,6 +42,7 @@ public class IndentRatingService {
         targetInd.setPricePerformanceRatio(BigDecimal.valueOf(requestDTO.getPrice_performance_ratio()));
         targetInd.setFoodQualityScore(BigDecimal.valueOf(requestDTO.getFood_quality_score()));
         targetInd.setServiceQualityScore(BigDecimal.valueOf(requestDTO.getService_quality_score()));
+        targetInd.setIndState(5);
         generateIndentRepository.save(targetInd);
 
         ArrayList<IndentCommodityEntity> com_arr=generateIndentComRepository.findByIndId(Integer.parseInt(requestDTO.getInd_id()));
