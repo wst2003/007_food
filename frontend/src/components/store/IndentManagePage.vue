@@ -127,8 +127,8 @@
                 </nut-collapse>
                 <nut-space v-if="item.ind_state==2">
                     <div>核销码： </div>
-                    <nut-input v-model="verCode" style="background-color:#93B090;opacity:0.7;"></nut-input>
-                    <nut-button @click="confirmVer(item.ind_verificationCode,item.ind_id)">确定</nut-button>
+                    <nut-input v-model="item.verCode" style="background-color:#93B090;opacity:0.7;"></nut-input>
+                    <nut-button @click="confirmVer(item.verCode,item.ind_verificationCode,item.ind_id)">确定</nut-button>
                 </nut-space>
                 <nut-divider dashed></nut-divider>
                 
@@ -137,7 +137,8 @@
 </nut-config-provider>
 
 <nut-popup v-model:visible="show" position="bottom">
-    <nut-picker v-model="status_val" :columns="columns" title="请选择订单状态" @confirm="show=false" @cancel="show = false" />
+    <nut-picker v-if="sendOrTake==='1'" v-model="status_val" :columns="columns_send" title="请选择订单状态" @confirm="show=false" @cancel="show = false" />
+    <nut-picker v-else v-model="status_val" :columns="columns_take" title="请选择订单状态" @confirm="show=false" @cancel="show = false" />
 </nut-popup>
 <nut-popup v-model:visible="showBottom" round position="bottom" style="justify-content: center;align-items: center;" :style="{ height: '20%' }">
     <div style="position:absolute;top:30%;left:30%;">{{ mess }}</div>
@@ -153,7 +154,6 @@ import { onMounted } from 'vue';
 // import axios from 'axios';
 const router=useRouter();
 const show=ref(false)
-const verCode=ref('')
 // const indList=ref([])
 const indInfo=ref([])
 const sendOrTake=ref('0')
@@ -175,12 +175,15 @@ const themeVars = ref({
 });
 const status_val=ref([0])
 
-const columns = ref([
-  { text: '未收货', value: 0 },
-  { text: '确认收货', value: 1 },
+const columns_take = ref([
   { text: '待取货', value: 2 },
   { text: '已核销', value: 3},
   { text: '超期未取', value: 4},
+  { text: '已评价', value: 5}
+]);
+const columns_send= ref([
+  { text: '未收货', value: 0 },
+  { text: '确认收货', value: 1 },
   { text: '已评价', value: 5}
 ]);
 
@@ -236,6 +239,7 @@ onMounted(()=>{
             )   
             indDetail.cusTotalBuy=cusTotalBuy+'共'+totalNum.toString()+'件';
             indDetail.totalMoney='￥'+totalMoney.toString()
+            indDetail.verCode=''
             indInfo.value.push(indDetail)
         })
 
@@ -250,8 +254,8 @@ function pathPlanClick(){
     })
 }
 
-const confirmVer=(ind_verificationCode,ind_id)=>{
-    if(verCode.value===ind_verificationCode){
+const confirmVer=(input_vercode,ind_verificationCode,ind_id)=>{
+    if(input_vercode===ind_verificationCode){
         axios.post('/api/cus/changeIndentState',  JSON.stringify({ 
             ind_id:ind_id,
             ind_state:3
