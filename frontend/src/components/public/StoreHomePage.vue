@@ -61,12 +61,12 @@ const List = [
     name: "indent",
   },
   {
-    title: "商店",
+    title: "库存",
     icon: h(Home),
     name: "home",
   },
   {
-    title: "上传商品",
+    title: "上传",
     icon: h(Find),
     name: "upload",
   },
