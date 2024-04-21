@@ -219,6 +219,8 @@ function computeDistance(){
 } 
 const BaseUrl = "http://localhost:8000"
 function afterLocation(lat,lng){
+    lat=31.289
+    lng=121.22
     initalizatin(lat,lng)
     var sto_ids=[]
     axios.get(BaseUrl+'/api/pub/map',{

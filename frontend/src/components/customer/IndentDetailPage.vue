@@ -183,7 +183,7 @@ import {  useRouter,useRoute } from 'vue-router';
 const BaseUrl = "http://localhost:8000"
 const router=useRouter();
 const route=useRoute();
-const commodity_name=ref('商品名称')
+const commodity_name=ref('订单详情')
 const indentDetail=ref({
     time:'时间',
     address:'地点',

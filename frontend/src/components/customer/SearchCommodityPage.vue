@@ -285,8 +285,8 @@ const translationEnd = async () => {
 
   if(voiceResult.value.length>1)
     axios.post(
-  // 'http://119.8.11.44:8081/api/test/gpt', 
-  'http://localhost:8081/api/test/gpt', 
+  'http://119.8.11.44:8081/api/test/gpt', 
+  // 'http://localhost:8081/api/test/gpt', 
   {
       words: voiceResult.value
     }).then(response => {
