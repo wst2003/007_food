@@ -1,12 +1,10 @@
 <template>
     <nut-config-provider :theme-vars="themeVars">
     <div class="background"></div>
-    <nut-space :gutter="1" style="position:absolute;left:30%;top:10px;">
-        <div class="login-word">顾客注册</div>
-        <div class="login-pic"></div>
-    </nut-space>
-    
-    <div style="position:relative;margin-top:15vh;opacity: 70%;">
+    <nut-navbar title="顾客注册" left-show @click-back="goback">
+    </nut-navbar>
+    <img src="../../assets/cat.svg" style="position:absolute;right: 20%;top:6%;transform: translateY(-100%);z-index: 1000;" />
+    <div style="position:relative;margin-top:3vh;opacity: 70%;">
         <nut-form>
             <nut-form-item label="请上传头像">
                 <nut-uploader
@@ -55,31 +53,9 @@
         <nut-popup v-model:visible="show" position="bottom">
             <nut-date-picker
             v-model="birth"
+            :min-date="new Date(1900, 0, 1)"
             :three-dimensional="false"
             @confirm="confirm"
-            ></nut-date-picker>
-        </nut-popup>
-        <nut-popup v-model:visible="show" position="bottom">
-            <nut-date-picker
-            v-model="birth"
-            :three-dimensional="false"
-            @confirm="confirm"
-            ></nut-date-picker>
-        </nut-popup>
-        <nut-popup v-model:visible="start_show" position="bottom">
-            <nut-date-picker
-            v-model="formData.sto_openingTime"
-            :three-dimensional="false"
-            @confirm="confirm_open"
-            type="hour-minute"
-            ></nut-date-picker>
-        </nut-popup>
-        <nut-popup v-model:visible="end_show" position="bottom">
-            <nut-date-picker
-            v-model="formData.sto_closingTime"
-            :three-dimensional="false"
-            @confirm="confirm_close"
-            type="hour-minute"
             ></nut-date-picker>
         </nut-popup>
         <nut-popup v-model:visible="showBottom" round position="bottom" style="justify-content: center;align-items: center;" :style="{ height: '20%' }">
@@ -121,8 +97,7 @@
     const birth_str=ref(birth.value.getFullYear().toString()+'-'+(birth.value.getMonth()+1).toString()+'-'+birth.value.getDate().toString())
     // 对弹窗组件是否弹出进行监控
     const show=ref(false)
-    const start_show=ref(false)
-    const end_show=ref(false)
+
 
     const agree=ref(false);
     const phoneReg = /^1[3-9]\d{9}$/;
@@ -220,16 +195,6 @@
         console.log(birth.value.getMonth())
         birth_str.value=birth.value.getFullYear().toString()+'-'+(birth.value.getMonth()+1).toString()+'-'+birth.value.getDate().toString()
         show.value = false;
-    };
-    const confirm_open = ({ selectedValue }) => {
-        console.log(selectedValue);
-        console.log(formData.value.sto_openingTime.getHours()+'-'+formData.value.sto_openingTime.getMinutes())
-        start_show.value = false;
-    };
-    const confirm_close = ({ selectedValue }) => {
-        console.log(selectedValue);
-        console.log(formData.value.sto_closingTime.getHours()+'-'+formData.value.sto_closingTime.getMinutes())
-        end_show.value = false;
     };
 
     const submit=()=>{
@@ -336,6 +301,11 @@
         }
         })
     }
+    const goback=()=>{
+    router.push({
+        path: '/login',
+    });
+}
 </script>
 <style scoped>
     .background{

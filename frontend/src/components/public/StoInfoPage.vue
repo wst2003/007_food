@@ -64,10 +64,10 @@ onMounted(()=>{
             formData.value.user_phone=response.data[0].user_phone
             formData.value.user_address=response.data[0].user_address
             formData.value.sto_introduction=response.data[0].sto_introduction
-            var sto_openingTime=new Date(response.data[0].sto_openingTime)
-            var sto_closingTime=new Date(response.data[0].sto_closingTime)
-            openTime.value=sto_openingTime.getHours().toString()+' : '+sto_openingTime.getMinutes().toString()+' - '
-            +sto_closingTime.getHours().toString()+' : '+sto_closingTime.getMinutes().toString()
+            var sto_openingTime=response.data[0].sto_openingTime
+            var sto_closingTime=response.data[0].sto_closingTime
+            openTime.value=sto_openingTime.substring(0, sto_openingTime.length - 3)+' - '
+            + sto_closingTime.substring(0, sto_closingTime.length - 3)
         })
 })
 const quit=()=>{

@@ -1,12 +1,10 @@
 <template>
     <nut-config-provider :theme-vars="themeVars">
     <div class="background"></div>
-    <nut-space :gutter="1" style="position:absolute;left:30%;top:10px;">
-        <div class="login-word">商家注册</div>
-        <div class="login-pic"></div>
-    </nut-space>
-    
-    <div style="position:relative;margin-top:15vh;opacity: 70%;">
+    <nut-navbar title="商家注册" left-show @click-back="goback">
+    </nut-navbar>
+    <img src="../../assets/cat.svg" style="position:absolute;right: 20%;top:6%;transform: translateY(-100%);z-index: 1000;" />
+    <div style="position:relative;margin-top:3vh;opacity: 70%;">
         <nut-form>
             <nut-form-item label="请上传头像">
                 <nut-uploader
@@ -41,8 +39,8 @@
             </nut-form-item>
             <nut-form-item label="请选择营业时间">
                 <nut-space :gutter="10" direction="vertical">
-                    <nut-button @click="start_show = true" style="width:170px;">{{'营业开始时间: '+formData.sto_openingTime.getHours()+'-'+formData.sto_openingTime.getMinutes()}}</nut-button>
-                    <nut-button @click="end_show = true" style="width:170px;">{{'营业结束时间: '+formData.sto_closingTime.getHours()+'-'+formData.sto_closingTime.getMinutes()}}</nut-button>
+                    <nut-button @click="start_show = true" style="width:170px;">{{'营业开始时间: '+transformTimeString(formData.sto_openingTime)}}</nut-button>
+                    <nut-button @click="end_show = true" style="width:170px;">{{'营业结束时间: '+transformTimeString(formData.sto_closingTime)}}</nut-button>
                 </nut-space>
             </nut-form-item>
             <nut-form-item label="请选择店铺地址">
@@ -80,13 +78,7 @@
         <nut-popup v-model:visible="show" position="bottom">
             <nut-date-picker
             v-model="birth"
-            :three-dimensional="false"
-            @confirm="confirm"
-            ></nut-date-picker>
-        </nut-popup>
-        <nut-popup v-model:visible="show" position="bottom">
-            <nut-date-picker
-            v-model="birth"
+            :min-date="new Date(1900, 0, 1)"
             :three-dimensional="false"
             @confirm="confirm"
             ></nut-date-picker>
@@ -332,8 +324,8 @@
             minutes='0'+date.getMinutes().toString()
         else
             minutes=date.getMinutes().toString()
-        console.log('time'+ hours+':'+minutes+':00')
-        return hours+':'+minutes+':00'
+        console.log('time'+ hours+':'+minutes)
+        return hours+':'+minutes
     }
 
     function dataURLtoFile(dataurl, filename) {
@@ -431,6 +423,11 @@
         }
         })
     }
+const goback=()=>{
+    router.push({
+        path: '/login',
+    });
+}
 </script>
 <style scoped>
     .background{
