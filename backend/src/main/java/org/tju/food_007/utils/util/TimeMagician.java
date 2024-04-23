@@ -40,7 +40,6 @@ public class TimeMagician{
                     generateIndentRepository.save(ind);
             }
         }
-
     }
 }
 
