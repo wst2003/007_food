@@ -82,7 +82,7 @@
     import {ref,onMounted} from 'vue';
     import { Checklist } from '@nutui/icons-vue';
     // const BaseUrl = "http://100.80.74.33:8000"
-    // const BaseUrl = "http://localhost:8000"
+    // const BaseUrl = "http://119.8.11.44:8002"
     const formData = ref({
         user_phone: '',
         user_password: '',
@@ -108,7 +108,7 @@
     const mess=ref('')
     import axios from 'axios';
     import { useRouter } from 'vue-router';
-    const BaseUrl = "http://localhost:8000"
+    const BaseUrl = "http://119.8.11.44:8002"
     const router = useRouter();
     
     const themeVars = ref({

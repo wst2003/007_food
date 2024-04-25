@@ -204,7 +204,7 @@ import {onMounted, ref} from "vue";
 import { Search2 } from '@nutui/icons-vue'
 import axios from "axios";
 import {useRoute, useRouter} from "vue-router";
-const BaseUrl = "http://localhost:8000"
+const BaseUrl = "http://119.8.11.44:8002"
 const sto_id=sessionStorage.getItem('user_id');
 const onClickBack = () => {
   router.go(-1);

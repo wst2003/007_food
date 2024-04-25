@@ -103,7 +103,7 @@
     const mess=ref('')
     const cus_payPassword_val=ref('')
     import axios from 'axios';
-    const BaseUrl = "http://localhost:8000"
+    const BaseUrl = "http://119.8.11.44:8002"
     import { useRouter } from 'vue-router';
     const router = useRouter();
     

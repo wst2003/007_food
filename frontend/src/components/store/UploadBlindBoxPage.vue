@@ -98,7 +98,7 @@ import {ref} from 'vue';
 import { useRouter } from 'vue-router';
 // import globalData from"../../global.js"
 import axios from 'axios';
-const BaseUrl = "http://localhost:8000"
+const BaseUrl = "http://119.8.11.44:8002"
 import { onMounted } from 'vue';
 const router=useRouter();
 const formData=ref({

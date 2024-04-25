@@ -15,7 +15,7 @@
     <script setup>
     import {ref } from 'vue';
     import axios from 'axios';
-    const BaseUrl = "http://localhost:8000"
+    const BaseUrl = "http://119.8.11.44:8002"
     // const BaseUrl = "http://100.80.74.33:8000"
     const images=ref([])
     const submit=()=>{

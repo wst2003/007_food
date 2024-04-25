@@ -217,7 +217,7 @@ function computeDistance(){
         console.error('Error:', error);
     });
 } 
-const BaseUrl = "http://localhost:8000"
+const BaseUrl = "http://119.8.11.44:8002"
 function afterLocation(lat,lng){
     lat=31.289
     lng=121.22

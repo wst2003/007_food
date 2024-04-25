@@ -33,7 +33,7 @@ import axios from 'axios';
 import { onMounted } from 'vue';
 import { ref } from 'vue'
 const imageURL = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"
-const BaseUrl = "http://localhost:8000"
+const BaseUrl = "http://119.8.11.44:8002"
 const formData = ref({
   user_phone: '',
   user_address: '',

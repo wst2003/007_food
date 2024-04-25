@@ -39,7 +39,7 @@ import { onMounted ,reactive,ref} from 'vue';
 import qs from 'qs';
 import BaiduMap from 'BaiduMap'
 import axios from 'axios';
-const BaseUrl = "http://localhost:8000"
+const BaseUrl = "http://119.8.11.44:8002"
 import globalData from '../../global.js'
 import { useRouter } from 'vue-router';
 const router=useRouter();

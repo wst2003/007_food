@@ -87,7 +87,7 @@ import axios from "axios";
 import BaiduMap from '../BaiduMap.vue'
 import IatRecorder from '@/assets/js/IatRecorder.js'
 import { reactive } from "vue";
-const BaseUrl = "http://localhost:8000"
+const BaseUrl = "http://119.8.11.44:8002"
 const iatRecorder = new IatRecorder('en_us', 'mandarin', '5f27b6a9')
 
 // import VoiceInput from "@/components/VoiceInput.vue";
