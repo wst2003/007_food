@@ -22,9 +22,11 @@ public class GenerateIndentController {
     @Autowired
     GenerateIndentService generateIndentService;
     @RequestMapping(value = "/generateIndent",method = RequestMethod.POST)
-    public ResponseEntity<String>GenerateIndent(@RequestBody GenerateIndentRequestDTO requestDTO){
-        generateIndentService.GenerateIndent(requestDTO);
-        return new ResponseEntity<>("订单生成成功", HttpStatus.OK);
+    public ResponseEntity<NormalResponseDTO>GenerateIndent(@RequestBody GenerateIndentRequestDTO requestDTO){
+       // generateIndentService.GenerateIndent(requestDTO);
+        NormalResponseDTO responseDTO=new NormalResponseDTO();
+        responseDTO.setMsg(generateIndentService.GenerateIndent(requestDTO));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }
 

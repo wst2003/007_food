@@ -13,7 +13,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "store", schema = "food_007", catalog = "")
 public class StoreEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "sto_ID")
     private Integer stoId;

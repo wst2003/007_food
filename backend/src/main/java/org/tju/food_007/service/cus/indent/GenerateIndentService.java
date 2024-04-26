@@ -57,6 +57,10 @@ public class GenerateIndentService {
     @Transactional
     public String GenerateIndent(GenerateIndentRequestDTO requestDTO){
         UserEntity targetUser=userUploadLogoImageUserRepository.findByUserId(Integer.valueOf(requestDTO.getCus_Id()));
+        if(targetUser.getUserBalance().doubleValue()<requestDTO.getInd_money()){
+            System.out.println("余额不足");
+            return "余额不足";
+        }
         String telephoneNumber=String.valueOf(targetUser.getUserPhone().subSequence(7,11));
         String teleCode=telephoneNumber+"-"+String.valueOf(generateVerificationCode().subSequence(0,4));
         IndentEntity newIndent=generateIndentRequestMapper.dtoToEntity(requestDTO);
@@ -81,12 +85,15 @@ public class GenerateIndentService {
             System.out.println(newCom.getComId());
             newCom.setIndId(inserted_ind.getIndId());
             newCom.setRatingType(1);
+            CommodityEntity aim_com=commodityDetailRepository.findByComId(newCom.getComId());
+            aim_com.setComLeft(aim_com.getComLeft()-Integer.parseInt(com.getInd_quantity()));
+            commodityDetailRepository.save(aim_com);
             IndentCommodityEntity inserted_com=generateIndentComRepository.save(newCom);
         }
 
         IndentCommodity dto =new IndentCommodity();
 
-        return "成功生成订单";
+        return "订单生成成功";
     }
 
     @Transactional
