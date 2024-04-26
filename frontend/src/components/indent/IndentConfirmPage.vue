@@ -94,7 +94,7 @@
 <script setup>
 import { onMounted, reactive,ref,computed} from 'vue';
 // import { useRoute,useRouter } from 'vue-router';
-import globalData from"../../global.js"
+
 import axios from 'axios';
 import globalData from "../../global.js"
 const BaseUrl = globalData.BaseUrl

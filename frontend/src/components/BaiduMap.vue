@@ -22,7 +22,7 @@ import BaiduMap from 'BaiduMap'
 import globalData from '../global.js'
 import axios from 'axios';
 import qs from 'qs'
-import globalData from "../../global.js"
+
 const BaseUrl = globalData.BaseUrl
 /*
     地区切换模块

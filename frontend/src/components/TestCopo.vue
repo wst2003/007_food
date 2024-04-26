@@ -15,7 +15,7 @@
     <script setup>
     import {ref } from 'vue';
     import axios from 'axios';
-    import globalData from "../../global.js"
+    import globalData from "../global.js"
     const BaseUrl = globalData.BaseUrl
 
     // const BaseUrl = "http://100.80.74.33:8000"

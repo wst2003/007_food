@@ -40,7 +40,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { Checklist } from '@nutui/icons-vue';
 import { useRouter } from 'vue-router';
-import globalData from"../../global.js"
+
 
 // const BaseUrl = "http://100.80.74.33:8000"
 import globalData from "../../global.js"
