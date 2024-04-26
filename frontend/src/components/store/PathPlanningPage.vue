@@ -39,8 +39,8 @@ import { onMounted ,reactive,ref} from 'vue';
 import qs from 'qs';
 import BaiduMap from 'BaiduMap'
 import axios from 'axios';
-const BaseUrl = "http://119.8.11.44:8002"
-import globalData from '../../global.js'
+import globalData from "../../global.js"
+const BaseUrl = globalData.BaseUrl
 import { useRouter } from 'vue-router';
 const router=useRouter();
 var global_map=null;//地图对象

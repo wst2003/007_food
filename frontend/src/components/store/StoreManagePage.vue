@@ -142,7 +142,8 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-const BaseUrl = "http://119.8.11.44:8002"
+import globalData from "../../global.js"
+const BaseUrl = globalData.BaseUrl
 import { ref, reactive } from 'vue';
 import { onBeforeMount } from 'vue';
 const router = useRouter();

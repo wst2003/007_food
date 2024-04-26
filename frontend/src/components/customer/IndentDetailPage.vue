@@ -180,7 +180,8 @@ import axios from 'axios'
 import {onMounted, ref} from 'vue';
 import { Clock ,Locationg3,Edit} from '@nutui/icons-vue';
 import {  useRouter,useRoute } from 'vue-router';
-const BaseUrl = "http://119.8.11.44:8002"
+import globalData from "../../global.js"
+const BaseUrl = globalData.BaseUrl
 const router=useRouter();
 const route=useRoute();
 const commodity_name=ref('订单详情')

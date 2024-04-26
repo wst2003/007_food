@@ -99,7 +99,8 @@
 import axios from 'axios';
 import {onMounted, ref} from 'vue';
 import {  useRouter } from 'vue-router';
-const BaseUrl = "http://119.8.11.44:8002"
+import globalData from "../../global.js"
+const BaseUrl = globalData.BaseUrl
 const state = ref('1');
 const router=useRouter();
 // const route=useRoute();

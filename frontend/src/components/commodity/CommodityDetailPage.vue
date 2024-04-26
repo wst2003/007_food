@@ -165,7 +165,9 @@ import { useRoute, useRouter } from 'vue-router';
 import * as echarts from 'echarts';
 import globalData from "../../global.js"
 import axios from 'axios';
-const BaseUrl = "http://119.8.11.44:8002"
+// const BaseUrl = "http://119.3.153.217:8002"
+const BaseUrl = globalData.BaseUrl
+
 const buying_quantity = ref(0);// quantity in shopping cart
 // Whenever quantity is modified, synchronize with shopping cart
 watch(buying_quantity, () => {
@@ -226,7 +228,7 @@ const sto_ID=ref(0);
 const loadMore = () => {
 
   setTimeout(() => {
-    axios.get('http://119.8.11.44:8002/api/com/searchCommodity', {
+    axios.get(BaseUrl+'/api/com/searchCommodity', {
       params: {
         content: "",
         com_type: "",
@@ -277,7 +279,7 @@ onMounted(() => {
   buying_quantity.value=globalData.shoppingCart.getItemById(route.query.id).quantity
   console.log('购物车中的对象：'+globalData.shoppingCart.getItemById(route.query.id))
   console.log(globalData.shoppingCart.items)
-  axios.get('http://119.8.11.44:8002/api/com/commoditydetail', {
+  axios.get(BaseUrl+'/api/com/commoditydetail', {
     params: {
       com_ID: route.query.id    // TODO: replace with router's params
     }
@@ -287,7 +289,7 @@ onMounted(() => {
       convert(response.data);
     })
 
-  axios.get('http://119.8.11.44:8002/api/com/searchCommodity', {
+  axios.get(BaseUrl+'/api/com/searchCommodity', {
     params: {
       content: "",
       com_type: "",

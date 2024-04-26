@@ -105,7 +105,8 @@ import axios from "axios";
 import BaiduMap from '../BaiduMap.vue'
 import IatRecorder from '@/assets/js/IatRecorder.js'
 import { reactive } from "vue";
-const BaseUrl = "http://119.8.11.44:8002"
+import globalData from "../../global.js"
+const BaseUrl = globalData.BaseUrl
 const iatRecorder = new IatRecorder('en_us', 'mandarin', '5f27b6a9')
 
 // import VoiceInput from "@/components/VoiceInput.vue";
@@ -285,8 +286,8 @@ const translationEnd = async () => {
 
   if(voiceResult.value.length>1)
     axios.post(
-  'http://119.8.11.44:8081/api/test/gpt', 
-  // 'http://localhost:8081/api/test/gpt', 
+  'http://119.8.11.44:8081/api/test/gpt', // 本地运行前端
+
   {
       words: voiceResult.value
     }).then(response => {

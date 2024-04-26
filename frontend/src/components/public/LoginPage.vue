@@ -43,7 +43,8 @@ import { useRouter } from 'vue-router';
 import globalData from"../../global.js"
 
 // const BaseUrl = "http://100.80.74.33:8000"
-const BaseUrl = "http://119.8.11.44:8002"
+import globalData from "../../global.js"
+const BaseUrl = globalData.BaseUrl
 const phoneNumber = ref('');
 const codeNumber = ref('')
 const size = ref(0);

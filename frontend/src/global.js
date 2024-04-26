@@ -145,5 +145,5 @@ const mapObj={
         }
     }
 }
-
-export default{shoppingCart,userPosition,userInfo,mapObj}
+const BaseUrl = "http://124.70.156.23:8002"
+export default{shoppingCart,userPosition,userInfo,mapObj,BaseUrl}

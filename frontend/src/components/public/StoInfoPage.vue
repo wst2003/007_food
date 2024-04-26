@@ -26,7 +26,8 @@
 </template>
 <script lang="js" setup>
 import axios from 'axios';
-const BaseUrl = "http://119.8.11.44:8002"
+import globalData from "../../global.js"
+const BaseUrl = globalData.BaseUrl
 import { onMounted } from 'vue';
 import { ref } from 'vue'
 const formData = ref({

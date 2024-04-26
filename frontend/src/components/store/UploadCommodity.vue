@@ -141,7 +141,8 @@ import * as echarts from 'echarts';
 import { onMounted } from 'vue';
 // import globalData from"../../global.js"
 import axios from 'axios';
-const BaseUrl = "http://119.8.11.44:8002"
+import globalData from "../../global.js"
+const BaseUrl = globalData.BaseUrl
 const uploadRef = ref(null);
 const categories=ref([])
 const router=useRouter();

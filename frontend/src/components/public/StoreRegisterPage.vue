@@ -152,7 +152,8 @@
     const showBottom=ref(false)
     const mess=ref('')
     import axios from 'axios';
-    const BaseUrl = "http://119.8.11.44:8002"
+    import globalData from "../../global.js"
+    const BaseUrl = globalData.BaseUrl
     import { useRouter } from 'vue-router';
     const router = useRouter();
     

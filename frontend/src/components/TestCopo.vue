@@ -15,7 +15,9 @@
     <script setup>
     import {ref } from 'vue';
     import axios from 'axios';
-    const BaseUrl = "http://119.8.11.44:8002"
+    import globalData from "../../global.js"
+    const BaseUrl = globalData.BaseUrl
+
     // const BaseUrl = "http://100.80.74.33:8000"
     const images=ref([])
     const submit=()=>{

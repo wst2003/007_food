@@ -22,6 +22,8 @@ import BaiduMap from 'BaiduMap'
 import globalData from '../global.js'
 import axios from 'axios';
 import qs from 'qs'
+import globalData from "../../global.js"
+const BaseUrl = globalData.BaseUrl
 /*
     地区切换模块
 */
@@ -217,7 +219,7 @@ function computeDistance(){
         console.error('Error:', error);
     });
 } 
-const BaseUrl = "http://119.8.11.44:8002"
+
 function afterLocation(lat,lng){
     lat=31.289
     lng=121.22
@@ -231,7 +233,7 @@ function afterLocation(lat,lng){
         console.log('获取的所有商家')
         console.log(res.data)
         sto_ids=res.data.sto_id
-        return axios.get('/api/sto/informationdetail',{
+        return axios.get(BaseUrl+'/api/sto/informationdetail',{
             params:{
                 sto_ID:sto_ids
             },
