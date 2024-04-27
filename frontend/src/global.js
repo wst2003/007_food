@@ -146,4 +146,5 @@ const mapObj={
     }
 }
 const BaseUrl = "http://124.70.156.23:8002"
+// const BaseUrl = "http://localhost:8002"
 export default{shoppingCart,userPosition,userInfo,mapObj,BaseUrl}
