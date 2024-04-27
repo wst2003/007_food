@@ -114,7 +114,17 @@ const confirm_recharge=()=>{
     charge_num.value=charge_num_input.value
   charge_num.value=parseFloat(charge_num.value)
   console.log(parseFloat(formData.value.user_balance)+charge_num.value)
-  axios.post(BaseUrl+'/api/pub/balanceChange',  JSON.stringify({ 
+  const orderId = generateOrderId();
+  axios.post('http://localhost:3000/api/payment', {
+      userType:1,
+      orderId: orderId,
+      price: charge_num.value,
+      name: '充值',
+      cus_id: sessionStorage.getItem("user_id"),
+    })
+    .then((res) => {
+      window.location.href = res.data.data.paymentUrl;  
+      axios.post(BaseUrl+'/api/pub/balanceChange',  JSON.stringify({ 
             new_balance:parseFloat(formData.value.user_balance)+charge_num.value,
             id:sessionStorage.getItem("user_id")
           }), {
@@ -126,9 +136,9 @@ const confirm_recharge=()=>{
             console.log(response.data.msg)
             if(response.data.msg=="成功"){
               baseClick("充值成功")
-              axios.get(BaseUrl+'/api/sto/informationdetail',{
+              axios.get(BaseUrl+'/api/cus/getInfo',{
               params: {
-                sto_ID:sessionStorage.getItem("user_id")
+                cus_id:sessionStorage.getItem("user_id")
               }
               }, {
                     headers: {
@@ -136,14 +146,32 @@ const confirm_recharge=()=>{
                     }
                   })
                   .then(response=>{
-                      formData.value.user_balance=response.data[0].user_balance
+                      formData.value.user_balance=response.data.user_balance
                   })
-              //location.reload();
+              location.reload();
             }
           })
+    });
+
 }
 const confirm_withdraw=()=>{
-  axios.post(BaseUrl+'/api/pub/balanceChange',  JSON.stringify({ 
+  const outBizNo = generateOrderId(); // 这需要是一个动态生成的唯一值
+    const orderTitle = '提现';
+    const payeeInfo = { 
+      identity: '2088722008198443', // 支付宝用户ID
+      identity_type: 'ALIPAY_USER_ID' // 支付宝的会员ID
+    };
+    axios.post('http://localhost:3000/api/withdraw', {
+        out_biz_no: outBizNo,
+        trans_amount: parseFloat(withdraw_num.value).toFixed(2),
+        biz_scene: 'DIRECT_TRANSFER',
+        product_code: 'TRANS_ACCOUNT_NO_PWD',
+        order_title: orderTitle,
+        payee_info: payeeInfo,
+    })
+    .then((res) => {
+        if (res.data.success) {
+          axios.post(BaseUrl+'/api/pub/balanceChange',  JSON.stringify({ 
             new_balance:parseFloat(formData.value.user_balance)-withdraw_num.value,
             id:sessionStorage.getItem("user_id")
           }), {
@@ -156,9 +184,9 @@ const confirm_withdraw=()=>{
             if(response.data.msg==="成功")
             {
               baseClick("提现成功")
-              axios.get(BaseUrl+'/api/sto/informationdetail',{
+              axios.get(BaseUrl+'/api/cus/getInfo',{
               params: {
-                sto_ID:sessionStorage.getItem("user_id")
+                cus_id:sessionStorage.getItem("user_id")
               }
               }, {
                     headers: {
@@ -166,12 +194,23 @@ const confirm_withdraw=()=>{
                     }
                   })
                   .then(response=>{
-                      formData.value.user_balance=response.data[0].user_balance
+                      formData.value.user_balance=response.data.user_balance
+                      location.reload();
                   })
               //location.reload();
             }
             
           })
+        } else {
+          alert('提现失败: ' + res.data.errorMessage);
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        alert('提现请求失败');
+    });
+
+  
 }
 const goBack=()=>{
   router.go(-1);
@@ -222,6 +261,11 @@ const baseClick = (message) => {
 showBottom.value=true;
 mess.value=message
 };
+function generateOrderId() {
+  const timestamp = Math.floor(Date.now() / 1000);
+  const randomDigits = Math.floor(Math.random() * 9000) + 1000;
+  return `${timestamp}${randomDigits}`;
+}
 </script>
 <style scoped>
 .background{

@@ -5,8 +5,9 @@ const { plugins } = require("eslint-plugin-vue/lib/configs/base");
 // import globalData from "../../global.js"
 
 // const BaseUrl = "http://119.3.153.217:8002"
-const BaseUrl = "http://124.70.156.23:8002"
-// const BaseUrl = "http://100.80.74.33:8000"
+// const BaseUrl = "http://124.70.156.23:8002"
+const BaseUrl="http://localhost:8002"
+// const BaseUrl = "http://100.80.74.33:8002"
 
 // const BaseUrl = "http://127.0.0.1:4523/m1/4090306-0-default/api"
 const imageURL = "https://food-bank.obs.cn-east-3.myhuaweicloud.com/"
