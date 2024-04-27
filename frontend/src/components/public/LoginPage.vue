@@ -32,6 +32,19 @@
                 <nut-button class="bottom-button">忘记密码</nut-button> -->
             </nut-space>
         </div>
+        <nut-space direction="vertical" fill style="position:absolute;top:10px;left:10%" :gutter="1">
+                <div>测试账号：
+                    <div>
+                        顾客：13837829689 密码：123456
+                    </div>
+                    <div>
+                        商家：15821295304 密码：123456
+                    </div>
+                    <div>
+                    请用移动设备使用本网站！
+                    </div>
+                </div>
+        </nut-space>
     </div>
 </template>
 <script setup lang="js">

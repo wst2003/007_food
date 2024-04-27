@@ -52,7 +52,7 @@
                   </div>
                 </div>
                 <div class="distance">
-                  {{ item.com_dist + 'km' }}
+                  {{ item.com_dist  }}
                 </div>
               </div>
             </div>
@@ -170,6 +170,26 @@ const searchBox = () => {
       }
       commodityList.value = commodityList.value.concat(response.data);
       console.log(commodityList.value)
+      // 下面代码用于步行规划，得到去到商品的步行距离。
+      // 延时等待 globalData.mapObj.map 初始化成功
+      setTimeout(()=>{
+        commodityList.value.forEach(ele=>{
+          axios.get(BaseUrl+'/api/sto/informationdetail', {
+            params: {
+              sto_ID: ele.sto_ID,
+            }
+          }).then(res=>{
+            // console.log(res.data[0])
+            globalData.mapObj.walkingRoute(
+              globalData.userPosition.latitude,globalData.userPosition.longitude,
+              res.data[0].sto_latitude,res.data[0].sto_longitude, 
+              false,(dis,dur)=>{
+                ele.com_dist=dis;
+                dur;
+              })
+          })
+        })
+      },1000)
       loading.value = false;
       if (response.data.length < pageSize.value) {
         hasMore.value = false;

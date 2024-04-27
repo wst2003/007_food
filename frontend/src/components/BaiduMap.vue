@@ -22,7 +22,8 @@ import BaiduMap from 'BaiduMap'
 import globalData from '../global.js'
 import axios from 'axios';
 import qs from 'qs'
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const BaseUrl = globalData.BaseUrl
 /*
     地区切换模块
@@ -71,6 +72,7 @@ var calcList=[]
 var markedPoint=[]
 
 function sto_info(sto_obj){
+    this.sto_id=sto_obj.user_ID
     this.sto_name=sto_obj.sto_name
     this.sto_address=sto_obj.user_address
     this.sto_latitude=sto_obj.sto_latitude
@@ -121,7 +123,7 @@ function qqMapTransBMap(lng, lat) {
       } 
 }
 
-function initalizatin(lat,lng){
+function initalization(lat,lng){
     //初始化
     map = new BaiduMap.Map("baidumap");
     globalData.mapObj.map=map
@@ -137,7 +139,7 @@ function initalizatin(lat,lng){
     map.addOverlay(circle);
     map.panTo(point);
     currentPoint  = point; // 百度BD09坐标
-
+    map.disableDoubleClickZoom()// 禁用双击放大
     // 将坐标与地址设置到全局变量
     globalData.userPosition.setCoordination(lat,lng)
     var geoc = new BMapGL.Geocoder();
@@ -154,54 +156,111 @@ function computeDistance(){
     var promises = [];
     sto_arr.forEach(function(element) {
         var sto_point=new BaiduMap.Point(element.sto_longitude,element.sto_latitude); 
-        var mk = new BaiduMap.Marker(sto_point);
-        mkList.push(mk);
-        // 添加信息窗口
-        var opts={
-            width:250,
-            height:80,
-            title:element.sto_name,
-            message:element.sto_name
-        }
-        map.addOverlay(mk);
-        mk.addEventListener("click",()=>{
-            var infoWindow = new BMapGL.InfoWindow(element.sto_introduction,opts);
-            map.openInfoWindow(infoWindow,sto_point);
-        })
+
+        // var mk = new BaiduMap.Marker(sto_point);
+        // mkList.push(mk);
+        // // 添加信息窗口
+        // var opts={
+        //     width:250,
+        //     height:80,
+        //     title:element.sto_name,
+        //     message:element.sto_name
+        // }
+        // map.addOverlay(mk);
+        // mk.addEventListener("click",()=>{
+        //     var infoWindow = new BMapGL.InfoWindow(element.sto_introduction,opts);
+        //     map.openInfoWindow(infoWindow,sto_point);
+        // })
+
+        // globalData.mapObj.walkingRoute(currentPoint.lat,currentPoint.lng,sto_point.lat,sto_point.lng,false, 
+        //     (distance, duration) => {
+        //         //console.log('Distance:', distance, 'Duration:', duration);
+        //         calcList.push([distance,duration])
+        //         if (!distance.includes("公里")){ markedPoint.push(point);}
+        //         else if(distance.includes("公里")){
+        //             var numberPattern = /\d+/g; // 正则表达式匹配任意数量的数字
+        //             var result = str.match(numberPattern); // 匹配字符串中的数字
+        //             if (result) {
+        //                 var number = parseInt(result[0]); // 将匹配到的数字字符串转换为整数
+        //                 // 输出提取到的数字
+        //                 if (number<3){
+        //                     markedPoint.push(point);
+        //                 }
+        //             } 
+        //         }
+        //         // 添加地图上的mk
+        //         var mk = new BaiduMap.Marker(point);
+        //         mkList.push(mk);
+        //         var opts = {
+        //             width : 200,     // 信息窗口宽度
+        //             height: 100,     // 信息窗口高度
+        //             title : element.sto_name , // 信息窗口标题
+        //             message:element.introduction
+        //         }
+        //         mk.addEventListener("click", function(){   
+        //             var infoWindow = new BaiduMap.InfoWindow('步行距离'+distance+'，步行时间'+duration, opts);  // 创建信息窗口对象        
+        //             map.openInfoWindow(infoWindow, point); //开启信息窗口
+        //         }); 
+        //         map.addOverlay(mk);
+                
+        //     });
 
         var promise = new Promise((resolve, reject) => {
-            globalData.mapObj.walkingRoute(currentPoint.lat,currentPoint.lng,sto_point.lat,sto_point.lng,false, (distance, duration) => {
+            globalData.mapObj.walkingRoute(currentPoint.lat,currentPoint.lng,sto_point.lat,sto_point.lng,false, 
+            (distance, duration) => {
                 //console.log('Distance:', distance, 'Duration:', duration);
                 calcList.push([distance,duration])
-                if (!distance.includes("公里")){ markedPoint.push(point);}
+                
+                if (!distance.includes("公里")){ markedPoint.push(sto_point);}
                 else if(distance.includes("公里")){
                     var numberPattern = /\d+/g; // 正则表达式匹配任意数量的数字
                     var result = str.match(numberPattern); // 匹配字符串中的数字
                     if (result) {
                         var number = parseInt(result[0]); // 将匹配到的数字字符串转换为整数
-                        // console.log(number); // 输出提取到的数字
+                        // 输出提取到的数字
                         if (number<3){
-                            markedPoint.push(point);
+                            markedPoint.push(sto_point);
                         }
                     } 
-                    // else {
-                    //     console.log("未找到数字");
-                    // }
                 }
-
+                // 添加地图上的mk
+                var mk = new BaiduMap.Marker(sto_point);
+                mkList.push(mk);
                 var opts = {
                     width : 200,     // 信息窗口宽度
-                    height: 100,     // 信息窗口高度
+                    height: 50,     // 信息窗口高度
                     title : element.sto_name , // 信息窗口标题
                     message:element.introduction
                 }
-                var infoWindow = new BaiduMap.InfoWindow('步行距离'+distance+'，步行时间'+duration, opts);  // 创建信息窗口对象 
-                    mk.addEventListener("click", function(){          
-                    map.openInfoWindow(infoWindow, point); //开启信息窗口
+                mk.addEventListener("click", function(){   
+                    var infoWindow = new BaiduMap.InfoWindow('步行距离'+distance+'，步行时间'+duration
+                    , opts);  // 创建信息窗口对象        
+                    infoWindow.setMaxContent('商店详情')
+                    infoWindow.enableMaximize()
+                    // infoWindow.disableCloseOnClick()
+                    infoWindow.addEventListener("maximize", function(){   
+                    console.log(element)
+                    router.push({
+                        path:'/storeDetail',
+                        query:{
+                            sto_id:element.sto_id
+                        }
+                    })
                 }); 
-                // 其他处理逻辑
-                // 解决Promise
-                consolee.log("Promise 结束")
+                    map.openInfoWindow(infoWindow, sto_point); //开启信息窗口
+                }); 
+                mk.addEventListener("dblclick", function(){   
+                    console.log(element)
+                    router.push({
+                        path:'/storeDetail',
+                        query:{
+                            sto_id:element.sto_id
+                        }
+                    })
+                }); 
+                map.addOverlay(mk);
+                
+                console.log("Promise 结束")
                 resolve(); 
             });
         });
@@ -213,7 +272,7 @@ function computeDistance(){
         // 可以调用一个函数来处理这部分逻辑
         markedPoint.push(currentPoint)
         console.log('需要做标记的点'+markedPoint)
-        drawPolygon(markedPoint);
+        // drawPolygon(markedPoint);
     })
     .catch(error => {
         console.error('Error:', error);
@@ -223,7 +282,7 @@ function computeDistance(){
 function afterLocation(lat,lng){
     lat=31.289
     lng=121.22
-    initalizatin(lat,lng)
+    initalization(lat,lng)
     var sto_ids=[]
     axios.get(BaseUrl+'/api/pub/map',{
     params:{
@@ -242,6 +301,7 @@ function afterLocation(lat,lng){
             }
         })
     }).then(res=>{
+        console.log(res)
         res.data.forEach(ele=>{
             sto_arr.push(new sto_info(ele))
         })

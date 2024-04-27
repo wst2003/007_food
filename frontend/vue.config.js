@@ -3,10 +3,10 @@ const Components = require('unplugin-vue-components/webpack')
 const NutUIResolver = require('@nutui/auto-import-resolver')
 const { plugins } = require("eslint-plugin-vue/lib/configs/base");
 // import globalData from "../../global.js"
-
+const fs=require('fs')
 // const BaseUrl = "http://119.3.153.217:8002"
-// const BaseUrl = "http://124.70.156.23:8002"
-const BaseUrl="http://localhost:8002"
+const BaseUrl = "http://124.70.156.23:8002"
+// const BaseUrl="http://localhost:8002"
 // const BaseUrl = "http://100.80.74.33:8002"
 
 // const BaseUrl = "http://127.0.0.1:4523/m1/4090306-0-default/api"
@@ -45,7 +45,8 @@ module.exports = defineConfig({
     }
   },
   devServer: {
-    port:5501,
+    port:80,
+    // port:443,
     client: { //加上这个就好了
       overlay: false,
     },
@@ -62,8 +63,18 @@ module.exports = defineConfig({
           "^/gpt": "",
         },
       },
-
-    }
+      "/alipay": {
+        target: "http://124.70.156.23:3000",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/alipay": "/",
+        },
+      },
+    },
+    // https:{
+    //   key:fs.readFileSync('./server.key'),
+    //   cert:fs.readFileSync('./server.cert'),
+    // }
   },
   parallel:false
 })

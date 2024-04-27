@@ -4,10 +4,19 @@ const alipaySdk = require('./alipay.js'); // 引入你之前定义的支付宝�
 const AlipayFormData = require('alipay-sdk/lib/form').default; // 引入AlipayFormData
 const app = express();
 
-
-app.use(cors()); // 使用CORS中间件
 // 解析JSON请求体
 app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+app.use((req,res,next)=>{
+    //设置响应头 告诉浏览器任何地址都可以访问这个接口
+    res.setHeader('Access-Control-Allow-Origin','*')
+    //告诉浏览器支持这些方式
+    res.setHeader('Access-Control-Allow-Methods','GET,POST,DELETE,PUT')
+    next()
+  })
+
+app.use(cors()); // 使用CORS中间件
+
 
 // 支付接口
 app.post('/api/payment', function (req, res, next) {

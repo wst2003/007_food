@@ -259,12 +259,17 @@ const generateIndent=()=>{
         .then(response=>{
             console.log('订单生成情况：')
             console.log(response)
-            promptStr.value=response.data
+            
+            promptStr.value=response.data.msg
             promptShow.value=true
- 
-            globalData.shoppingCart.clear()
-            indent_items.clear()
-            // 清空购物车、页面数据
+            if(response.data.msg=="余额不足"){
+                alert('账户余额不足！')
+            }
+            else{
+                globalData.shoppingCart.clear()
+                indent_items.clear()
+                // 清空购物车、页面数据
+            }
         })
 }
 </script>
