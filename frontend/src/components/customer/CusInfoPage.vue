@@ -116,7 +116,10 @@ import {  useRouter } from 'vue-router';
 // import globalData from"../../global.js"
 const router=useRouter();
 const goBack=()=>{
-  router.go(-1);
+  router.push({
+    path: '/home',
+  // path:'cusinfopage'
+  });
 }
 onMounted(()=>{
   axios.get(BaseUrl+'/api/cus/getInfo',{

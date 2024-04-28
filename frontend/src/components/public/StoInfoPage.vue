@@ -221,7 +221,9 @@ const confirm_withdraw=()=>{
   
 }
 const goBack=()=>{
-  router.go(-1);
+  router.push({
+    path: '/storemanage',
+  });
 }
 onMounted(()=>{
   axios.get(BaseUrl+'/api/sto/informationdetail',{
