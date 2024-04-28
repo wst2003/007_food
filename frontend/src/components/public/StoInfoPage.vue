@@ -5,6 +5,14 @@
     <nut-avatar size="large" style="margin-left:40vw;margin-top:5vh;">
       <img :src="formData.user_logo" />
     </nut-avatar>
+    <div style="position:absolute;">
+      支付宝沙箱账号及密码
+      <br>
+      账号：ihbifl1217@sandbox.com
+      <br>
+      登录密码：111111
+      支付密码：111111
+    </div>
       <nut-form style="margin-top:10vh;opacity:0.9;">
           <nut-form-item label="手机号">
             <nut-input v-model="formData.user_phone" placeholder="请输入姓名" type="text" :disabled="true" />
@@ -134,22 +142,22 @@ const confirm_recharge=()=>{
         })
           .then(response => {
             console.log(response.data.msg)
-            if(response.data.msg=="成功"){
-              baseClick("充值成功")
-              axios.get(BaseUrl+'/api/cus/getInfo',{
-              params: {
-                cus_id:sessionStorage.getItem("user_id")
-              }
-              }, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                  })
-                  .then(response=>{
-                      formData.value.user_balance=response.data.user_balance
-                  })
-              location.reload();
-            }
+            // if(response.data.msg=="成功"){
+            //   baseClick("充值成功")
+            //   axios.get(BaseUrl+'/api/cus/getInfo',{
+            //   params: {
+            //     cus_id:sessionStorage.getItem("user_id")
+            //   }
+            //   }, {
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         }
+            //       })
+            //       .then(response=>{
+            //           formData.value.user_balance=response.data.user_balance
+            //       })
+            //   location.reload();
+            // }
           })
     });
 
@@ -197,7 +205,7 @@ const confirm_withdraw=()=>{
                       formData.value.user_balance=response.data.user_balance
                       location.reload();
                   })
-              //location.reload();
+              location.reload();
             }
             
           })

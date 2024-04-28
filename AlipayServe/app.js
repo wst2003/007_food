@@ -43,7 +43,7 @@ app.post('/api/payment', function (req, res, next) {
     // 获取环境变量中的HOST，如果没有则默认localhost
     const host = process.env.HOST || 'localhost';
     // 获取环境变量中的 PORT，如果没有则默认为8080
-    const port = process.env.PORT || '5501'
+    const port = process.env.PORT || '80'
     let returnURL='';
     if(userType==0)
         returnURL = `http://${host}:${port}/cusinfopage`;
