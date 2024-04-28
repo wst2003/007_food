@@ -107,7 +107,7 @@ const mapObj={
                     distance=plan.getDistance(true);
                     duration=plan.getDuration(true);
                     
-                    console.log('步行距离'+plan.getDistance(true)+'步行时间'+plan.getDuration(true)); 
+                    // console.log('步行距离'+plan.getDistance(true)+'步行时间'+plan.getDuration(true)); 
                      // 调用回调函数，传递distance和duration
                     if (callback && typeof callback === 'function') {
                         callback(distance, duration);
@@ -146,4 +146,6 @@ const mapObj={
     }
 }
 const BaseUrl = "http://124.70.156.23:8002"
+// const BaseUrl = "http://localhost:8002"
+// const BaseUrl = "http://100.80.74.33:8002"
 export default{shoppingCart,userPosition,userInfo,mapObj,BaseUrl}

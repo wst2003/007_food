@@ -17,7 +17,7 @@
                         <div style="color:white;position: absolute;right:55%">-￥2</div>
                     </div>
                     <div style="margin-left: 10%;margin-top: 3%;">
-                        <nut-tag round plain color="#E9E9E9" text-color="#999999"> 1.2km  ></nut-tag>
+                        <nut-tag round plain color="#E9E9E9" text-color="#999999"> {{ indent_items.getEstimatedDistance()}}  ></nut-tag>
                     </div>
                 </div>
             </nut-col>
@@ -36,7 +36,7 @@
                         <div style="color:white;position: absolute;right:5%">+{{ 0.68*globalData.shoppingCart.items.length }}kg</div>
                     </div>
                     <div style="margin-left: 10%;margin-top: 3%;">
-                        <nut-tag round plain color="#E9E9E9" text-color="#999999"> 30min  ></nut-tag>
+                        <nut-tag round plain color="#E9E9E9" text-color="#999999"> {{ indent_items.getEstimatedDurition()}}  ></nut-tag>
                     </div>
                 </div>
             </nut-col>
@@ -94,7 +94,7 @@
 <script setup>
 import { onMounted, reactive,ref,computed} from 'vue';
 // import { useRoute,useRouter } from 'vue-router';
-
+import qs from 'qs'
 import axios from 'axios';
 import globalData from "../../global.js"
 const BaseUrl = globalData.BaseUrl
@@ -174,6 +174,22 @@ const indent_items=reactive({
                 ele.duration=dur
             }
         })
+    },
+    getEstimatedDistance(){
+        if(this.items.length>0){
+            return this.items[0].distance
+        }
+        else{
+            return "0公里"
+        }
+    },
+    getEstimatedDurition(){
+        if(this.items.length>0){
+            return this.items[0].duration
+        }
+        else{
+            return "0分钟"
+        }
     }
 })
 onMounted(()=>{
@@ -213,24 +229,27 @@ onMounted(()=>{
                 tmp_sto_id=response.data[0].sto_ID
             }
             console.log(indent_items.items)
-
             // 拉取商家详细信息，用于获取配送/自取距离
-            return axios.get(BaseUrl+'api/sto/informationdetail',{
+            return axios.get(BaseUrl+'/api/sto/informationdetail',{
                     params:{
                         sto_ID:response.data[0].sto_ID
+                    },
+                    paramsSerializer: params => {
+                        return qs.stringify(params, { indices: false })
                     }
                 })
         }).then(res=>{
-            console.log("地图组件:")
-            console.log(globalData.mapObj.map)
-            globalData.mapObj.walkingRoute(globalData.userPosition.latitude,
+            console.log(res.data[0])
+            console.log(globalData.userPosition.latitude,
                 globalData.userPosition.longitude,
                 res.data[0].sto_latitude,
-                res.data[0].sto_longtitude,
+                res.data[0].sto_longitude,)
+            globalData.mapObj.walkingRoute(globalData.userPosition.latitude,
+                globalData.userPosition.longitude,
+                Number(res.data[0].sto_latitude),
+                Number(res.data[0].sto_longitude),false,
                 (dis,dur)=>{
                     indent_items.afterRouting(dis,dur,tmp_sto_id)
-                    console.log('调用百度云函数成功'+indent_items)
-                    console.log(indent_items)
                 }
             );
         }).catch(err=>{
@@ -259,12 +278,17 @@ const generateIndent=()=>{
         .then(response=>{
             console.log('订单生成情况：')
             console.log(response)
-            promptStr.value=response.data
+            
+            promptStr.value=response.data.msg
             promptShow.value=true
- 
-            globalData.shoppingCart.clear()
-            indent_items.clear()
-            // 清空购物车、页面数据
+            if(response.data.msg=="余额不足"){
+                alert('账户余额不足！')
+            }
+            else{
+                globalData.shoppingCart.clear()
+                indent_items.clear()
+                // 清空购物车、页面数据
+            }
         })
 }
 </script>
