@@ -478,7 +478,5 @@ function toggleHeight(e) {
         position: relative;
         right: 10px;
     }
-    #baidumap{
 
-    }
 </style>
