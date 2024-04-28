@@ -3,8 +3,12 @@
     <BaiduMap />
     <nut-searchbar v-model="query_content">
       <template #rightin>
+        <div v-if="false">
         <Voice @click="translationStart" v-if="voiceState" />
         <Voice @click="translationEnd" v-else />
+        </div>
+        <nut-switch v-model="val" active-color="skyblue"/>
+
         <!--      <VoiceInput @click="getResult"/>-->
       </template>
       <template #rightout>
@@ -98,7 +102,7 @@
 import { ref } from "vue";
 import {
   Search2,
-  Voice,
+  // Voice,
 } from "@nutui/icons-vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -108,7 +112,7 @@ import { reactive } from "vue";
 import globalData from "../../global.js"
 const BaseUrl = globalData.BaseUrl
 const iatRecorder = new IatRecorder('en_us', 'mandarin', '5f27b6a9')
-
+const val=ref(false)
 // import VoiceInput from "@/components/VoiceInput.vue";
 const pageSize = ref(6);
 const pageNum = ref(0);
@@ -213,49 +217,90 @@ const typeOptionClick = (num) => {
 }
 
 const searchCommodity = () => {
-  pageNum.value++;
-  axios.get(BaseUrl+'/api/com/searchCommodity', {
-    params: {
-      content: query_content.value,
-      com_type: comType.value,
-      sort_by: sortBy.value,
-      sort_order: sortOrder.value,
-      page_size: pageSize.value,
-      page_num: pageNum.value
-    }
-  })
-    .then(response => {
-      for(let i=0;i<response.data.length;i++){
-        response.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+response.data[i].commodityImage;
-      }
-      commodityList.value = commodityList.value.concat(response.data);
-      // console.log( commodityList.value)
-      // 下面代码用于步行规划，得到去到商品的步行距离。
-      // 延时等待 globalData.mapObj.map 初始化成功
-      setTimeout(()=>{
-        commodityList.value.forEach(ele=>{
-          axios.get(BaseUrl+'/api/sto/informationdetail', {
-            params: {
-              sto_ID: ele.sto_ID,
-            }
-          }).then(res=>{
-            // console.log(res.data[0])
-            globalData.mapObj.walkingRoute(
-              globalData.userPosition.latitude,globalData.userPosition.longitude,
-              res.data[0].sto_latitude,res.data[0].sto_longitude, 
-              false,(dis,dur)=>{
-                ele.com_dist=dis;
-                dur;
-              })
-          })
-        })
-      },1000)
-      
-      loading.value = false;
-      if (response.data.length < pageSize.value) {
-        hasMore.value = false;
+  if(val.value===false) {
+    pageNum.value++;
+    axios.get(BaseUrl + '/api/com/searchCommodity', {
+      params: {
+        content: query_content.value,
+        com_type: comType.value,
+        sort_by: sortBy.value,
+        sort_order: sortOrder.value,
+        page_size: pageSize.value,
+        page_num: pageNum.value
       }
     })
+        .then(response => {
+          for (let i = 0; i < response.data.length; i++) {
+            response.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/" + response.data[i].commodityImage;
+          }
+          commodityList.value = commodityList.value.concat(response.data);
+          // console.log( commodityList.value)
+          // 下面代码用于步行规划，得到去到商品的步行距离。
+          // 延时等待 globalData.mapObj.map 初始化成功
+          setTimeout(() => {
+            commodityList.value.forEach(ele => {
+              axios.get(BaseUrl + '/api/sto/informationdetail', {
+                params: {
+                  sto_ID: ele.sto_ID,
+                }
+              }).then(res => {
+                // console.log(res.data[0])
+                globalData.mapObj.walkingRoute(
+                    globalData.userPosition.latitude, globalData.userPosition.longitude,
+                    res.data[0].sto_latitude, res.data[0].sto_longitude,
+                    false, (dis, dur) => {
+                      ele.com_dist = dis;
+                      dur;
+                    })
+              })
+            })
+          }, 1000)
+
+          loading.value = false;
+          if (response.data.length < pageSize.value) {
+            hasMore.value = false;
+          }
+        })
+  }
+  else{
+    console.log("GPT")
+    axios.post(
+        'http://119.8.11.44:8081/api/test/gpt', // 本地运行前端
+
+        {
+          words: query_content.value
+        }).then(response => {
+      // console.log(voiceResult.value)
+      console.log("上传完成")
+      console.log(JSON.stringify(response.data.com_ids.join(',')))
+      axios.get(BaseUrl+'/api/com/commoditydetailbyarray',{
+        params:{
+          com_ID:response.data.com_ids.join(',')
+          // com_ID:112
+        }
+      }).then(response=>{
+        console.log(response.data)
+        commodityData.value = [];
+        commodityList.value=[];
+        pageNum.value = 0;
+        hasMore.value = false;
+
+        for(let i=0;i<response.data.length;i++){
+          if(response.data[i].com_ID===-1)
+            continue;
+          response.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+response.data[i].commodityImage[0].com_image;
+          response.data[i].com_price=response.data[i].com_oriPrice
+          commodityList.value.push(response.data[i])
+        }
+        // commodityList.value = commodityList.value.concat(response.data);
+        console.log(commodityList.value)
+        loading.value = false;
+        if (response.data.length < pageSize.value) {
+          hasMore.value = false;
+        }
+      })
+    })
+  }
 }
 
 searchCommodity();
