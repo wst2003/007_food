@@ -174,8 +174,8 @@ const confirm_recharge=async ()=>{
   console.log(parseFloat(formData.value.user_balance)+charge_num.value)
   const orderId = generateOrderId();
   axios.post(
-    'http://localhost:3000/api/payment', 
-    // 'http://124.70.156.23:3000/api/payment', 
+    // 'http://localhost:3000/api/payment', 
+    'http://124.70.156.23:3000/api/payment', 
     // '/alipay/api/payment', 
     {
       userType:0,
@@ -225,8 +225,8 @@ const confirm_withdraw=()=>{
       identity_type: 'ALIPAY_USER_ID' // 支付宝的会员ID
     };
     axios.post(
-      'http://localhost:3000/api/withdraw', 
-      // 'http://124.70.156.23:3000/api/withdraw', 
+      // 'http://localhost:3000/api/withdraw', 
+      'http://124.70.156.23:3000/api/withdraw', 
       // '/alipay/api/withdraw', 
     {
         out_biz_no: outBizNo,

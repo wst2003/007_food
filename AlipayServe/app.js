@@ -7,13 +7,13 @@ const app = express();
 // 解析JSON请求体
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
-app.use((req,res,next)=>{
-    //设置响应头 告诉浏览器任何地址都可以访问这个接口
-    res.setHeader('Access-Control-Allow-Origin','*')
-    //告诉浏览器支持这些方式
-    res.setHeader('Access-Control-Allow-Methods','GET,POST,DELETE,PUT')
-    next()
-  })
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'Authorization,X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method' )
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH, PUT, DELETE')
+    res.header('Allow', 'GET, POST, PATCH, OPTIONS, PUT, DELETE')
+    next();
+}); 
 
 app.use(cors()); // 使用CORS中间件
 
