@@ -162,7 +162,7 @@
 import { ref, onMounted, watch } from 'vue';
 import { Shop, Clock } from '@nutui/icons-vue';
 import { useRoute, useRouter } from 'vue-router';
-import * as echarts from 'echarts';
+import {init, graphic } from 'echarts';
 import globalData from "../../global.js"
 import axios from 'axios';
 // const BaseUrl = "http://119.3.153.217:8002"
@@ -193,7 +193,7 @@ var option = {
       type: 'line',
       step: 'end',
       areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        color: new graphic.LinearGradient(0, 0, 0, 1, [
           { offset: 0, color: "#93B090" },
           { offset: 1, color: "#FBFCFA" },
         ]),
@@ -274,7 +274,7 @@ const convert = (response) => {
 onMounted(() => {
   console.log("use")
   console.log(route.query);
-  myChart = echarts.init(document.getElementById('main'));
+  myChart = init(document.getElementById('main'));
   // myChart.setOption(option);
   buying_quantity.value=globalData.shoppingCart.getItemById(route.query.id).quantity
   console.log('购物车中的对象：'+globalData.shoppingCart.getItemById(route.query.id))
@@ -345,7 +345,7 @@ const showDetail = (id, position, distance, price, name, left) => {
   route.query.left=left;
 
 
-  myChart = echarts.init(document.getElementById('main'));
+  myChart = init(document.getElementById('main'));
   // myChart.setOption(option);
   buying_quantity.value=globalData.shoppingCart.getItemById(route.query.id).quantity
 

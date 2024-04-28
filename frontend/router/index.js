@@ -1,30 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import SearchCommodityPage from '@/components/customer/SearchCommodityPage.vue';
-import HomePage from "@/components/public/HomePage.vue"
-import CommodityDetailPage from "@/components/commodity/CommodityDetailPage.vue";
-import LoginPage from '@/components/public/LoginPage.vue';
-import SelectIdentityPage from '@/components/public/SelectIdentityPage.vue';
-import StoreDetailPage from '@/components/customer/StoreDetailPage.vue';
-import MyIndentPage from '@/components/customer/MyIndentPage.vue';
-import CusRegisterPage from '@/components/public/CusRegisterPage.vue';
-import StoreRegisterPage from '@/components/public/StoreRegisterPage.vue';
-import CommentPage from '@/components/customer/CommentPage.vue';
-import IndentDetailPage from '@/components/customer/IndentDetailPage.vue';
-import IndentConfirmPage from '@/components/indent/IndentConfirmPage.vue';
-import UploadCommodity from '@/components/store/UploadCommodity.vue';
-import UploadBlindBoxPage from '@/components/store/UploadBlindBoxPage.vue';
-import UploadSelector from '@/components/store/UploadSelector.vue';
-import MysteryBoxDetailPage from '@/components/commodity/MysteryBoxDetailPage.vue'
-import StoreManagePage from '@/components/store/StoreManagePage.vue'
-import IndentManagePage from '@/components/store/IndentManagePage.vue';
-import CommodityManagePage from "@/components/store/CommodityManagePage.vue";
-import SearchBoxPage from "@/components/customer/SearchBoxPage.vue";
-import PathPlanningPage from '@/components/store/PathPlanningPage.vue';
-import StoreHomePage from "@/components/public/StoreHomePage.vue";
-import CusInfoPage from '@/components/customer/CusInfoPage.vue';
-import StoInfoPage from '@/components/public/StoInfoPage.vue';
-import TestCopo from '@/components/TestCopo.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -38,17 +13,17 @@ const router = createRouter({
             // meta:{
             //     keepAlive:true
             // },
-            component: HomePage,
+            component: () => import('@/components/public/HomePage.vue'),
             children: [
                 {
                     path: '/mysteryBoxDetail',
                     name: 'mysteryBoxDetail',
-                    component: MysteryBoxDetailPage
+                    component: () => import('@/components/commodity/MysteryBoxDetailPage.vue'),
                 },
                 {
                     path: '/searchCommodity',
                     name: 'searchCommodity',
-                    component: SearchCommodityPage,
+                    component: () => import('@/components/customer/SearchCommodityPage.vue'),
                     meta: {
                         keepAlive: true //需要被缓存
                     }
@@ -56,128 +31,123 @@ const router = createRouter({
                 {
                     path: '/commodityDetail',
                     name: 'commodityDetail',
-                    component: CommodityDetailPage
+                    component: () => import('@/components/commodity/CommodityDetailPage.vue'),
                 },
                 {
                     path: '/storeDetail',
                     name: 'storeDetail',
-                    component: StoreDetailPage
+                    component:  () => import('@/components/customer/StoreDetailPage.vue'),
                 },
                 {
                     path: '/myIndent',
                     name: 'myIndent',
-                    component: MyIndentPage
+                    component:  () => import('@/components/customer/MyIndentPage.vue'),
                 },
                 {
                     path:'/comment',
                     name:'comment',
-                    component:CommentPage
+                    component:() => import('@/components/customer/CommentPage.vue'),
                 },
                 {
                     path:'/indentdetail',
                     name:'indentdetail',
-                    component:IndentDetailPage
+                    component:() => import('@/components/customer/IndentDetailPage.vue')
                 },
                 {
                     path:'/indentConfirm',
                     name: 'indentConfirm',
-                    component:IndentConfirmPage
+                    component:() => import('@/components/indent/IndentConfirmPage.vue')
                 },
                 {
                     path:'/searchBox',
                     name:'searchBox',
-                    component:SearchBoxPage
+                    component:() => import('@/components/customer/SearchBoxPage.vue')
                 }
             ]
         },
         {
             path: '/SelectIdentity',
             name: 'SelectIdentity',
-            component: SelectIdentityPage
+            component:() => import('@/components/public/SelectIdentityPage.vue')
         },
         {
             path: '/login',
             name: 'login',
-            component: LoginPage
+            component: () => import('@/components/public/LoginPage.vue')
         },
         {
             path:'/cusregister',
             name:'cusregister',
-            component:CusRegisterPage
+            component:() => import('@/components/public/CusRegisterPage.vue')
         },
         {
             path:'/storegister',
             name:'storegister',
-            component:StoreRegisterPage
+            component:() => import('@/components/public/StoreRegisterPage.vue')
         },
         {
             path:'/uploadblindbox',
             name:'uploadblindbox',
-            component:UploadBlindBoxPage
+            component:() => import('@/components/store/UploadBlindBoxPage.vue')
         },
         {
             path:'/UploadSelector',
             name: 'UploadSelector',
-            component:UploadSelector
+            component:() => import('@/components/store/UploadSelector.vue')
         },
         {
             path:'/pathPlanningPage',
             name:'pathPlanningPage',
-            component:PathPlanningPage
+            component:() => import('@/components/store/PathPlanningPage.vue')
         },
         {
             path:'/storeHome',
             name:'storeHome',
-            component:StoreHomePage,
+            component:() => import('@/components/public/StoreHomePage.vue'),
             children:[
                 {
                     path:'/uploadCommodity',
                     name:'uploadCommodity',
-                    component:UploadCommodity
+                    component:() => import('@/components/store/UploadCommodity.vue'),
                 },
                 {
                     path:'/indentmanagepage',
                     name:'indentmanagepage',
-                    component:IndentManagePage
+                    component:() => import('@/components/store/IndentManagePage.vue'),
                 },
                 {
                     path:'/commodityManage',
                     name:'commodityManage',
-                    component:CommodityManagePage
+                    component:() => import('@/components/store/CommodityManagePage.vue'),
                 },
                 {
 
                     path:'/storemanage',
                     name:'storemanage',
-                    component:StoreManagePage
+                    component:() => import('@/components/store/StoreManagePage.vue'),
                 },
                 {
                     path: '/storeCommodityDetail',
                     name: 'storeCommodityDetail',
-                    component: CommodityDetailPage
+                    component: () => import('@/components/commodity/CommodityDetailPage.vue'),
                 },
             ]
         
         },
-        // {
-        //     path:'/storemanage',
-        //     name:'storemanage',
-        //     component:StoreManagePage
-        // },
         {
             path:'/cusinfopage',
             name:'cusinfopage',
-            component:CusInfoPage
+            component:() => import('@/components/customer/CusInfoPage.vue'),
         },
         {
             path:'/stoinfopage',
             name:'stoinfopage',
-            component:StoInfoPage
+            component:() => import('@/components/public/StoInfoPage.vue'),
         },
         {
             path:'/testcopo',
             name:'testcopo',
-            component:TestCopo
+            component:() => import('@/components/TestCopo.vue'),
         }
     ]
 });
