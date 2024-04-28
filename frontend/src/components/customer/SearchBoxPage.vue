@@ -51,6 +51,9 @@
                     {{ item.praise_rate }}
                   </div>
                 </div>
+                <div class="distance">
+                  {{ item.com_dist  }}
+                </div>
               </div>
             </div>
             <div style="background-color: #808080;width: 20%;margin-bottom: 20px;border-radius: 0 20px 20px 0;background: #93B090;box-shadow: -3px 0px 4px 0px rgba(0, 0, 0, 0.25);z-index: 10;

@@ -118,6 +118,9 @@
                     {{ item.praise_rate }}
                   </div>
                 </div>
+                <div class="distance">
+                  {{ item.com_dist  }}
+                </div>
               </div>
 
             </div>
@@ -239,6 +242,7 @@ const loadMore = () => {
         res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
       }
       recommendationList.value = recommendationList.value.concat(res.data);
+      listRoute()
       ifLoading.value = false;
       if (res.data.length < recommendationInfo.page_size)
         hasMore.value = false;
@@ -300,12 +304,32 @@ onMounted(() => {
         res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
       }
     recommendationList.value = recommendationList.value.concat(res.data);
+    listRoute()
     if (res.data.length < recommendationInfo.page_size)
       hasMore.value = false;
   })
 })
 
-
+const listRoute=()=>{
+  setTimeout(() => {
+            recommendationList.value.forEach(ele => {
+              axios.get(BaseUrl + '/api/sto/informationdetail', {
+                params: {
+                  sto_ID: ele.sto_ID,
+                }
+              }).then(res => {
+                // console.log(res.data[0])
+                globalData.mapObj.walkingRoute(
+                    globalData.userPosition.latitude, globalData.userPosition.longitude,
+                    res.data[0].sto_latitude, res.data[0].sto_longitude,
+                    false, (dis, dur) => {
+                      ele.com_dist = dis;
+                      dur;
+                    })
+              })
+            })
+          }, 1000)
+}
 
 const timePeriod = ref("");
 
@@ -372,6 +396,7 @@ const showDetail = (id, position, distance, price, name, left) => {
         res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
       }
       recommendationList.value = recommendationList.value.concat(res.data);
+      listRoute()
       ifLoading.value = false;
       if (res.data.length < recommendationInfo.page_size)
         hasMore.value = false;

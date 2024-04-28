@@ -105,6 +105,9 @@
                     {{ item.praise_rate }}
                   </div>
                 </div>
+                <div class="distance">
+                 {{ item.com_dist }}
+                </div>
               </div>
             </div>
             <div style="background-color: #808080;width: 20%;margin-bottom: 20px;border-radius: 0 20px 20px 0;background: #93B090;box-shadow: -3px 0px 4px 0px rgba(0, 0, 0, 0.25);z-index: 10;
@@ -168,7 +171,7 @@ watch(buying_quantity, () => {
 const router = useRouter();
 const route=useRoute();
 const hasMore = ref(true);
-const timePeriod = ref("");
+// const timePeriod = ref("");
 
 const recommendationInfo = {
   page_num: 0,
@@ -200,6 +203,7 @@ const loadMore = () => {
       }
     }).then((res) => {
       recommendationList.value = recommendationList.value.concat(res.data);
+      listRoute()
       ifLoading.value = false;
       if (res.data.length < recommendationInfo.page_size)
         hasMore.value = false;
@@ -231,12 +235,32 @@ onMounted(() => {
     }
   }).then((res) => {
     recommendationList.value = recommendationList.value.concat(res.data);
+    listRoute()
     if (res.data.length < recommendationInfo.page_size)
       hasMore.value = false;
   })
 })
 
-
+const listRoute=()=>{
+  setTimeout(() => {
+            recommendationList.value.forEach(ele => {
+              axios.get(BaseUrl + '/api/sto/informationdetail', {
+                params: {
+                  sto_ID: ele.sto_ID,
+                }
+              }).then(res => {
+                // console.log(res.data[0])
+                globalData.mapObj.walkingRoute(
+                    globalData.userPosition.latitude, globalData.userPosition.longitude,
+                    res.data[0].sto_latitude, res.data[0].sto_longitude,
+                    false, (dis, dur) => {
+                      ele.com_dist = dis;
+                      dur;
+                    })
+              })
+            })
+          }, 1000)
+}
 
 
 

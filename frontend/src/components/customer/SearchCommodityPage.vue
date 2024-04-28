@@ -78,6 +78,9 @@
                     {{ item.praise_rate }}
                   </div>
                 </div>
+                <div class="distance">
+                  {{ item.com_dist }}
+                </div>
               </div>
 
             </div>
