@@ -41,7 +41,7 @@ app.post('/api/payment', function (req, res, next) {
         });
     // 支付成功或者失败打开的页面
     // 获取环境变量中的HOST，如果没有则默认localhost
-    const host = process.env.HOST || 'localhost';
+    const host = process.env.HOST || '124.70.156.23';
     // 获取环境变量中的 PORT，如果没有则默认为8080
     const port = process.env.PORT || '80'
     let returnURL='';
