@@ -1,7 +1,7 @@
 <template>
   <nut-config-provider :theme-vars="themeVars">
     <div class="background"></div>
-    <nut-navbar title="个人信息" left-show @click-back="goBack"></nut-navbar>
+    <nut-navbar title="商家信息" left-show @click-back="goBack"></nut-navbar>
     <nut-avatar size="large" style="margin-left:40vw;margin-top:5vh;">
       <img :src="formData.user_logo" />
     </nut-avatar>
