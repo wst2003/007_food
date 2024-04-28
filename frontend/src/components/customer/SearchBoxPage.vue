@@ -1,10 +1,12 @@
 <template>
   <div v-if="!loading">
     <BaiduMap />
-    <nut-searchbar v-model="query_content">
+    <nut-searchbar v-model="query_content" placeholder="普通搜索">
       <template #rightin>
-        <Voice @click="translationStart" v-if="voiceState" />
-        <Voice @click="translationEnd" v-else />
+        <div v-if="false">
+          <Voice @click="translationStart" v-if="voiceState" />
+          <Voice @click="translationEnd" v-else />
+        </div>
         <!--      <VoiceInput @click="getResult"/>-->
       </template>
       <template #rightout>

@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
     <BaiduMap />
-    <nut-searchbar v-model="query_content">
+    <nut-searchbar v-model="query_content" :placeholder="searchHint">
       <template #rightin>
         <div v-if="false">
         <Voice @click="translationStart" v-if="voiceState" />
@@ -108,7 +108,7 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import BaiduMap from '../BaiduMap.vue'
 import IatRecorder from '@/assets/js/IatRecorder.js'
-import { reactive } from "vue";
+import { reactive ,watch} from "vue";
 import globalData from "../../global.js"
 const BaseUrl = globalData.BaseUrl
 const iatRecorder = new IatRecorder('en_us', 'mandarin', '5f27b6a9')
@@ -152,6 +152,15 @@ const sortName = {
   s3: 2
 }
 
+const searchHint=ref("普通搜索")
+watch(val,()=>{
+  if(val.value==false){
+    searchHint.value="普通搜索"
+  }
+  else{
+    searchHint.value="智慧搜索"
+  }
+})
 
 const themeVars = ref({
   cellPadding: "0px 0px",
