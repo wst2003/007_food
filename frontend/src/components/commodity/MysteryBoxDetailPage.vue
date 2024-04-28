@@ -45,13 +45,13 @@
         <Shop style="margin-right: 15px;"/>
         <span>
           <span>
-        {{ " " + mysteryBoxInfo.sto_name }}</span>
+        {{ " " + mysteryBoxInfo.sto_name}}</span>
         <span>{{  }}</span>
         </span>
       </nut-row>
       <nut-row style="display: flex;align-items: center;">
         <Clock style="margin-right: 15px;"/>
-        {{ timePeriod }}
+        {{ mysteryBoxInfo.sto_openingTime+' - ' +mysteryBoxInfo.sto_closingTime }}
       </nut-row>
       <nut-row style="display: flex;align-items: start;">
         <Ask style="margin-right: 15px;"/>
@@ -104,9 +104,6 @@
                   <div class="rate">
                     {{ item.praise_rate }}
                   </div>
-                </div>
-               <div class="distance">
-                 {{ item.com_dist + 'km' }}
                 </div>
               </div>
             </div>

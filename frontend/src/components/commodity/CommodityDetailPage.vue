@@ -118,9 +118,6 @@
                     {{ item.praise_rate }}
                   </div>
                 </div>
-                <div class="distance">
-                  {{ item.com_dist + 'km' }}
-                </div>
               </div>
 
             </div>
@@ -167,7 +164,7 @@ import globalData from "../../global.js"
 import axios from 'axios';
 // const BaseUrl = "http://119.3.153.217:8002"
 const BaseUrl = globalData.BaseUrl
-
+let type = '饮品';
 const buying_quantity = ref(0);// quantity in shopping cart
 // Whenever quantity is modified, synchronize with shopping cart
 watch(buying_quantity, () => {
@@ -231,7 +228,7 @@ const loadMore = () => {
     axios.get(BaseUrl+'/api/com/searchCommodity', {
       params: {
         content: "",
-        com_type: "",
+        com_type: type,
         sort_by: 1,
         sort_order: 0,
         page_size: recommendationInfo.page_size,
@@ -292,7 +289,7 @@ onMounted(() => {
   axios.get(BaseUrl+'/api/com/searchCommodity', {
     params: {
       content: "",
-      com_type: "",
+      com_type: type,
       sort_by: 1,
       sort_order: 0,
       page_size: recommendationInfo.page_size,
@@ -355,6 +352,7 @@ const showDetail = (id, position, distance, price, name, left) => {
     }
   })
       .then(response => {
+        type = response.data.commodity_categories[0].com_category;
         console.log(response.data);
         convert(response.data);
       })
@@ -363,7 +361,7 @@ const showDetail = (id, position, distance, price, name, left) => {
   axios.get(BaseUrl+'api/com/searchCommodity', {
     params: {
       content: "",
-      com_type: "",
+      com_type: type,
       sort_by: 1,
       sort_order: 0,
       page_size: recommendationInfo.page_size,

@@ -47,7 +47,7 @@
         <div class="container">
           <div v-for="(item, index) in commodityList" :key="index" style="width: 45%;">
             <div class="commodity-card"
-              @click="showDetail(item.com_ID, item.com_position, item.com_dist, item.com_price, item.com_name, item.com_left)">
+              @click="showDetail(item.com_ID, item.com_position, item.com_dist, item.com_price, item.com_name, item.com_left,item.com_type)">
               <div style="height: 150px;position: relative;">
                 <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 20px 0 0;" />
                 <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">
@@ -77,9 +77,6 @@
                   <div class="rate">
                     {{ item.praise_rate }}
                   </div>
-                </div>
-                <div class="distance">
-                  {{ item.com_dist }}
                 </div>
               </div>
 
@@ -230,6 +227,7 @@ const searchCommodity = () => {
       }
     })
         .then(response => {
+          console.log('#',response.data);
           for (let i = 0; i < response.data.length; i++) {
             response.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/" + response.data[i].commodityImage;
           }
