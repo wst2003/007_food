@@ -1,7 +1,8 @@
 const { defineConfig } = require('@vue/cli-service')
 const Components = require('unplugin-vue-components/webpack')
 const NutUIResolver = require('@nutui/auto-import-resolver')
-const { plugins } = require("eslint-plugin-vue/lib/configs/base");
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // import globalData from "../../global.js"
 const fs=require('fs')
 // const BaseUrl = "http://119.3.153.217:8002"
@@ -14,36 +15,29 @@ const imageURL = "https://food-bank.obs.cn-east-3.myhuaweicloud.com/"
 
 module.exports = defineConfig({
   transpileDependencies: true,
-  // configureWebpack:{
-  //   plugins: [
-  //     // 开启 unplugin 插件，自动引入 NutUI 组件
-  //     Components({
-  //       resolvers: [NutUIResolver()],
-  //     })
-  //   ],
-  //   externals: {
-  //     'BaiduMap': "BMapGL"
-  //   }
-  // },
-  configureWebpack: config => {
-    config.module.rules.push({
-      test: /\.worker.js$/,
-      use: {
-        loader: 'worker-loader',
-        options: { inline: true, name: 'workerName.[hash].js' }
-      }
-    })
-    const plugin = [
-      // 开启 unplugin 插件，自动引入 NutUI 组件
-      Components({
-        resolvers: [NutUIResolver()],
-      })
-    ];
-    config.plugins.push(...plugin);
-    config["externals"] = {
-      'BaiduMap': "BMapGL"
-    }
-  },
+
+  configureWebpack:
+    config => {
+      config.mode = 'production';
+      config.plugins.push(new BundleAnalyzerPlugin());
+      config.optimization = {
+        minimizer: [
+          new CssMinimizerPlugin(), // 去重压缩css
+        ],
+      };
+      config.module.rules.push(
+      )
+      const plugin = [
+        // 开启 unplugin 插件，自动引入 NutUI 组件
+        Components({
+          resolvers: [NutUIResolver()],
+        }),
+      ];
+      config.plugins.push(...plugin);
+      config["externals"] = {
+        'BaiduMap': "BMapGL",
+      };
+    },
   devServer: {
     port:80,
     // port:443,
@@ -76,5 +70,5 @@ module.exports = defineConfig({
     //   cert:fs.readFileSync('./server.cert'),
     // }
   },
-  parallel:false
+  parallel: false
 })

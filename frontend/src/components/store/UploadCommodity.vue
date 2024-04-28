@@ -137,7 +137,7 @@
 
 import {ref} from 'vue';
 import { useRouter } from 'vue-router';
-import * as echarts from 'echarts';
+import {init, graphic } from 'echarts';
 import { onMounted } from 'vue';
 // import globalData from"../../global.js"
 import axios from 'axios';
@@ -258,7 +258,7 @@ var option = {
       type: 'line',
       step: 'end',
       areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        color: new graphic.LinearGradient(0, 0, 0, 1, [
           { offset: 0, color: "#93B090" },
           { offset: 1, color: "#FBFCFA" },
         ]),
@@ -291,7 +291,7 @@ const convert=()=>{
 }
 
 onMounted(()=>{
-    myChart = echarts.init(document.getElementById('main'));
+    myChart = init(document.getElementById('main'));
     axios.get(BaseUrl+'/api/com/getCategories', {
     }).then((res) => {
       categoryType.value=res.data
