@@ -35,7 +35,7 @@ public class RecommendComService {
             System.out.println("商品信息不存在");
             return response;
         }
-        List<CommodityEntity> commodities = recommendCommodityRepository.findAll();
+        List<CommodityEntity> commodities = recommendCommodityRepository.findAllByComType(0);
         for(CommodityEntity commodity : commodities){
             Com_ALL_IDs.add(commodity.getComId());
         }
@@ -107,7 +107,21 @@ public class RecommendComService {
         IndentEntity indent=recommendIndentRepositiry.findFirstByCusId(user_ID);
         if(indent==null){
             System.out.println("用户没有订单，无法推荐");
-            return  response;
+            List<CommodityEntity> commodities = recommendCommodityRepository.findAllByComType(0);
+            for(CommodityEntity commodity : commodities){
+                response.add(commodity.getComId());
+            }
+            System.out.println("推荐总数为" + response.size());
+            if (response.size() <= page_size * (page_num - 1)) {
+                response.clear();
+                return response; // 如果请求页超出范围，则返回空列表
+            }
+            int beg = page_size * (page_num - 1); // 起始索引
+            int end = Math.min(page_size * page_num, response.size()); // 结束索引（不包括）
+
+            System.out.println("返回总数为" + (end - beg));
+
+            return response.subList(beg, end);
         }
         Integer com_ID = recommendIndentDetailRepository.
                 findFirstByIndId(indent.getIndId()).getComId();
