@@ -78,15 +78,7 @@
         </nut-form-item>
         <div id="main" style="width:auto;height: 300px;"></div>
         <nut-space style="
-        position:relative;margin-top:0vh;margin-left:5vw;">
-            <nut-button style="
-            width: 168px;
-            height: 40px;
-            flex-shrink: 0;
-            border-radius: 5px;
-            border: 0.5px solid #E6E6E6;
-            background: #FFF;">
-            快速批量发布</nut-button>
+        position:relative;margin-top:0vh;margin-left:30vw;">
             <nut-button style="
             width: 168px;
             height: 40px;
