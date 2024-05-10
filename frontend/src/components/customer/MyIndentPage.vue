@@ -98,8 +98,9 @@
 <script setup>
 import axios from 'axios';
 import {onMounted, ref} from 'vue';
-import {  useRouter } from 'vue-router';
+import {useRouter} from 'vue-router';
 import globalData from "../../global.js"
+
 const BaseUrl = globalData.BaseUrl
 const state = ref('1');
 const router=useRouter();
@@ -175,7 +176,11 @@ const searchIndent=(state)=>{
     }
   }).then(response=>{
     var data=response.data;
+
+    data.sort((a, b) => a.ind_creationTime > b.ind_creationTime ? -1 : 1);
+
     console.log(data)
+
     convert(data);
   })
 }

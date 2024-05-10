@@ -260,7 +260,7 @@ const convert = (response) => {
   option.series[0].data = [];
   for (let i = 0; i < response.commodityPriceCurve.length; ++i) {
     var nowCurve = response.commodityPriceCurve[i];
-    option.xAxis.data.push(nowCurve.com_pc_time);
+    option.xAxis.data.push(nowCurve.com_pc_time.split(" ")[0]);
     option.series[0].data.push(nowCurve.com_pc_price);
   }
 

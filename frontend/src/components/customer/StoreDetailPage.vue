@@ -126,9 +126,7 @@ const licenceImage = ref([]);
 
 // 返回操作响应函数
 const onClick = () => {
-  router.push({
-    path: ''
-  })
+  router.go(-1);
 };
 
 const changeTabCb = () => {
