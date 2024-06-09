@@ -1,7 +1,6 @@
 <template>
   <nut-navbar :title="mysteryBoxInfo.com_name" left-show @click-back="goBackPage">
     <template #left>
-      <div>Back</div>
     </template>
   </nut-navbar>
 
@@ -46,16 +45,16 @@
         <span>
           <span>
         {{ " " + mysteryBoxInfo.sto_name}}</span>
-        <span>{{  }}</span>
         </span>
       </nut-row>
       <nut-row style="display: flex;align-items: center;">
         <Clock style="margin-right: 15px;"/>
         {{ mysteryBoxInfo.sto_openingTime+' - ' +mysteryBoxInfo.sto_closingTime }}
       </nut-row>
-      <nut-row style="display: flex;align-items: start;">
+      <nut-row>
         <Ask style="margin-right: 15px;"/>
-        {{ mysteryBoxInfo.com_introduction }}
+        <span>
+        {{ mysteryBoxInfo.com_introduction }}</span>
       </nut-row>
     </div>
   </nut-cell>
@@ -303,7 +302,7 @@ const showDetail = (id) => {
 }
 </script>
 
-<style>
+<style scoped>
 .info-tag {
   background-color: #eaf3e8;
   border-radius: 0 0 20px 20px;

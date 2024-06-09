@@ -174,7 +174,6 @@ const commodityData = ref([]);
 const commodityList = ref([]);
 
 const showDetail = (id, position, distance, price, name, left) => {
-  console.log(name)
   router.push({
     path: '/commodityDetail',
     query: {

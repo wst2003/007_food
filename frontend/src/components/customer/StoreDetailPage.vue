@@ -12,7 +12,7 @@
               <div class="info info3">{{ sto_info.user_phone }}</div>
             </div>
           </div>
-          <div class="rate-container">
+          <div class="store-rate-container">
 
             <div style="">
               <nut-circle-progress :progress="sto_info.sto_rating * 20" color="#93B090" stroke-width="7"
@@ -30,7 +30,7 @@
       <div>
         <nut-tabs v-model="tabValue" @click="changeTabCb">
           <nut-tab-pane style="padding: 0 0;" title="商品" pane-key="1">
-            <nut-category :category="categoryData.category" @change="change">
+            <nut-category :category="categoryData.category" @change="change" style="background-color: #f9fbf7">
               <nut-infinite-loading :has-more="hasMore" @load-more="loadMore" style="margin-left: 20px;">
                 <div v-for="(item, index) in curPageCommodity" :key="item.com_ID" @click="goToDetailPage(item.com_ID,item.commodityPriceCurve[item.commodityPriceCurve.length - 1].com_pc_price,sto_info.user_address)">
                   <div class="com-container">
@@ -40,8 +40,8 @@
                         :src="'https://007-food.obs.cn-east-3.myhuaweicloud.com/' + curPageCommodity[index].commodityImage[0].com_image"
                         style="width: 10vh;height: 10vh;" />
                     </div>
-                    <div style="display: flex;flex-direction: column; margin-left: 20px;">
-                      <div style="font-size: large;">{{ item.com_name }}</div>
+                    <div style="display: flex;flex-direction: column; margin-left: 20px;margin-right:10%">
+                      <div style="font-size: 15px;">{{ item.com_name }}</div>
                       <div>
                         <span style="color: #979797; font-size: 12.295px;">库存</span>
                         <span style="font-size: 12.295px;">{{ item.com_left }}</span>
@@ -148,7 +148,7 @@ const getStoreInfoData = () => {
   console.log(route.query.sto_id)
   axios.get(BaseUrl+'/api/sto/informationdetail', {
     params: {
-      sto_ID: route.query.sto_id    // TODO: modify to real ID
+      sto_ID: route.query.sto_id   
     }
   }).then(res => {
     console.log(res.data)
@@ -200,7 +200,7 @@ const loadMore = () => {
       com_type: pageInfo.com_type
     }
   }).then(res => {
-    curPageCommodity.value = res.data;  // TODO: add stop loading logic
+    curPageCommodity.value = res.data;  
   })
 }
 
@@ -212,12 +212,10 @@ const cmtLoadMore = () => {
       page_size: commentInfo.page_size
     }
   }).then(res => {
-    commentList.value.concat(res.data);    // TODO: add stop loading logic
+    commentList.value.concat(res.data);   
   })
 }
 
-
-// TODO: callback function for commodity detail info page
 const goToDetailPage = (id,price,address) => {
   router.push({
     path:'/commodityDetail',
@@ -258,7 +256,8 @@ onMounted(()=>{
 }
 
 .comment-avatar {
-  width: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background-blend-mode: darken;
   box-shadow: 0px 0px 27.9px 0px rgba(147, 176, 144, 0.62);
@@ -298,7 +297,6 @@ onMounted(()=>{
 .com-container {
   display: flex;
   flex-direction: row;
-  height: 10vh;
   margin-bottom: 4vh;
   margin-top: 4vh;
   position: relative;
@@ -323,7 +321,7 @@ onMounted(()=>{
   transform-origin: center bottom;
 }
 
-.rate-container {
+.store-rate-container {
   width: 100px;
   height: inherit;
   position: absolute;
@@ -375,7 +373,7 @@ onMounted(()=>{
 
 
 .store-info-container {
-  height: 25vh;
+  height: 30vh;
   position: relative;
   background-image: url('../../assets/store-background.png');
 }
@@ -383,6 +381,7 @@ onMounted(()=>{
 .store-info {
   height: fit-content;
   width: 100vw;
+  height: 12vh;
   background-color: #F8FBF7;
   position: absolute;
   bottom: 0;
@@ -394,7 +393,6 @@ onMounted(()=>{
 
 .store-info-list {
   display: flex;
-  height: inherit;
   align-items: center;
   margin-left: 30px;
 

@@ -1,8 +1,6 @@
 <template>
+  <div :key="$route.fullPath">
   <nut-navbar :title="route.query.name" left-show @click-back="goBackPage">
-    <template>
-      <div>Back</div>
-    </template>
   </nut-navbar>
 
   <div class="swiper-demo">
@@ -87,7 +85,7 @@
     <div style="padding: 0 20px;">
     <div v-for="(item) in recommendationList" :key=item.com_ID >
       <div class="commodity-card"
-              @click="showDetail(item.com_ID, item.com_position,0, item.com_price, item.com_name, item.com_left)">
+              @click="showDetail(item.com_ID, item.com_position,item.com_dist, item.com_price, item.com_name, item.com_left)">
               <div style="height: 150px;position: relative;">
                 <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 20px 0 0;" />
                 <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">
@@ -156,10 +154,11 @@
         去结算</div>
     </div>
   </div>
+</div>
 
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch,getCurrentInstance } from 'vue';
 import { Shop, Clock } from '@nutui/icons-vue';
 import { useRoute, useRouter } from 'vue-router';
 import {init, graphic } from 'echarts';
@@ -355,52 +354,20 @@ const EnterIndentConfirmPage = () => {
   }
 
 }
-
+  const instance = getCurrentInstance();
 const showDetail = (id, position, distance, price, name, left) => {
-
-  route.query.id=id;
-  route.query.position=position;
-  route.query.distance=distance;
-  route.query.price=price;
-  route.query.name=name;
-  route.query.left=left;
-
-
-  myChart = init(document.getElementById('main'));
-  // myChart.setOption(option);
-  buying_quantity.value=globalData.shoppingCart.getItemById(route.query.id).quantity
-
-  axios.get(BaseUrl+'api/com/commoditydetail', {
-    params: {
-      com_ID: route.query.id    // TODO: replace with router's params
+  router.push({
+    path: '/commodityDetail',
+    query: {
+      id: id,
+      position: position,
+      distance: distance,
+      price: price,
+      name: name,
+      left: left
     }
   })
-      .then(response => {
-        type = response.data.commodity_categories[0].com_category;
-        console.log(response.data);
-        convert(response.data);
-      })
-
-  recommendationInfo.page_num=0;
-  axios.get(BaseUrl+'api/com/searchCommodity', {
-    params: {
-      content: "",
-      com_type: type,
-      sort_by: 1,
-      sort_order: 0,
-      page_size: recommendationInfo.page_size,
-      page_num: ++recommendationInfo.page_num
-    }
-  }).then((res) => {
-      for(let i=0;i<res.data.length;i++){
-        res.data[i].commodityImage = "https://007-food.obs.cn-east-3.myhuaweicloud.com/"+res.data[i].commodityImage;
-      }
-      recommendationList.value = recommendationList.value.concat(res.data);
-      listRoute()
-      ifLoading.value = false;
-      if (res.data.length < recommendationInfo.page_size)
-        hasMore.value = false;
-  })
+  instance.proxy.$forceUpdate();
 }
 </script>
 
