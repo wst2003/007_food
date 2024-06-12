@@ -1,46 +1,43 @@
 <template>
+    <nut-navbar title="支付详情" left-show @click-back="goBackPage">
+        <template #left>
+        </template>
+      </nut-navbar>
     <div style="margin-top:30px;margin-bottom: 30px;">
-        <nut-row>
-            <nut-col :span="12"> 
+        <div style="display:flex;justify-content:center">
                 <div :class="classObject1" @click="toggleMethod()">
-                    <div style="text-align: center; color: white; font-size: 1.2rem; font-family: 'Source Han Sans SC'; font-weight: 700; word-wrap: break-word">到店自提</div>
-                    <div style="display:flex;margin-top: 3%;margin-left:5% ;">
-                        <StarFillN color="white" />
-                        <div style="color:black;font-family: 'Source Han Sans SC';font-weight:1000;margin-left: 5%;letter-spacing: 0.36">拯救 </div>
-                        <div style="color:white;">临期食品</div>
-                        <div style="color:white;position: absolute;right:55%">+{{ globalData.shoppingCart.items.length }} </div>
+                    <div class="card-title">到店自提</div>
+
+                    <div style="font-size:12px;margin-top:20px;">
+                        <span>拯救 </span>
+                        <span>临期食品</span>
+                        <span>+{{ globalData.shoppingCart.items.length }} </span>
                     </div>
-                    <div style="display:flex;margin-top: 4%;margin-left:5% ;">
-                        <StarFillN color="white" />
-                        <div style="color:black;font-family: 'Source Han Sans SC';font-weight:1000;margin-left: 5%;letter-spacing: 0.36">省去 </div>
-                        <div style="color:white;">配送费</div>
-                        <div style="color:white;position: absolute;right:55%">-￥2</div>
+                    <div style="font-size:15px">
+                        <span style="color:#ffb755;margin-right:5px;" :class="delivery_method ===1?'highlight': null">省去 </span>
+                        <span>配送费</span>
+                        <span style="font-size:18px;font-family:system-ui;margin-left:5px">-￥2</span>
                     </div>
-                    <div style="margin-left: 10%;margin-top: 3%;">
-                        <nut-tag round plain color="#E9E9E9" text-color="#999999"> {{ indent_items.getEstimatedDistance()}}  ></nut-tag>
+                    <div>
+                        <div class="tag"> {{'店铺距您： '+indent_items.getEstimatedDistance()}} </div>
                     </div>
                 </div>
-            </nut-col>
-            <nut-col :span="12"> 
                 <div :class="classObject2" @click="toggleMethod()">
-                    <div style="text-align: center; color: white; font-size: 1.2rem; font-family: 'Source Han Sans SC'; font-weight: 700; word-wrap: break-word">外卖配送</div>
-                    <div style="display:flex;margin-top: 3%;margin-left:5% ;">
-                        <StarFillN color="white" />
-                        <div style="color:black;font-family: 'Source Han Sans SC';font-weight:1000;margin-left: 5%;letter-spacing: 0.36">拯救 </div>
-                        <div style="color:white;">临期食品</div>
-                        <div style="color:white;position: absolute;right:5%">+{{ globalData.shoppingCart.items.length }} </div>
+                    <div class="card-title">外卖配送</div>
+                    <div style="font-size:12px;margin-top:20px;">
+                        <span>拯救 </span>
+                        <span>临期食品</span>
+                        <span>+{{ globalData.shoppingCart.items.length }} </span>
                     </div>
-                    <div style="display:flex;margin-top: 4%;margin-left:5% ;">
-                        <StarFillN color="white" />
-                        <div style="color:black;font-family: 'Source Han Sans SC';font-weight:1000;margin-left: 5%;letter-spacing: 0.36">碳排放 </div>
-                        <div style="color:white;position: absolute;right:5%">+{{ 0.68*globalData.shoppingCart.items.length }}kg</div>
+                    <div style="font-size:15px">
+                        <span style="color:silver;margin-right:5px;" :class="delivery_method ===0?'highlight': null">碳排放 </span>
+                        <span style="font-size:18px;font-family:system-ui;margin-left:5px">+{{ 0.68*globalData.shoppingCart.items.length }}kg</span>
                     </div>
-                    <div style="margin-left: 10%;margin-top: 3%;">
-                        <nut-tag round plain color="#E9E9E9" text-color="#999999"> {{ indent_items.getEstimatedDurition()}}  ></nut-tag>
+                    <div>
+                        <div class="tag">{{ '预计时间： '+indent_items.getEstimatedDurition()}}</div>
                     </div>
                 </div>
-            </nut-col>
-        </nut-row>
+                </div>
     </div>
     <div>
         <hr/>
@@ -93,12 +90,11 @@
 
 <script setup>
 import { onMounted, reactive,ref,computed} from 'vue';
-// import { useRoute,useRouter } from 'vue-router';
+import {useRouter } from 'vue-router';
 import qs from 'qs'
 import axios from 'axios';
 import globalData from "../../global.js"
 const BaseUrl = globalData.BaseUrl
-import { StarFillN } from '@nutui/icons-vue';
 // import { showToast } from '@nutui/nutui's
 // import { useRouter } from 'vue-router';
 // const router=useRouter();
@@ -108,7 +104,7 @@ const delivery_address=globalData.userPosition.address
 const cus_Id=sessionStorage.getItem("user_id")//TODO: confirmity
 const promptShow=ref(false)
 const promptStr=ref("")
-
+const router = useRouter();
 function toggleMethod(){
     if(delivery_method.value==0){
         delivery_method.value=1;
@@ -148,11 +144,13 @@ function indent_item(response_obj){
 const classObject1 = computed(() => ({
     delivery_method_block_chosen: delivery_method.value==0,
     delivery_method_block: delivery_method.value==1,
+    block: true,
 }))
 
 const classObject2 = computed(() => ({
     delivery_method_block_chosen: delivery_method.value==1,
     delivery_method_block: delivery_method.value==0,
+    block: true,
 }))
 
 const indent_items=reactive({
@@ -291,23 +289,37 @@ const generateIndent=()=>{
             }
         })
 }
+
+const goBackPage = () => {
+  router.go(-1);
+}
 </script>
 
 <style scoped>
 .delivery_method_block{
-    width: 90%; 
-    height: 116px; 
-    margin: auto; 
-    background: #CDCDCD; 
-    border-radius: 15px
+    background: #cdcdcd10; 
+    color: #7c9579;
+    border: solid 1px #7c9579;
 }
 .delivery_method_block_chosen{
-    width: 90%;
-    height: 116px;
-    margin: auto; 
     background: #93B090; 
-    box-shadow: 0px 0px 33.400001525878906px #93B090; 
-    border-radius: 15px
+    border: solid 1px #7c9579;
+    color: white;
+}
+.block{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+    width: 90%; 
+    align-items: flex-start;
+    gap: 10px;
+    padding: 20px;
+    margin: 10px;
+}
+.card-title{
+    font-size: 22px;
+    font-weight: 500;
 }
 .nutcell{
     margin: auto;
@@ -356,4 +368,42 @@ button {
 button:hover {
     background-color: #f7f7f7;
 }
+
+@keyframes shake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-30deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(30deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes shakeAndPause {
+    0%, 6.25% { transform: rotate(0deg); }
+    12.5% { transform: rotate(-15deg); }
+    18.75% { transform: rotate(0deg); }
+    25% { transform: rotate(15deg); }
+    31.25% { transform: rotate(0deg); }
+    37.5% { transform: rotate(-15deg); }
+    43.75% { transform: rotate(0deg); }
+    50% { transform: rotate(-15deg); }
+    56.25% { transform: rotate(0deg); }
+    62.5%, 100% { transform: rotate(0deg); }
+}
+
+
+.highlight {
+    display: inline-block;
+    animation: shakeAndPause 2s cubic-bezier(0.84, 0.14, 0.78, 0.39) infinite;
+}
+
+.tag{
+    font-size: 10px;
+    border-radius:10px;
+    padding: 2px 5px;
+    font-weight: 500;
+    background-color: white;
+    color:#7c9579;
+    border: solid 1px #7c9579;
+}
+
 </style>
