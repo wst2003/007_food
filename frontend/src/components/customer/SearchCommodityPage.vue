@@ -234,7 +234,8 @@ const searchCommodity = () => {
         sort_by: sortBy.value,
         sort_order: sortOrder.value,
         page_size: pageSize.value,
-        page_num: pageNum.value
+        page_num: pageNum.value,
+        remaining_proportion:1
       }
     })
         .then(response => {
