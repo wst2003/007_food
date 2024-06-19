@@ -263,7 +263,7 @@ const convert = (response) => {
     option.series[0].data.push(nowCurve.com_pc_price);
   }
 
-  option.xAxis.data.push(nowCurve.com_expirationDate.split(" ")[0]);
+  option.xAxis.data.push(response.com_expirationDate.split(" ")[0]);
   option.series[0].data.push(0);
 
   list.value = [];
