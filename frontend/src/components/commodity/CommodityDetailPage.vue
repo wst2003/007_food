@@ -54,6 +54,11 @@
         <Clock style="margin-right: 15px;"/>
         {{ timePeriod }}
       </nut-row>
+      <nut-row style="display:flex;flex-direction:row;align-items: center;">
+        <Ask style="margin-right: 15px;min-width:16px;min-height:16px;align-self:flex-start"/>
+        <span>
+        {{ intro }}</span>
+      </nut-row>
     </div>
   </nut-cell>
 
@@ -159,7 +164,7 @@
 </template>
 <script setup>
 import { ref, onMounted, watch,getCurrentInstance } from 'vue';
-import { Shop, Clock } from '@nutui/icons-vue';
+import { Shop, Clock, Ask } from '@nutui/icons-vue';
 import { useRoute, useRouter } from 'vue-router';
 import {init, graphic } from 'echarts';
 import globalData from "../../global.js"
@@ -249,13 +254,13 @@ const loadMore = () => {
   }, 1000)
 
 }
-
+const intro = ref('');
 const convert = (response) => {
   sto_ID.value=response.sto_ID;
   console.log(sto_ID.value)
   timePeriod.value = response.sto_openingTime.split(':')[0]+':'+response.sto_openingTime.split(':')[1] + " - " + response.sto_closingTime.split(':')[0]+':'+response.sto_closingTime.split(':')[1];
-
   option.xAxis.data = [];
+  intro.value = response.com_introduction;
   option.series[0].data = [];
   for (let i = 0; i < response.commodityPriceCurve.length; ++i) {
     var nowCurve = response.commodityPriceCurve[i];

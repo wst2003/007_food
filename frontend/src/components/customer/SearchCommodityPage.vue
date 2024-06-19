@@ -47,7 +47,7 @@
         <div class="container">
           <div v-for="(item, index) in commodityList" :key="index" style="width: 45%;">
             <div class="commodity-card"
-              @click="showDetail(item.com_ID, item.com_position, item.com_dist, item.com_price, item.com_name, item.com_left,item.com_type)">
+              @click="showDetail(item.com_ID, item.com_position, item.com_dist, item.com_price, item.com_name, item.com_left,item.com_type,item.com_introduction)">
               <div style="height: 150px;position: relative;">
                 <img :src="item.commodityImage" style="width:100%;height: 150px;border-radius: 20px 20px 0 0;" />
                 <div style="position:absolute;bottom: 0;display: flex;height: fit-content;">
@@ -173,7 +173,7 @@ const commodityData = ref([]);
 
 const commodityList = ref([]);
 
-const showDetail = (id, position, distance, price, name, left) => {
+const showDetail = (id, position, distance, price, name, left, intro) => {
   router.push({
     path: '/commodityDetail',
     query: {
@@ -182,7 +182,8 @@ const showDetail = (id, position, distance, price, name, left) => {
       distance: distance,
       price: price,
       name: name,
-      left: left
+      left: left,
+      intro: intro,
     }
   })
 }
