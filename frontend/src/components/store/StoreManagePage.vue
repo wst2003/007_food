@@ -45,7 +45,7 @@
                                                 <span style="color: #979797; font-size: 12.295px;">库存</span>
                                                 <span style="font-size: 12.295px;">{{ item.com_left }}</span>
                                             </div>
-                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[item.commodityPriceCurve.length -1].com_pc_price }}</div>
+                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[0].com_pc_price }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                                 <span style="color: #979797; font-size: 12.295px;">库存</span>
                                                 <span style="font-size: 12.295px;">{{ item.com_left }}</span>
                                             </div>
-                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[item.commodityPriceCurve.length -1].com_pc_price }}</div>
+                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[0].com_pc_price }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -97,7 +97,7 @@
                                                 <span style="color: #979797; font-size: 12.295px;">库存</span>
                                                 <span style="font-size: 12.295px;">{{ item.com_left }}</span>
                                             </div>
-                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[item.commodityPriceCurve.length -1].com_pc_price }}</div>
+                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[0].com_pc_price }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -123,7 +123,7 @@
                                                 <span style="color: #979797; font-size: 12.295px;">库存</span>
                                                 <span style="font-size: 12.295px;">{{ item.com_left }}</span>
                                             </div>
-                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[item.commodityPriceCurve.length -1].com_pc_price }}</div>
+                                            <div style="color:#93B090;font-size: 14.5px; ">{{ "¥" +item.commodityPriceCurve[0].com_pc_price }}</div>
                                         </div>
                                     </div>
                                 </div>

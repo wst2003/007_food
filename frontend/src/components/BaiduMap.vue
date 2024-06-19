@@ -90,7 +90,7 @@ onMounted(()=>{
     geolocation.getLocation(
         function(position){
             // alert(position.lat+' '+position.lng)
-            console.log(position)
+            console.log('qqmap:'+position)
             var {lng,lat}=qqMapTransBMap(position.lng,position.lat);
             // alert(lat+' '+lng)
             // var {lng,lat}={lng: -74,lat:40.7}
@@ -280,8 +280,8 @@ function computeDistance(){
 } 
 
 function afterLocation(lat,lng){
-    lat = 31.167;
-    lng = 121.424;
+    lat = 31.288;
+    lng = 121.220;
     initalization(lat,lng)
     var sto_ids=[]
     axios.get(BaseUrl+'/api/pub/map',{
