@@ -280,8 +280,8 @@ function computeDistance(){
 } 
 
 function afterLocation(lat,lng){
-    lat = 31.288;
-    lng = 121.220;
+    lat = 37.536;
+    lng = 122.068;
     initalization(lat,lng)
     var sto_ids=[]
     axios.get(BaseUrl+'/api/pub/map',{

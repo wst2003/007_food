@@ -134,9 +134,12 @@ function initalization(lat,lng){
 }
 function afterLocation(lat,lng){
     //********** 
-    lat=31.282431
-    lng=121.212268
+    // lat=31.282431
+    // lng=121.212268
     // 同济嘉定校区大门坐标，用于测试；正式版需要注释掉
+    lat = 37.536;
+    lng = 122.068;
+    // 山东大学威海校区坐标
     initalization(lat,lng) // 初始化地图与位置信息
     var ind_ids=[]
     console.log('SessionStorage中的id '+sessionStorage.getItem("user_id"))
