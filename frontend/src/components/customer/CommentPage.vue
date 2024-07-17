@@ -47,7 +47,9 @@
         top:8vh;
         left:10%;">
             <div style="margin-top:5%;width:70px;">服务质量</div>
-            <nut-rate size="30" active-color="rgba(116, 136, 101, 0.66)" v-model="commentData.service_quality" />
+            <nut-rate size="30"
+             active-color="rgba(116, 136, 101, 0.66)" 
+             v-model="commentData.service_quality" />
         </nut-space>
         <nut-space :gutter="40" style="
         color: #000;
